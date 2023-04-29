@@ -1,42 +1,63 @@
 package com.example.dialectica.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.dialectica.databinding.FragmentHomeBinding
+import com.example.dialectica.themes.DialectTheme
+import com.example.dialectica.ui.adapters.ThemeListAdapter
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private lateinit var _binding: FragmentHomeBinding
+    private val viewModel: HomeViewModel by viewModels()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private var themesAdapter: ThemeListAdapter = ThemeListAdapter { viewModel.onClickTheme(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return _binding.root
+    }
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeUiState()
+        initThemeList()
+    }
+
+    private fun observeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    state.themeList.apply {
+                        setThemeList(this)
+                    }
+                }
+            }
         }
-        return root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun initThemeList() {
+        _binding.rvThemes.adapter = themesAdapter
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setThemeList(themes: List<DialectTheme>) {
+        themesAdapter.items = themes
+        themesAdapter.notifyDataSetChanged()
+    }
+
 }
