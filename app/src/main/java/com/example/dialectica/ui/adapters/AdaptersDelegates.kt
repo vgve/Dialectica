@@ -1,7 +1,10 @@
 package com.example.dialectica.ui.adapters
 
+import com.example.dialectica.R
+import com.example.dialectica.data.DialectQuestion
 import com.example.dialectica.databinding.ItemThemeBinding
-import com.example.dialectica.themes.DialectTheme
+import com.example.dialectica.data.DialectTheme
+import com.example.dialectica.databinding.ItemQuestionBinding
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 fun themeAdapterDelegate(
@@ -13,7 +16,23 @@ fun themeAdapterDelegate(
         itemClickedListener(item)
     }
     bind {
-        binding.itemThemeTitle.text = item.name
-        binding.itemThemeImage.setImageResource(item.src)
+        binding.itemThemeTitle.text = item.nameTheme
+        binding.itemThemeImage.setImageResource(item.srcTheme)
+    }
+}
+
+fun questionAdapterDelegate(
+    itemClickedListener: (DialectQuestion) -> Unit
+) = adapterDelegateViewBinding<DialectQuestion, DialectQuestion, ItemQuestionBinding>(
+    { layoutInflater, root -> ItemQuestionBinding.inflate(layoutInflater, root, false) }
+) {
+    binding.ivCheck.setOnClickListener {
+        itemClickedListener(item)
+    }
+    bind {
+        if (item.isChosen == true) {
+            binding.ivCheck.setImageResource(R.drawable.ic_chosen)
+        }
+        binding.tvQuestionText.text = item.textQuestion
     }
 }

@@ -1,7 +1,9 @@
 package com.example.dialectica.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.dialectica.data.DialectQuestion
 import com.example.dialectica.databinding.FragmentHomeBinding
-import com.example.dialectica.themes.DialectTheme
+import com.example.dialectica.data.DialectTheme
+import com.example.dialectica.databinding.DialogRandomQuestionBinding
+import com.example.dialectica.ui.adapters.QuestionListAdapter
 import com.example.dialectica.ui.adapters.ThemeListAdapter
+import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -21,6 +27,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     private var themesAdapter: ThemeListAdapter = ThemeListAdapter { viewModel.onClickTheme(it) }
+    private var questionsAdapter: QuestionListAdapter = QuestionListAdapter { viewModel.onClickQuestion(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,25 +40,35 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(this.TAG, "onViewCreated")
 
         observeUiState()
-        initThemeList()
-    }
-
-    private fun observeUiState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    state.themeList.apply {
-                        setThemeList(this)
-                    }
-                }
+        _binding.rvThemes.adapter = themesAdapter
+        _binding.rvQuestions.adapter = questionsAdapter
+        _binding.ivMagicRandom.setOnClickListener {
+            val randomQuestion = viewModel.uiState.value.allQuestions.random().textQuestion
+            val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
+            val dialog = Dialog(requireContext()).apply {
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                setContentView(dialogBinding.root)
+                setCancelable(true)
             }
+            dialogBinding.tvQuestion.text = randomQuestion
+            dialog.show()
         }
     }
 
-    private fun initThemeList() {
-        _binding.rvThemes.adapter = themesAdapter
+    private fun observeUiState() {
+        Log.d(this.TAG, "observeUiState")
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    Log.d(this.TAG, "$state")
+                    setThemeList(state.themeList)
+                    setQuestionList(state.currentQuestionList)
+                }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -60,4 +77,9 @@ class HomeFragment : Fragment() {
         themesAdapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setQuestionList(questions: List<DialectQuestion>) {
+        questionsAdapter.items = questions
+        questionsAdapter.notifyDataSetChanged()
+    }
 }
