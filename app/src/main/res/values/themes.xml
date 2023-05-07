@@ -14,4 +14,18 @@
         <!-- Customize your theme here. -->
         <item name="android:actionBarItemBackground">@color/white</item>
     </style>
+
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="AddButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="maxLines">1</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
 </resources>

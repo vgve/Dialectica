@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Dialectica</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Personal</string>
+    <string name="title_home">Каталог</string>
+    <string name="title_fav">Избранное</string>
+    <string name="title_personal">Разговоры</string>
     <string name="themes_title">Themes</string>
     <string name="random_question">Random question!</string>
+    <string name="add_to_fav">В избранное</string>
+    <string name="add_to_personal">В разговор</string>
+    <string name="next">Дальше</string>
+    <string name="info_home_page">Здравствуйте! Нажмите на любой раздел в меню ниже и добавьте себе новую тему</string>
 </resources>
