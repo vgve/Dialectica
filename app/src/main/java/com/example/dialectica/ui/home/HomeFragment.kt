@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -56,6 +57,9 @@ class HomeFragment : Fragment() {
             dialogBinding.tvQuestion.text = randomQuestion
             dialog.show()
         }
+        _binding.btnNext.setOnClickListener {
+            viewModel.onClickNext()
+        }
     }
 
     private fun observeUiState() {
@@ -66,6 +70,10 @@ class HomeFragment : Fragment() {
                     Log.d(this.TAG, "$state")
                     setThemeList(state.themeList)
                     setQuestionList(state.currentQuestionList)
+                    _binding.tvQuestion.text = state.currentQuestion?.textQuestion
+                    _binding.btnNext.isVisible = state.currentQuestion?.textQuestion != null
+                    _binding.btnAddFav.isVisible = state.currentQuestion?.textQuestion != null
+                    _binding.btnAddPersonal.isVisible = state.currentQuestion?.textQuestion != null
                 }
             }
         }

@@ -16,8 +16,10 @@ fun themeAdapterDelegate(
         itemClickedListener(item)
     }
     bind {
+        val strokeColor = if (item.isChosen == true) R.color.black else R.color.white
         binding.itemThemeTitle.text = item.nameTheme
         binding.itemThemeImage.setImageResource(item.srcTheme)
+        binding.itemThemeImage.setStrokeColorResource(strokeColor)
     }
 }
 

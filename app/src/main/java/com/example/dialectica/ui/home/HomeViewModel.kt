@@ -26,13 +26,19 @@ class HomeViewModel : ViewModel() {
 
     fun onClickTheme(theme: DialectTheme) {
         Log.d(this.TAG, "onClickTheme")
+        val themes = _uiState.value.themeList.map {
+            it.isChosen = it.id == theme.id
+            it
+        }
         val questions = mutableListOf<DialectQuestion>()
         Themes().questionList.forEach {
             if (it.idTheme == theme.id) questions.add(it)
         }
         _uiState.update {
             it.copy(
-                currentQuestionList = questions
+                themeList = themes,
+                currentQuestionList = questions,
+                currentQuestion = questions.random()
             )
         }
     }
@@ -52,10 +58,19 @@ class HomeViewModel : ViewModel() {
             )
         }
     }
+
+    fun onClickNext() {
+        _uiState.update {
+            it.copy(
+                currentQuestion = _uiState.value.currentQuestionList.random()
+            )
+        }
+    }
 }
 
 data class HomeUiState(
     val themeList: List<DialectTheme> = emptyList(),
     val allQuestions: List<DialectQuestion> = emptyList(),
-    val currentQuestionList: List<DialectQuestion> = emptyList()
+    val currentQuestionList: List<DialectQuestion> = emptyList(),
+    val currentQuestion: DialectQuestion? = null
 )
