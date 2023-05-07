@@ -4,9 +4,9 @@ import com.example.dialectica.R
 
 class Themes {
     val themeList = listOf(
-        DialectTheme("0", "Узнать друг друга", R.drawable.theme_image_philosophy),
-        DialectTheme("1", "Поделиться тем, что нравится", R.drawable.theme_image_art),
-        DialectTheme("2", "Истории и впечатления", R.drawable.theme_image_main)
+        DialectTheme("0", "Мировоззрение", R.drawable.ic_handshake),
+        DialectTheme("1", "Культура", R.drawable.ic_book),
+        DialectTheme("2", "Истории из жизни", R.drawable.ic_idea)
     )
 
     val questionList = listOf(
