@@ -57,20 +57,6 @@
             android:layout_marginEnd="8dp"
             android:background="@color/grey" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_questions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@color/light_grey"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_question"
-            tools:orientation="vertical"
-            android:visibility="gone"
-            tools:scrollbars="vertical" />
-
         <TextView
             android:id="@+id/tv_question"
             android:layout_width="match_parent"
@@ -142,6 +128,7 @@
         app:elevation="6dp"
         app:backgroundTint="@color/lavender"
         android:src="@drawable/ic_magic"
+        app:maxImageSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

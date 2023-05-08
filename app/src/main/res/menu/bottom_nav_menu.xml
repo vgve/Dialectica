@@ -9,13 +9,13 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_favourite"
         android:icon="@drawable/ic_fav_menu"
         app:labelVisibilityMode="unlabeled"
         android:title="@string/title_fav" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_personal"
         android:icon="@drawable/ic_person_menu"
         app:labelVisibilityMode="unlabeled"
         android:title="@string/title_personal" />

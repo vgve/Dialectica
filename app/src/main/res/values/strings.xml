@@ -9,4 +9,8 @@
     <string name="add_to_personal">В разговор</string>
     <string name="next">Дальше</string>
     <string name="info_home_page">Здравствуйте! Нажмите на любой раздел в меню ниже и добавьте себе новую тему</string>
+    <string name="please_login">Для сохранения тем необходимо авторизоваться!</string>
+    <string name="login_btn">Войти</string>
+    <string name="no">Пропустить</string>
+    <string name="empty">Здесь пока ничего нет...</string>
 </resources>
