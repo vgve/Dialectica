@@ -2,7 +2,7 @@ package com.example.dialectica.models
 
 data class DialectTheme(
     val id: String,
-    val nameTheme: String,
-    val srcTheme: Int,
+    val name: String,
+    val src: Int,
     var isChosen: Boolean? = false
 )

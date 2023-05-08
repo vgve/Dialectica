@@ -18,9 +18,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 class HomeViewModel(application: Application): AndroidViewModel(application) {
 
     private val context = application
+
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -67,8 +69,9 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun onClickNext() {
+        Log.d(TAG, "onClickNext")
         var nextQuestion = _uiState.value.currentQuestion
-        while (nextQuestion == _uiState.value.currentQuestion || checkFavourite(nextQuestion)) {
+        while (nextQuestion == _uiState.value.currentQuestion) {
             nextQuestion = _uiState.value.currentQuestionList.random()
         }
 
@@ -80,31 +83,50 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun onClickRandom(): DialectQuestion? {
+        var randomQuestion = _uiState.value.currentRandomQuestion
+        while (randomQuestion == _uiState.value.currentRandomQuestion || randomQuestion == _uiState.value.currentQuestion) {
+            randomQuestion = _uiState.value.allQuestions.random()
+        }
+        _uiState.update {
+            it.copy(
+                currentRandomQuestion = randomQuestion
+            )
+        }
+        return randomQuestion
+    }
+
     fun addToFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
         Log.d(TAG, "addToFavourite")
         if (checkFavourite(question)) return
 
-        _uiState.update {
-            it.copy(
-                isFavourite = true
-            )
-        }
+        _uiState.update { it.copy(isFavourite = true) }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            REPOSITORY.insert(question) {
-                viewModelScope.launch(Dispatchers.Main) {
-                    onSuccess()
-                }
-            }
+        viewModelScope.launch(Dispatchers.Main) {
+            REPOSITORY.insert(question)
+            getFavQuestions()
+            onSuccess()
         }
     }
+
     private fun checkFavourite(question: DialectQuestion?): Boolean {
-        Log.d(TAG, "checkFavourite")
-        val data = REPOSITORY.favQuestions.value
-        data?.forEach {
-            return it.id == question?.id
+        Log.d(TAG, "checkFavourite: $question")
+        var isFavourite = false
+        _uiState.value.favouriteList.forEach {
+            if (it.text == question?.text) isFavourite = true
         }
-        return false
+        return isFavourite
+    }
+
+    fun getFavQuestions() {
+        Log.d(TAG, "getFavQuestions")
+        viewModelScope.launch(Dispatchers.Main) {
+            _uiState.update {
+                it.copy(
+                    favouriteList = REPOSITORY.getFavQuestions()
+                )
+            }
+        }
     }
 
     fun addToPersonal(currentQuestion: DialectQuestion?, function: () -> Unit) {
@@ -116,6 +138,8 @@ data class HomeUiState(
     val themeList: List<DialectTheme> = emptyList(),
     val allQuestions: List<DialectQuestion> = emptyList(),
     val currentQuestionList: List<DialectQuestion> = emptyList(),
+    val favouriteList: List<DialectQuestion> = emptyList(),
     val currentQuestion: DialectQuestion? = null,
+    val currentRandomQuestion: DialectQuestion? = null,
     val isFavourite: Boolean = false
 )

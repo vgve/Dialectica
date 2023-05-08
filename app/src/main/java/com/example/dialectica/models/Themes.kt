@@ -32,12 +32,4 @@ class Themes {
         DialectQuestion(18, "2", "Какое блюдо ассоциируется у вас с детством?"),
         DialectQuestion(19, "2", "Какое правильное решение далось вам тяжелее всего?")
     )
-
-    fun addQuestionToFavourite(question: DialectQuestion?) {
-        questionList.forEach {
-            if (it.id == question?.id) {
-                it.isFavourite = true
-            }
-        }
-    }
 }

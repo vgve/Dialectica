@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
         Log.d(this.TAG, "onViewCreated")
 
         observeUiState()
+        viewModel.getFavQuestions()
 
         _binding.rvThemes.adapter = themesAdapter
         _binding.btnNext.setOnClickListener {
@@ -63,7 +64,8 @@ class HomeFragment : Fragment() {
 
         }
         _binding.ivMagicRandom.setOnClickListener {
-            val randomQuestion = viewModel.uiState.value.allQuestions.random()
+            val randomQuestion = viewModel.onClickRandom()
+            val isFavourite = viewModel.uiState.value.favouriteList.contains(randomQuestion)
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
             val dialog = Dialog(requireContext()).apply {
                 window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -71,7 +73,8 @@ class HomeFragment : Fragment() {
                 setCancelable(true)
             }
             dialog.show()
-            dialogBinding.tvQuestion.text = randomQuestion.textQuestion
+            dialogBinding.tvQuestion.text = randomQuestion?.text
+            dialogBinding.btnAddFav.isVisible = !isFavourite
             dialogBinding.btnAddFav.setOnClickListener {
                 viewModel.addToFavourite(randomQuestion) {}
                 dialog.dismiss()
@@ -100,11 +103,11 @@ class HomeFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
                     setThemeList(state.themeList)
-                    _binding.tvQuestion.text = state.currentQuestion?.textQuestion
-                    _binding.btnNext.isVisible = state.currentQuestion?.textQuestion != null
-                    _binding.btnAddFav.isVisible = state.currentQuestion?.textQuestion != null
-                    _binding.btnAddPersonal.isVisible = state.currentQuestion?.textQuestion != null
-                    _binding.btnAddFav.text = if (state.isFavourite) "Избранное" else "В избранное"
+                    _binding.tvQuestion.text = state.currentQuestion?.text
+                    _binding.btnNext.isVisible = state.currentQuestion?.text != null
+                    _binding.btnAddFav.isVisible = state.currentQuestion?.text != null
+                    _binding.btnAddPersonal.isVisible = state.currentQuestion?.text != null
+                    _binding.btnAddFav.text = if (state.isFavourite) getString(R.string.is_fav) else getString(R.string.add_to_fav)
                     val ic = if (state.isFavourite) R.drawable.ic_check else R.drawable.ic_fav_menu
                     _binding.btnAddFav.setIconResource(ic)
                 }

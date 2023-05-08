@@ -9,22 +9,24 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.dialectica.databinding.FragmentFavouriteBinding
 import com.example.dialectica.models.DialectQuestion
 import com.example.dialectica.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.TAG
+import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
 
     private lateinit var _binding: FragmentFavouriteBinding
     private val viewModel: FavouriteViewModel by viewModels()
-    private lateinit var observerList: Observer<List<DialectQuestion>>
 
     private var questionsAdapter: QuestionListAdapter = QuestionListAdapter {
         Log.d(this.TAG, "onDeleteQuestion: $it")
-        viewModel.onDeleteQuestion(it)
+        viewModel.onDeleteQuestion(it) {}
     }
 
     override fun onCreateView(
@@ -44,7 +46,20 @@ class FavouriteFragment : Fragment() {
             adapter = questionsAdapter
         }
 
-        addObserver()
+        viewModel.getFavQuestions()
+        observeUiState()
+    }
+
+    private fun observeUiState() {
+        Log.d(this.TAG, "observeUiState")
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    setQuestionList(state.questions)
+                    _binding.btnEmpty.isVisible = state.questions.isEmpty()
+                }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -52,19 +67,5 @@ class FavouriteFragment : Fragment() {
         Log.d(TAG, "setQuestionList: $questions")
         questionsAdapter.items = questions
         questionsAdapter.notifyDataSetChanged()
-    }
-
-    private fun addObserver() {
-        // initialize observer
-        observerList = Observer {
-            // create list and add notes to up of list
-            val questions = it.asReversed()
-            _binding.btnEmpty.isVisible = questions.isEmpty()
-            _binding.rvQuestions.isVisible = questions.isNotEmpty()
-            setQuestionList(questions)
-            viewModel.setFavQuestionList(questions)
-        }
-
-        viewModel.getFavQuestions().observe(this, observerList)
     }
 }

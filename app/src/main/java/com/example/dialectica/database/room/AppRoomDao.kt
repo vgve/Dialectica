@@ -1,13 +1,12 @@
 package com.example.dialectica.database.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.dialectica.models.DialectQuestion
 
 @Dao
 interface AppRoomDao {
     @Query("SELECT *from question_tables")
-    fun getFavQuestions(): LiveData<List<DialectQuestion>>
+    fun getFavQuestions(): List<DialectQuestion>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(question: DialectQuestion?)

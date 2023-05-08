@@ -9,6 +9,6 @@ import java.io.Serializable
 data class DialectQuestion (
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     @ColumnInfo val idTheme: String,
-    @ColumnInfo val textQuestion: String,
+    @ColumnInfo val text: String,
     @ColumnInfo var isFavourite: Boolean? = false
 ) : Serializable

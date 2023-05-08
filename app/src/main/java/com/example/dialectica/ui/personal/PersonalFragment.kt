@@ -13,7 +13,6 @@ class PersonalFragment : Fragment() {
     private lateinit var _binding: FragmentPersonalBinding
     private val viewModel: PersonalViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,5 +26,4 @@ class PersonalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
-
 }

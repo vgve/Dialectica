@@ -1,21 +1,30 @@
 package com.example.dialectica.database.room
 
-import androidx.lifecycle.LiveData
 import com.example.dialectica.models.DialectQuestion
 import com.example.dialectica.database.DatabaseRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AppRoomRepository(private val appRoomDao: AppRoomDao) : DatabaseRepository {
-    override val favQuestions: LiveData<List<DialectQuestion>>
+
+    override val favQuestions: List<DialectQuestion>
         get() = appRoomDao.getFavQuestions()
 
-    override suspend fun insert(question: DialectQuestion?, onSuccess: () -> Unit) {
-        appRoomDao.insert(question)
-        onSuccess()
+    override suspend fun getFavQuestions(): List<DialectQuestion> {
+        return withContext(Dispatchers.IO) {
+            appRoomDao.getFavQuestions()
+        }
     }
 
-    override suspend fun delete(question: DialectQuestion?, onSuccess: () -> Unit) {
-        appRoomDao.delete(question)
-        onSuccess()
+    override suspend fun insert(question: DialectQuestion?) {
+        withContext(Dispatchers.IO) {
+            appRoomDao.insert(question)
+        }
     }
 
+    override suspend fun delete(question: DialectQuestion?) {
+        withContext(Dispatchers.IO) {
+            appRoomDao.delete(question)
+        }
+    }
 }

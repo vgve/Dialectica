@@ -1,7 +1,6 @@
 package com.example.dialectica.ui.favourite
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.models.DialectQuestion
@@ -18,33 +17,23 @@ class FavouriteViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(FavouriteUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {}
-
-    fun onDeleteQuestion(question: DialectQuestion) {
-        delete(question)
-    }
-
-    private fun delete(note: DialectQuestion) {
+    fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
-        viewModelScope.launch (Dispatchers.IO) {
-            REPOSITORY.delete(note) {
-                viewModelScope.launch (Dispatchers.Main) {
-                }
-            }
+        viewModelScope.launch (Dispatchers.Main) {
+            REPOSITORY.delete(question)
+            getFavQuestions()
+            onSuccess()
         }
     }
 
-    fun getFavQuestions() : LiveData<List<DialectQuestion>> {
-        Log.d(TAG, "getFavQuestions: ${REPOSITORY.favQuestions}")
-        // get LiveData from REPOSITORY
-        return REPOSITORY.favQuestions
-    }
-
-    fun setFavQuestionList(questions: List<DialectQuestion>) {
-        _uiState.update {
-            it.copy(
-                questions = questions
-            )
+    fun getFavQuestions() {
+        Log.d(TAG, "getFavQuestions")
+        viewModelScope.launch(Dispatchers.Main) {
+            _uiState.update {
+                it.copy(
+                    questions = REPOSITORY.getFavQuestions()
+                )
+            }
         }
     }
 }

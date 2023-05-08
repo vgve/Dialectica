@@ -6,6 +6,7 @@
     <string name="themes_title">Themes</string>
     <string name="random_question">Random question!</string>
     <string name="add_to_fav">В избранное</string>
+    <string name="is_fav">Избранное</string>
     <string name="add_to_personal">В разговор</string>
     <string name="next">Дальше</string>
     <string name="info_home_page">Здравствуйте! Нажмите на любой раздел в меню ниже и добавьте себе новую тему</string>

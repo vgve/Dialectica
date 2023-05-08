@@ -18,8 +18,8 @@ fun themeAdapterDelegate(
     }
     bind {
         val strokeColor = if (item.isChosen == true) R.color.black else R.color.white
-        binding.itemThemeTitle.text = item.nameTheme
-        binding.itemThemeImage.setImageResource(item.srcTheme)
+        binding.itemThemeTitle.text = item.name
+        binding.itemThemeImage.setImageResource(item.src)
         binding.itemThemeImage.setStrokeColorResource(strokeColor)
     }
 }
@@ -36,11 +36,11 @@ fun questionAdapterDelegate(
             var themeOfQuestionIcon: Int? = null
             Themes().themeList.forEach {
                 if (item.idTheme == it.id) {
-                    themeOfQuestionIcon = it.srcTheme
+                    themeOfQuestionIcon = it.src
                 }
             }
             binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_hello)
 
-        binding.tvQuestionText.text = item.textQuestion
+        binding.tvQuestionText.text = item.text
     }
 }
