@@ -1,10 +1,11 @@
 package com.example.dialectica.ui.adapters
 
 import com.example.dialectica.R
-import com.example.dialectica.data.DialectQuestion
+import com.example.dialectica.models.DialectQuestion
 import com.example.dialectica.databinding.ItemThemeBinding
-import com.example.dialectica.data.DialectTheme
+import com.example.dialectica.models.DialectTheme
 import com.example.dialectica.databinding.ItemQuestionBinding
+import com.example.dialectica.models.Themes
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 fun themeAdapterDelegate(
@@ -24,17 +25,22 @@ fun themeAdapterDelegate(
 }
 
 fun questionAdapterDelegate(
-    itemClickedListener: (DialectQuestion) -> Unit
+    itemDeleteClickedListener: (DialectQuestion) -> Unit
 ) = adapterDelegateViewBinding<DialectQuestion, DialectQuestion, ItemQuestionBinding>(
     { layoutInflater, root -> ItemQuestionBinding.inflate(layoutInflater, root, false) }
 ) {
-    binding.ivCheck.setOnClickListener {
-        itemClickedListener(item)
+    binding.ivDelete.setOnClickListener {
+        itemDeleteClickedListener(item)
     }
     bind {
-        if (item.isChosen == true) {
-            binding.ivCheck.setImageResource(R.drawable.ic_chosen)
-        }
+            var themeOfQuestionIcon: Int? = null
+            Themes().themeList.forEach {
+                if (item.idTheme == it.id) {
+                    themeOfQuestionIcon = it.srcTheme
+                }
+            }
+            binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_hello)
+
         binding.tvQuestionText.text = item.textQuestion
     }
 }

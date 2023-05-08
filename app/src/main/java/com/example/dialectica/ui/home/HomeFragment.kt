@@ -13,13 +13,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.dialectica.data.DialectQuestion
+import androidx.navigation.fragment.findNavController
+import com.example.dialectica.R
+import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentHomeBinding
-import com.example.dialectica.data.DialectTheme
+import com.example.dialectica.models.DialectTheme
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
-import com.example.dialectica.ui.adapters.QuestionListAdapter
 import com.example.dialectica.ui.adapters.ThemeListAdapter
+import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.TAG
+import com.example.dialectica.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -27,8 +30,10 @@ class HomeFragment : Fragment() {
     private lateinit var _binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
-    private var themesAdapter: ThemeListAdapter = ThemeListAdapter { viewModel.onClickTheme(it) }
-    private var questionsAdapter: QuestionListAdapter = QuestionListAdapter { viewModel.onClickQuestion(it) }
+    private var themesAdapter: ThemeListAdapter = ThemeListAdapter {
+        Log.d(this.TAG, "onClickTheme: $it")
+        viewModel.onClickTheme(it)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,21 +49,47 @@ class HomeFragment : Fragment() {
         Log.d(this.TAG, "onViewCreated")
 
         observeUiState()
+
         _binding.rvThemes.adapter = themesAdapter
-        _binding.rvQuestions.adapter = questionsAdapter
+        _binding.btnNext.setOnClickListener {
+            viewModel.onClickNext()
+        }
+        _binding.btnAddFav.apply {
+            setOnClickListener {
+                viewModel.addToFavourite(viewModel.uiState.value.currentQuestion) {}
+            }
+        }
+        _binding.btnAddPersonal.setOnClickListener {
+
+        }
         _binding.ivMagicRandom.setOnClickListener {
-            val randomQuestion = viewModel.uiState.value.allQuestions.random().textQuestion
+            val randomQuestion = viewModel.uiState.value.allQuestions.random()
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
             val dialog = Dialog(requireContext()).apply {
                 window?.setBackgroundDrawableResource(android.R.color.transparent)
                 setContentView(dialogBinding.root)
                 setCancelable(true)
             }
-            dialogBinding.tvQuestion.text = randomQuestion
             dialog.show()
+            dialogBinding.tvQuestion.text = randomQuestion.textQuestion
+            dialogBinding.btnAddFav.setOnClickListener {
+                viewModel.addToFavourite(randomQuestion) {}
+                dialog.dismiss()
+            }
+            dialogBinding.btnAddPersonal.setOnClickListener {
+                viewModel.addToPersonal(viewModel.uiState.value.currentQuestion) {}
+                dialog.dismiss()
+            }
         }
-        _binding.btnNext.setOnClickListener {
-            viewModel.onClickNext()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (AppPreference.getInitUser()) {
+            viewModel.initDatabase(AppPreference.getTypeDatabase()) {}
+        } else {
+            initDatabase()
         }
     }
 
@@ -69,11 +100,13 @@ class HomeFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
                     setThemeList(state.themeList)
-                    setQuestionList(state.currentQuestionList)
                     _binding.tvQuestion.text = state.currentQuestion?.textQuestion
                     _binding.btnNext.isVisible = state.currentQuestion?.textQuestion != null
                     _binding.btnAddFav.isVisible = state.currentQuestion?.textQuestion != null
                     _binding.btnAddPersonal.isVisible = state.currentQuestion?.textQuestion != null
+                    _binding.btnAddFav.text = if (state.isFavourite) "Избранное" else "В избранное"
+                    val ic = if (state.isFavourite) R.drawable.ic_check else R.drawable.ic_fav_menu
+                    _binding.btnAddFav.setIconResource(ic)
                 }
             }
         }
@@ -81,13 +114,37 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun setThemeList(themes: List<DialectTheme>) {
+        Log.d(this.TAG, "setThemeList")
         themesAdapter.items = themes
         themesAdapter.notifyDataSetChanged()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setQuestionList(questions: List<DialectQuestion>) {
-        questionsAdapter.items = questions
-        questionsAdapter.notifyDataSetChanged()
+    private fun checkInitUser(): Boolean {
+        Log.d(TAG, "checkInitUser: ${AppPreference.getInitUser()}")
+        if (!AppPreference.getInitUser()) {
+            val dialogBinding = DialogLoginBinding.inflate(layoutInflater)
+            val dialog = Dialog(requireContext()).apply {
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                setContentView(dialogBinding.root)
+                setCancelable(true)
+            }
+            dialog.show()
+            dialogBinding.btnNo.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialogBinding.btnLogin.setOnClickListener {
+                findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
+                dialog.dismiss()
+            }
+            return false
+        }
+        return true
+    }
+
+    private fun initDatabase() {
+        viewModel.initDatabase(TYPE_ROOM) {
+            AppPreference.setInitUser(true)
+            AppPreference.setTypeDatabase(TYPE_ROOM)
+        }
     }
 }

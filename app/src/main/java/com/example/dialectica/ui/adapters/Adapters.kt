@@ -1,7 +1,7 @@
 package com.example.dialectica.ui.adapters
 
-import com.example.dialectica.data.DialectQuestion
-import com.example.dialectica.data.DialectTheme
+import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.DialectTheme
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 
 class ThemeListAdapter(
@@ -11,7 +11,7 @@ class ThemeListAdapter(
 )
 
 class QuestionListAdapter(
-    itemClickedListener: (DialectQuestion) -> Unit
+    itemDeleteClickedListener: (DialectQuestion) -> Unit
 ) : ListDelegationAdapter<List<DialectQuestion>>(
-    questionAdapterDelegate(itemClickedListener)
+    questionAdapterDelegate(itemDeleteClickedListener)
 )
