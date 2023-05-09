@@ -3,7 +3,7 @@ package com.example.dialectica.ui.personal
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dialectica.models.DialectPerson
+import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +69,8 @@ class PersonalViewModel: ViewModel() {
         val newPerson = DialectPerson(
             name = personName,
             interests = _uiState.value.tempInterestList,
-            isOwner = false
+            isOwner = false,
+            questions = emptyList()
         )
 
         _uiState.update { it.copy(tempInterestList = emptyList()) }
@@ -81,11 +82,11 @@ class PersonalViewModel: ViewModel() {
         }
     }
 
-    fun updateOwnPerson(onSuccess: () -> Unit) {
+    private fun updateOwnPerson(onSuccess: () -> Unit) {
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.updatePerson(_uiState.value.ownInterestList, _uiState.value.ownerId)
+            REPOSITORY.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
             getPersons()
             onSuccess()
         }
@@ -111,7 +112,8 @@ class PersonalViewModel: ViewModel() {
         val newPerson = DialectPerson(
             name = username,
             interests = _uiState.value.ownInterestList,
-            isOwner = true
+            isOwner = true,
+            questions = emptyList()
         )
 
         viewModelScope.launch(Dispatchers.Main) {

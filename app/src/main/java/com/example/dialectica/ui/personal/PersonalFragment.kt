@@ -20,12 +20,14 @@ import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentPersonalBinding
-import com.example.dialectica.models.DialectPerson
+import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.ui.adapters.InterestListAdapter
 import com.example.dialectica.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.AppPreference
+import com.example.dialectica.utils.PERSON
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
+
 
 class PersonalFragment : Fragment() {
 
@@ -45,7 +47,9 @@ class PersonalFragment : Fragment() {
     private var personsAdapter: PersonListAdapter = PersonListAdapter (
         {
             Log.d(this.TAG, "onClickPerson: $it")
-            findNavController().navigate(R.id.action_navigation_personal_to_navigation_talk)
+            val bundle = Bundle()
+            bundle.putSerializable(PERSON, it)
+            findNavController().navigate(R.id.action_navigation_personal_to_navigation_talk, bundle)
         },
         {
             Log.d(this.TAG, "onDeletePerson: $it")
@@ -223,6 +227,8 @@ class PersonalFragment : Fragment() {
             setCancelable(true)
         }
         dialog.show()
+
+        dialogBinding.tvInfo.text = getString(R.string.info_delete_person, person.name)
 
         dialogBinding.btnNo.setOnClickListener {
             dialog.dismiss()
