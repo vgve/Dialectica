@@ -29,5 +29,15 @@
         android:id="@+id/navigation_personal"
         android:name="com.example.dialectica.ui.personal.PersonalFragment"
         android:label="@string/title_personal"
-        tools:layout="@layout/fragment_personal" />
+        tools:layout="@layout/fragment_personal" >
+        <action
+            android:id="@+id/action_navigation_personal_to_navigation_talk"
+            app:destination="@id/navigation_talk" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_talk"
+        android:name="com.example.dialectica.ui.talk.TalkFragment"
+        android:label="@string/title_talk"
+        tools:layout="@layout/fragment_talk" />
 </navigation>

@@ -9,7 +9,7 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:id="@+id/ll_question"
+        android:id="@+id/ll_person"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -17,16 +17,17 @@
         android:layout_marginBottom="8dp">
 
         <ImageView
-            android:id="@+id/iv_theme"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/iv_person"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_idea"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_person_menu"
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/tv_question_text"
-            android:layout_width="220dp"
+            android:id="@+id/tv_person_name"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="8dp"
@@ -38,12 +39,13 @@
 
         <ImageView
             android:id="@+id/iv_delete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="8dp"
             android:layout_gravity="center"
+            android:layout_marginEnd="5dp"
+            app:tint="@color/lavender"
             android:src="@drawable/ic_delete"
-            tools:ignore="ContentDescription"
-            app:tint="@color/lavender" />
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

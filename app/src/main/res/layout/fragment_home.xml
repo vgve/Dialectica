@@ -27,12 +27,13 @@
             app:cardCornerRadius="9dp">
 
             <TextView
+                android:id="@+id/tv_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:fontFamily="@font/lato_regular"
                 android:textSize="14sp"
-                android:lineHeight="23dp"
+                android:lineSpacingExtra="6dp"
                 android:text="@string/info_home_page"/>
 
         </androidx.cardview.widget.CardView>
@@ -62,11 +63,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_margin="20dp"
-            android:lineHeight="23dp"
+            android:layout_margin="30dp"
+            android:lineSpacingExtra="10dp"
             android:textSize="18sp"
             android:fontFamily="@font/lato_regular"
             android:textColor="@color/black"
+            android:padding="20dp"
+            android:background="@drawable/bg_corner_button"
             tools:text="Question" />
 
         <LinearLayout
@@ -112,7 +115,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/next"
-                app:icon="@drawable/ic_magic"
+                app:icon="@drawable/ic_arrow"
                 app:iconGravity="start"
                 app:iconSize="24dp"
                 app:iconTint="@null" />
@@ -121,7 +124,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/iv_magic_random"
+        android:id="@+id/fab_magic_random"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
