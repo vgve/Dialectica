@@ -6,15 +6,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.database.room.AppRoomDatabase
 import com.example.dialectica.database.room.AppRoomRepository
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectQuestion
 import com.example.dialectica.models.DialectTheme
 import com.example.dialectica.models.Themes
+import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.TYPE_ROOM
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,6 +28,9 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiAction: Channel<HomeAction> = Channel()
+    val uiAction = _uiAction.receiveAsFlow()
 
     init {
         _uiState.update {
@@ -70,9 +76,11 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
 
     fun onClickNext() {
         Log.d(TAG, "onClickNext")
-        var nextQuestion = _uiState.value.currentQuestion
-        while (nextQuestion == _uiState.value.currentQuestion) {
-            nextQuestion = _uiState.value.currentQuestionList.random()
+        val currentIndex = _uiState.value.currentQuestionList.indexOf(_uiState.value.currentQuestion)
+        val nextQuestion = if (currentIndex + 1 < _uiState.value.currentQuestionList.size) {
+            _uiState.value.currentQuestionList[currentIndex + 1]
+        } else {
+            _uiState.value.currentQuestionList.first()
         }
 
         _uiState.update {
@@ -90,6 +98,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         }
         _uiState.update {
             it.copy(
+                isRandom = true,
                 currentRandomQuestion = randomQuestion
             )
         }
@@ -100,10 +109,20 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         Log.d(TAG, "addToFavourite")
         if (checkFavourite(question)) return
 
-        _uiState.update { it.copy(isFavourite = true) }
+        _uiState.update { it.copy(isFavourite = true, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
             REPOSITORY.insertFavourite(question)
+            getFavQuestions()
+            onSuccess()
+        }
+    }
+
+    fun deleteFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+        _uiState.update { it.copy(isFavourite = false, isRandom = false) }
+
+        viewModelScope.launch(Dispatchers.Main) {
+            REPOSITORY.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -118,6 +137,14 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         return isFavourite
     }
 
+    fun changeFavouriteState() {
+        _uiState.update {
+            it.copy(
+                isFavourite = checkFavourite(_uiState.value.currentQuestion)
+            )
+        }
+    }
+
     fun getFavQuestions() {
         Log.d(TAG, "getFavQuestions")
         viewModelScope.launch(Dispatchers.Main) {
@@ -129,8 +156,42 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun addToPersonal(currentQuestion: DialectQuestion?, function: () -> Unit) {
+    fun getPersons() {
+        Log.d(TAG, "getPersons")
+        viewModelScope.launch(Dispatchers.Main) {
+            val tempPersons = REPOSITORY.getPersonList()
+            val personsWithoutOwner = tempPersons.toMutableList()
+            tempPersons.forEach {
+                if (it.isOwner) {
+                    personsWithoutOwner.remove(it)
+                }
+            }
+            _uiState.update {
+                it.copy(
+                    personList = personsWithoutOwner
+                )
+            }
+        }
+    }
 
+    fun addQuestionToPerson(person: DialectPerson, onSuccess: () -> Unit) {
+        Log.d(TAG, "addQuestionToPerson: ${person.name}")
+        val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
+
+        viewModelScope.launch(Dispatchers.Main) {
+            val newQuestionList = REPOSITORY.getPersonById(person.id).questions.toMutableList()
+            if (!newQuestionList.contains(question)) {
+                question?.let { newQuestionList.add(it) }
+                REPOSITORY.updatePersonQuestions(newQuestionList, person.id)
+            }
+            _uiAction.send(HomeAction.AddQuestionToPersonClick)
+            onSuccess()
+        }
+    }
+
+    fun setRandomState(isRandom: Boolean) {
+        Log.d(TAG, "setRandomState: $isRandom")
+        _uiState.update { it.copy(isRandom = isRandom) }
     }
 }
 
@@ -141,5 +202,11 @@ data class HomeUiState(
     val favouriteList: List<DialectQuestion> = emptyList(),
     val currentQuestion: DialectQuestion? = null,
     val currentRandomQuestion: DialectQuestion? = null,
-    val isFavourite: Boolean = false
+    val personList: List<DialectPerson> = emptyList(),
+    val isFavourite: Boolean = false,
+    val isRandom: Boolean = false
 )
+
+sealed class HomeAction {
+    object AddQuestionToPersonClick : HomeAction()
+}
