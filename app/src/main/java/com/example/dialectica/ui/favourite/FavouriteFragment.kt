@@ -13,7 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.dialectica.databinding.FragmentFavouriteBinding
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectQuestion
 import com.example.dialectica.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.TAG
