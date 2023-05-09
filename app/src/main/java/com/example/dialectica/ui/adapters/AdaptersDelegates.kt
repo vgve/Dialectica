@@ -1,15 +1,17 @@
 package com.example.dialectica.ui.adapters
 
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.dialectica.R
 import com.example.dialectica.databinding.ItemInterestBinding
 import com.example.dialectica.databinding.ItemPersonBinding
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectQuestion
 import com.example.dialectica.databinding.ItemThemeBinding
 import com.example.dialectica.models.DialectTheme
 import com.example.dialectica.databinding.ItemQuestionBinding
-import com.example.dialectica.models.DialectPerson
+import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.models.Themes
+import com.example.dialectica.ui.talk.LocalInterest
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 fun themeAdapterDelegate(
@@ -21,7 +23,7 @@ fun themeAdapterDelegate(
         itemClickedListener(item)
     }
     bind {
-        val strokeColor = if (item.isChosen == true) R.color.black else R.color.white
+        val strokeColor = if (item.isChosen == true) R.color.black else R.color.light_grey
         binding.itemThemeTitle.text = item.name
         binding.itemThemeImage.setImageResource(item.src)
         binding.itemThemeImage.setStrokeColorResource(strokeColor)
@@ -43,7 +45,7 @@ fun questionAdapterDelegate(
                     themeOfQuestionIcon = it.src
                 }
             }
-            binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_hello)
+            binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_inkwell)
 
         binding.tvQuestionText.text = item.text
     }
@@ -59,6 +61,21 @@ fun interestAdapterDelegate(
     }
     bind {
         binding.tvInterest.text = item
+    }
+}
+
+fun interestLocalAdapterDelegate(
+    itemDeleteClickedListener: (LocalInterest) -> Unit
+) = adapterDelegateViewBinding<LocalInterest, LocalInterest, ItemInterestBinding>(
+    { layoutInflater, root -> ItemInterestBinding.inflate(layoutInflater, root, false) }
+) {
+    binding.btnDelete.setOnClickListener {
+        itemDeleteClickedListener(item)
+    }
+    bind {
+        binding.tvInterest.text = item.name
+        val backgroundColor = if (item.isCommon) ContextCompat.getColor(context, R.color.lavender) else ContextCompat.getColor(context, R.color.light_grey)
+        binding.llInterest.setBackgroundColor(backgroundColor)
     }
 }
 
@@ -79,5 +96,21 @@ fun personAdapterDelegate(
         val iconPerson = if (!item.isOwner) R.drawable.ic_person_menu else R.drawable.ic_inkwell
         binding.ivPerson.setImageResource(iconPerson)
         binding.ivDelete.isVisible = !item.isOwner
+    }
+}
+
+fun personAddAdapterDelegate(
+    itemClickedListener: (DialectPerson) -> Unit
+) = adapterDelegateViewBinding<DialectPerson, DialectPerson, ItemPersonBinding>(
+    { layoutInflater, root -> ItemPersonBinding.inflate(layoutInflater, root, false) }
+) {
+    binding.llPerson.setOnClickListener {
+        itemClickedListener(item)
+    }
+    bind {
+        binding.tvPersonName.text = if (!item.isOwner) item.name else getString(R.string.notes)
+        val iconPerson = if (!item.isOwner) R.drawable.ic_person_menu else R.drawable.ic_inkwell
+        binding.ivPerson.setImageResource(iconPerson)
+        binding.ivDelete.setImageResource(R.drawable.ic_add)
     }
 }

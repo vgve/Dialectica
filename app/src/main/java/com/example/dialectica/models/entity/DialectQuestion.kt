@@ -1,4 +1,4 @@
-package com.example.dialectica.models
+package com.example.dialectica.models.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

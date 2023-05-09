@@ -1,4 +1,4 @@
-package com.example.dialectica.models
+package com.example.dialectica.models.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -12,5 +12,7 @@ data class DialectPerson (
     @ColumnInfo val name: String,
     @TypeConverters(DataConverter::class)
     @ColumnInfo val interests: List<String>,
-    @ColumnInfo val isOwner: Boolean
+    @TypeConverters(QuestionConverter::class)
+    @ColumnInfo val questions: List<DialectQuestion>,
+    @ColumnInfo val isOwner: Boolean,
 ) : Serializable

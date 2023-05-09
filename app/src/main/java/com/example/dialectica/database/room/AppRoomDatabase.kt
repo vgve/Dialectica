@@ -5,13 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.dialectica.models.DataConverter
-import com.example.dialectica.models.DialectInterest
-import com.example.dialectica.models.DialectPerson
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.*
 
 @Database(entities = [DialectQuestion::class, DialectInterest::class, DialectPerson::class],version = 1)
-@TypeConverters(DataConverter::class)
+@TypeConverters(DataConverter::class, QuestionConverter::class)
 abstract class AppRoomDatabase: RoomDatabase() {
     abstract fun getAppRoomDao(): AppRoomDao
 

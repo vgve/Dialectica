@@ -1,8 +1,8 @@
 package com.example.dialectica.database
 
-import com.example.dialectica.models.DialectInterest
-import com.example.dialectica.models.DialectPerson
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectInterest
+import com.example.dialectica.models.entity.DialectPerson
+import com.example.dialectica.models.entity.DialectQuestion
 
 interface DatabaseRepository {
     val favQuestions: List<DialectQuestion>
@@ -17,9 +17,15 @@ interface DatabaseRepository {
 
     suspend fun insertPerson(person: DialectPerson?)
 
-    suspend fun updatePerson(interests: List<String>, id: Int?)
+    suspend fun updatePersonInterests(interests: List<String>, id: Int?)
+
+    suspend fun updatePersonQuestions(questions: List<DialectQuestion>, id: Int?)
 
     suspend fun deletePerson(person: DialectPerson?)
+
+    suspend fun getOwnerPerson(isOwner: Boolean?) : DialectPerson
+
+    suspend fun getPersonById(id: Int?) : DialectPerson
 
     suspend fun getPersonList() : List<DialectPerson>
 

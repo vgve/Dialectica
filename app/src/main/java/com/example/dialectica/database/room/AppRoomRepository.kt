@@ -1,9 +1,9 @@
 package com.example.dialectica.database.room
 
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectQuestion
 import com.example.dialectica.database.DatabaseRepository
-import com.example.dialectica.models.DialectInterest
-import com.example.dialectica.models.DialectPerson
+import com.example.dialectica.models.entity.DialectInterest
+import com.example.dialectica.models.entity.DialectPerson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -40,15 +40,33 @@ class AppRoomRepository(private val appRoomDao: AppRoomDao) : DatabaseRepository
         }
     }
 
-    override suspend fun updatePerson(interests: List<String>, id: Int?) {
+    override suspend fun updatePersonInterests(interests: List<String>, id: Int?) {
         withContext(Dispatchers.IO) {
-            appRoomDao.updatePerson(interests, id)
+            appRoomDao.updatePersonInterests(interests, id)
+        }
+    }
+
+    override suspend fun updatePersonQuestions(questions: List<DialectQuestion>, id: Int?) {
+        withContext(Dispatchers.IO) {
+            appRoomDao.updatePersonQuestions(questions, id)
         }
     }
 
     override suspend fun deletePerson(person: DialectPerson?) {
         withContext(Dispatchers.IO) {
             appRoomDao.deletePerson(person)
+        }
+    }
+
+    override suspend fun getOwnerPerson(isOwner: Boolean?): DialectPerson {
+        return withContext(Dispatchers.IO) {
+            appRoomDao.getOwnerPerson(isOwner)
+        }
+    }
+
+    override suspend fun getPersonById(id: Int?): DialectPerson {
+        return withContext(Dispatchers.IO) {
+            appRoomDao.getPersonById(id)
         }
     }
 

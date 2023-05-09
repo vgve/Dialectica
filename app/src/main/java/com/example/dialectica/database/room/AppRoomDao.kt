@@ -1,9 +1,9 @@
 package com.example.dialectica.database.room
 
 import androidx.room.*
-import com.example.dialectica.models.DialectInterest
-import com.example.dialectica.models.DialectPerson
-import com.example.dialectica.models.DialectQuestion
+import com.example.dialectica.models.entity.DialectInterest
+import com.example.dialectica.models.entity.DialectPerson
+import com.example.dialectica.models.entity.DialectQuestion
 
 @Dao
 interface AppRoomDao {
@@ -20,11 +20,20 @@ interface AppRoomDao {
     @Query("SELECT *from person_tables")
     fun getPersonList(): List<DialectPerson>
 
+    @Query("SELECT *from person_tables  WHERE isOwner = :isOwner")
+    fun getOwnerPerson(isOwner: Boolean?): DialectPerson
+
+    @Query("SELECT *from person_tables  WHERE id = :id")
+    fun getPersonById(id: Int?): DialectPerson
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPerson(person: DialectPerson?)
 
     @Query("UPDATE person_tables SET interests=:interests WHERE id = :id")
-    suspend fun updatePerson(interests: List<String>, id: Int?)
+    suspend fun updatePersonInterests(interests: List<String>, id: Int?)
+
+    @Query("UPDATE person_tables SET questions=:questions WHERE id = :id")
+    suspend fun updatePersonQuestions(questions: List<DialectQuestion>, id: Int?)
 
     @Delete
     suspend fun deletePerson(person: DialectPerson?)
