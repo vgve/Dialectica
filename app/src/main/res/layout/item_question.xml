@@ -21,8 +21,10 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="8dp"
+            android:layout_gravity="center"
             android:src="@drawable/ic_idea"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/tv_question_text"
@@ -32,6 +34,7 @@
             android:layout_margin="8dp"
             android:fontFamily="@font/lato_regular"
             android:lineSpacingExtra="6dp"
+            android:textAlignment="inherit"
             tools:text="Question 1: What do you think about..."
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -41,7 +44,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="8dp"
-            android:layout_gravity="center"
+            android:layout_gravity="end|center"
             android:src="@drawable/ic_delete"
             tools:ignore="ContentDescription"
             app:tint="@color/lavender" />

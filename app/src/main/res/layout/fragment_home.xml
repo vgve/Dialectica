@@ -12,37 +12,54 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.61"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/lavender"
-            app:cardCornerRadius="9dp">
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:background="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_themes"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
                 android:fontFamily="@font/lato_regular"
-                android:textSize="14sp"
-                android:lineSpacingExtra="6dp"
-                android:text="@string/info_home_page"/>
+                android:gravity="center"
+                android:lineSpacingExtra="10dp"
+                android:padding="20dp"
+                android:text="@string/title_themes"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="10dp" />
 
-        </androidx.cardview.widget.CardView>
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                android:background="@color/grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_themes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -59,11 +76,29 @@
             android:background="@color/grey" />
 
         <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:lineSpacingExtra="10dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/lato_regular"
+            android:textColor="@color/black"
+            android:padding="20dp"
+            android:background="@drawable/bg_corner_button"
+            tools:text="Question" />
+
+        <TextView
             android:id="@+id/tv_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_margin="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
             android:lineSpacingExtra="10dp"
             android:textSize="18sp"
             android:fontFamily="@font/lato_regular"
@@ -73,54 +108,49 @@
             tools:text="Question" />
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_fav"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/add_to_fav"
-                app:icon="@drawable/ic_fav_menu"
-                app:iconGravity="start"
-                app:iconSize="24dp"
-                app:iconTint="@null" />
+            android:layout_gravity="end"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_personal"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/AddButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/add_to_personal"
                 app:icon="@drawable/ic_person_menu"
-                app:iconGravity="start"
-                app:iconSize="24dp"
+                app:iconGravity="end"
+                app:iconSize="30dp"
                 app:iconTint="@null" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_next"
-                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/btn_add_fav"
+                style="@style/AddButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
+                android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
-                android:text="@string/next"
-                app:icon="@drawable/ic_arrow"
-                app:iconGravity="start"
-                app:iconSize="24dp"
+                app:icon="@drawable/ic_fav_menu"
+                app:iconGravity="textStart"
+                app:iconSize="50dp"
                 app:iconTint="@null" />
 
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_next"
+            style="@style/AddButton"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/next"
+            app:icon="@drawable/ic_arrow"
+            app:iconGravity="textStart"
+            app:iconSize="30dp"
+            app:iconTint="@null" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -133,6 +163,7 @@
         android:src="@drawable/ic_magic"
         app:maxImageSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/random" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@
             android:cropToPadding="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_handshake"
+            app:tint="@color/black"
             app:shapeAppearanceOverlay="@style/circleImageView"
             app:strokeColor="@color/black"
             app:strokeWidth="2dp" />

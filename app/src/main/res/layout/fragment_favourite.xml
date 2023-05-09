@@ -31,6 +31,7 @@
         app:iconSize="24dp"
         app:iconTint="@null"
         android:fontFamily="@font/lato_regular"
+        android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
