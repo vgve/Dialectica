@@ -103,7 +103,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         _uiState.update { it.copy(isFavourite = true) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.insert(question)
+            REPOSITORY.insertFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -123,7 +123,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    favouriteList = REPOSITORY.getFavQuestions()
+                    favouriteList = REPOSITORY.getFavouriteList()
                 )
             }
         }

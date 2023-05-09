@@ -20,7 +20,7 @@ class FavouriteViewModel : ViewModel() {
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
         viewModelScope.launch (Dispatchers.Main) {
-            REPOSITORY.delete(question)
+            REPOSITORY.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -31,7 +31,7 @@ class FavouriteViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    questions = REPOSITORY.getFavQuestions()
+                    questions = REPOSITORY.getFavouriteList()
                 )
             }
         }
