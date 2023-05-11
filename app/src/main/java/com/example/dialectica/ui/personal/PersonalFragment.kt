@@ -24,7 +24,7 @@ import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.ui.adapters.InterestListAdapter
 import com.example.dialectica.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.AppPreference
-import com.example.dialectica.utils.PERSON
+import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
 
@@ -48,7 +48,7 @@ class PersonalFragment : Fragment() {
         {
             Log.d(this.TAG, "onClickPerson: $it")
             val bundle = Bundle()
-            bundle.putSerializable(PERSON, it)
+            bundle.putInt(PERSON_ID, it.id)
             findNavController().navigate(R.id.action_navigation_personal_to_navigation_talk, bundle)
         },
         {

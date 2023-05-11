@@ -3,7 +3,6 @@ package com.example.dialectica.ui.talk
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dialectica.models.entity.DialectInterest
 import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.models.entity.DialectQuestion
 import com.example.dialectica.utils.REPOSITORY
@@ -57,19 +56,27 @@ class TalkViewModel: ViewModel() {
         updatePerson {  }
     }
 
-    fun setPerson(dialectPerson: DialectPerson) {
+    fun setPerson(personId: Int?, onSuccess: () -> Unit) {
         Log.d(TAG, "setPerson")
-        getOwnerPerson {
-            setLocalInterestList(dialectPerson.interests)
-        }
-        _uiState.update {
-            it.copy(
-                username = dialectPerson.name,
-                personId = dialectPerson.id,
-                isOwner = dialectPerson.isOwner,
-                simpleInterestList = dialectPerson.interests,
-                questionList = dialectPerson.questions
-            )
+        var person: DialectPerson?
+        viewModelScope.launch(Dispatchers.Main) {
+            person = REPOSITORY.getPersonById(personId)
+
+            _uiState.update {
+                it.copy(
+                    username = person?.name,
+                    personId = person?.id,
+                    isOwner = person?.isOwner ?: false,
+                    simpleInterestList = person?.interests.orEmpty(),
+                    questionList = person?.questions.orEmpty()
+                )
+            }
+
+            getOwnerPerson {
+                setLocalInterestList(person?.interests.orEmpty())
+            }
+
+            onSuccess()
         }
     }
 

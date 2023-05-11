@@ -18,12 +18,10 @@ import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
 import com.example.dialectica.databinding.FragmentTalkBinding
-import com.example.dialectica.models.entity.DialectPerson
 import com.example.dialectica.models.entity.DialectQuestion
-import com.example.dialectica.ui.adapters.InterestListAdapter
 import com.example.dialectica.ui.adapters.InterestLocalListAdapter
 import com.example.dialectica.ui.adapters.QuestionListAdapter
-import com.example.dialectica.utils.PERSON
+import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
 
@@ -56,7 +54,7 @@ class TalkFragment : Fragment() {
 
         observeUiState()
 
-        viewModel.setPerson(arguments?.getSerializable(PERSON) as DialectPerson)
+        viewModel.setPerson(arguments?.getInt(PERSON_ID)) { }
 
         _binding.rvInterests.adapter = interestsAdapter
 

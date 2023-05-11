@@ -143,7 +143,7 @@ class HomeFragment : Fragment() {
                     _binding.btnAddFav.isVisible = state.currentQuestion?.text != null
                     _binding.btnAddPersonal.isVisible = state.currentQuestion?.text != null
                     val ic = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
-                    _binding.btnAddFav.setIconResource(ic)
+                    _binding.btnAddFav.setImageResource(ic)
 
                     if (state.currentQuestion != null) {
                         viewModel.changeFavouriteState()
