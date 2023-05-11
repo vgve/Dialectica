@@ -6,13 +6,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:ignore="contentDescription"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    tools:ignore="ContentDescription">
 
     <LinearLayout
         android:id="@+id/ll_interest"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="1dp"
         android:orientation="horizontal"
         android:background="@color/lavender">
@@ -34,5 +34,4 @@
             android:layout_margin="5dp"
             android:src="@drawable/ic_cross_delete"/>
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

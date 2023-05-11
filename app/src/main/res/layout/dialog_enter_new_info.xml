@@ -18,7 +18,8 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_info"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_question"
@@ -28,15 +29,15 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:lineHeight="23dp"
+            android:lineSpacingExtra="6dp"
             android:textSize="16sp"
-            android:text="Введите новый интерес:"
+            android:text="@string/enter_new_interest"
             android:fontFamily="@font/lato_regular"
             android:textColor="@color/black" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_username"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/til_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -53,8 +54,8 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_question"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/til_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -78,8 +79,8 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_no"
                 style="@style/AddButton"
+                android:id="@+id/btn_no"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
@@ -91,8 +92,8 @@
                 app:iconTint="@null" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_yes"
                 style="@style/AddButton"
+                android:id="@+id/btn_yes"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
@@ -102,8 +103,6 @@
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
                 app:iconTint="@null" />
-
         </LinearLayout>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

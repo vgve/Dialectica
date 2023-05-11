@@ -18,7 +18,8 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_info"
-            android:layout_margin="20dp"/>
+            android:layout_margin="20dp"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_info"
@@ -41,8 +42,8 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_no"
                 style="@style/AddButton"
+                android:id="@+id/btn_no"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
@@ -54,8 +55,8 @@
                 app:iconTint="@null" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_yes"
                 style="@style/AddButton"
+                android:id="@+id/btn_yes"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
@@ -65,7 +66,6 @@
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
                 app:iconTint="@null" />
-
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -27,9 +27,8 @@
             android:cropToPadding="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_handshake"
-            app:tint="@color/black"
+            app:tint="?android:attr/textColorPrimary"
             app:shapeAppearanceOverlay="@style/circleImageView"
-            app:strokeColor="@color/black"
             app:strokeWidth="2dp" />
 
     </androidx.cardview.widget.CardView>
@@ -41,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:textColor="@color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:fontFamily="@font/lato_regular"
         android:breakStrategy="high_quality"
         android:textSize="14sp"

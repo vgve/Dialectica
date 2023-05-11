@@ -10,19 +10,18 @@
     <string name="add_to_personal">В разговор</string>
     <string name="next">Дальше</string>
     <string name="info_home_page_user">Здравствуйте, %s! Выберите интересующий вас раздел и добавьте себе новую тему</string>
-    <string name="info_for_owner">%s, здесь вы можете хранить свои идеи и личные темы для разговоров</string>
+    <string name="info_for_owner">Личное: темы, идеи, заметки</string>
     <string name="info_home_page">Выберите интересующий вас раздел и добавьте себе новую тему</string>
     <string name="please_login">Для ведения списка разговоров необходимо авторизоваться!</string>
     <string name="info_login">Кнопка справа от поля ввода сохраняет введенный интерес.</string>
     <string name="enter_name">Введите никнейм/имя</string>
     <string name="enter_interests">Введите интересы: f.e. история</string>
+    <string name="enter_new_interest">Введите новый интерес:</string>
     <string name="login_btn">Войти</string>
     <string name="back">Назад</string>
     <string name="empty">Здесь пока ничего нет…</string>
     <string name="add_new_person">Добавить нового собеседника</string>
     <string name="error_empty_name">Введите никнейм или имя!</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="dialog_btn_add">Добавить</string>
     <string name="info_delete_person">Вы уверены, что хотите удалить собеседника «%s»? Отменить это действие невозможно.</string>
     <string name="info_delete_question">Вы уверены, что хотите удалить тему «%s»? Отменить это действие невозможно.</string>

@@ -110,36 +110,37 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
             android:layout_gravity="end"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btn_add_personal"
-                style="@style/AddButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:icon="@drawable/ic_person_menu"
-                app:iconGravity="end"
-                app:iconSize="30dp"
-                app:iconTint="@null" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_menu"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="ContentDescription" />
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btn_add_fav"
-                style="@style/AddButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                app:icon="@drawable/ic_fav_menu"
-                app:iconGravity="textStart"
-                app:iconSize="50dp"
-                app:iconTint="@null" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_fav_menu"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_next"
             style="@style/AddButton"
+            android:id="@+id/btn_next"
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -158,12 +159,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:src="@drawable/ic_magic"
+        android:contentDescription="@string/random"
         app:elevation="6dp"
         app:backgroundTint="@color/lavender"
-        android:src="@drawable/ic_magic"
         app:maxImageSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="@string/random" />
-
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
