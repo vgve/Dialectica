@@ -54,7 +54,7 @@ class TalkFragment : Fragment() {
 
         observeUiState()
 
-        viewModel.setPerson(arguments?.getInt(PERSON_ID)) { }
+        viewModel.getPerson(arguments?.getInt(PERSON_ID)) { }
 
         _binding.rvInterests.adapter = interestsAdapter
 

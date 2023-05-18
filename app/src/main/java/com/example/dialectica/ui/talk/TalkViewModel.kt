@@ -56,7 +56,7 @@ class TalkViewModel: ViewModel() {
         updatePerson {  }
     }
 
-    fun setPerson(personId: Int?, onSuccess: () -> Unit) {
+    fun getPerson(personId: Int?, onSuccess: () -> Unit) {
         Log.d(TAG, "setPerson")
         var person: DialectPerson?
         viewModelScope.launch(Dispatchers.Main) {
