@@ -124,9 +124,7 @@ class HomeFragment : Fragment() {
             initDatabase()
         }
 
-        if (AppPreference.getUserAuthorize()) {
-            _binding.tvStart.text = if (AppPreference.getUserAuthorize()) getString(R.string.info_home_page_user, AppPreference.getUserName()) else getString(R.string.info_home_page)
-        }
+        _binding.tvStart.text = if (AppPreference.getUserAuthorize()) getString(R.string.info_home_page_user, AppPreference.getUserName()) else getString(R.string.info_home_page)
     }
 
     private fun observeUiState() {
