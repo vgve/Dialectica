@@ -1,17 +1,17 @@
-package com.example.dialectica.ui.adapters
+package com.example.dialectica.presentation.ui.adapters
 
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.dialectica.R
 import com.example.dialectica.databinding.ItemInterestBinding
 import com.example.dialectica.databinding.ItemPersonBinding
-import com.example.dialectica.models.entity.DialectQuestion
+import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.databinding.ItemThemeBinding
-import com.example.dialectica.models.DialectTheme
+import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.databinding.ItemQuestionBinding
-import com.example.dialectica.models.entity.DialectPerson
-import com.example.dialectica.models.Themes
-import com.example.dialectica.ui.talk.LocalInterest
+import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.data.models.Themes
+import com.example.dialectica.presentation.talk.LocalInterest
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 fun themeAdapterDelegate(

@@ -1,9 +1,9 @@
 package com.example.dialectica.database.room
 
 import androidx.room.*
-import com.example.dialectica.models.entity.DialectInterest
-import com.example.dialectica.models.entity.DialectPerson
-import com.example.dialectica.models.entity.DialectQuestion
+import com.example.dialectica.data.models.entity.DialectInterest
+import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.data.models.entity.DialectQuestion
 
 @Dao
 interface AppRoomDao {

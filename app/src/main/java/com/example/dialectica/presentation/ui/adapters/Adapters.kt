@@ -1,9 +1,9 @@
-package com.example.dialectica.ui.adapters
+package com.example.dialectica.presentation.ui.adapters
 
-import com.example.dialectica.models.entity.DialectPerson
-import com.example.dialectica.models.entity.DialectQuestion
-import com.example.dialectica.models.DialectTheme
-import com.example.dialectica.ui.talk.LocalInterest
+import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.data.models.DialectTheme
+import com.example.dialectica.presentation.talk.LocalInterest
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
 
 class ThemeListAdapter(

@@ -1,4 +1,4 @@
-package com.example.dialectica.ui.talk
+package com.example.dialectica.presentation.talk
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -18,9 +18,9 @@ import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
 import com.example.dialectica.databinding.FragmentTalkBinding
-import com.example.dialectica.models.entity.DialectQuestion
-import com.example.dialectica.ui.adapters.InterestLocalListAdapter
-import com.example.dialectica.ui.adapters.QuestionListAdapter
+import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.presentation.ui.adapters.InterestLocalListAdapter
+import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch

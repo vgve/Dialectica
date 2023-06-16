@@ -1,24 +1,24 @@
-package com.example.dialectica.models.entity
+package com.example.dialectica.data.models.entity
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 
-class QuestionConverter {
 
+class DataConverter {
     @TypeConverter
-    fun storedStringToQuestionList(data: String?): List<DialectQuestion>? {
+    fun storedStringToInterestList(data: String?): List<String>? {
         val gson = Gson()
         if (data == null) {
             return Collections.emptyList()
         }
-        val turnsType = object : TypeToken<List<DialectQuestion>>() {}.type
+        val turnsType = object : TypeToken<List<String>>() {}.type
         return gson.fromJson(data, turnsType)
     }
 
     @TypeConverter
-    fun questionListToStoredString(interests: List<DialectQuestion?>?): String? {
+    fun interestListToStoredString(interests: List<String?>?): String? {
         return Gson().toJson(interests)
     }
 }

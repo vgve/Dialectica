@@ -1,4 +1,4 @@
-package com.example.dialectica.ui.home
+package com.example.dialectica.presentation.home
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -18,10 +18,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.dialectica.R
 import com.example.dialectica.databinding.DialogAddToTalkBinding
 import com.example.dialectica.databinding.FragmentHomeBinding
-import com.example.dialectica.models.DialectTheme
+import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
-import com.example.dialectica.ui.adapters.PersonAddListAdapter
-import com.example.dialectica.ui.adapters.ThemeListAdapter
+import com.example.dialectica.presentation.ui.adapters.PersonAddListAdapter
+import com.example.dialectica.presentation.ui.adapters.ThemeListAdapter
 import com.example.dialectica.utils.*
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

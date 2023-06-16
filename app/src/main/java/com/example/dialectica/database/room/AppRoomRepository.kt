@@ -1,9 +1,9 @@
 package com.example.dialectica.database.room
 
-import com.example.dialectica.models.entity.DialectQuestion
+import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.database.DatabaseRepository
-import com.example.dialectica.models.entity.DialectInterest
-import com.example.dialectica.models.entity.DialectPerson
+import com.example.dialectica.data.models.entity.DialectInterest
+import com.example.dialectica.data.models.entity.DialectPerson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

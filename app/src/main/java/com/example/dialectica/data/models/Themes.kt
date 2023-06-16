@@ -1,7 +1,7 @@
-package com.example.dialectica.models
+package com.example.dialectica.data.models
 
 import com.example.dialectica.R
-import com.example.dialectica.models.entity.DialectQuestion
+import com.example.dialectica.data.models.entity.DialectQuestion
 
 class Themes {
     val themeList = listOf(

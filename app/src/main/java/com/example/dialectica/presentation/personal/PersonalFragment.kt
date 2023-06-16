@@ -1,4 +1,4 @@
-package com.example.dialectica.ui.personal
+package com.example.dialectica.presentation.personal
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -20,9 +20,9 @@ import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentPersonalBinding
-import com.example.dialectica.models.entity.DialectPerson
-import com.example.dialectica.ui.adapters.InterestListAdapter
-import com.example.dialectica.ui.adapters.PersonListAdapter
+import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.presentation.ui.adapters.InterestListAdapter
+import com.example.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG

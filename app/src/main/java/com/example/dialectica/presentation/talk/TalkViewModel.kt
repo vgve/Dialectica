@@ -1,10 +1,10 @@
-package com.example.dialectica.ui.talk
+package com.example.dialectica.presentation.talk
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dialectica.models.entity.DialectPerson
-import com.example.dialectica.models.entity.DialectQuestion
+import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers

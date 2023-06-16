@@ -1,4 +1,4 @@
-package com.example.dialectica.ui.home
+package com.example.dialectica.presentation.home
 
 import android.app.Application
 import android.util.Log
@@ -6,10 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.database.room.AppRoomDatabase
 import com.example.dialectica.database.room.AppRoomRepository
-import com.example.dialectica.models.entity.DialectQuestion
-import com.example.dialectica.models.DialectTheme
-import com.example.dialectica.models.Themes
-import com.example.dialectica.models.entity.DialectPerson
+import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.data.models.DialectTheme
+import com.example.dialectica.data.models.Themes
+import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.TYPE_ROOM

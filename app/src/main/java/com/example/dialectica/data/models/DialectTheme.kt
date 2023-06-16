@@ -1,4 +1,4 @@
-package com.example.dialectica.models
+package com.example.dialectica.data.models
 
 data class DialectTheme(
     val id: String,

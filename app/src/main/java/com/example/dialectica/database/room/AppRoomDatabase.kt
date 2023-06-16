@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.dialectica.models.entity.*
+import com.example.dialectica.data.models.entity.*
 
 @Database(entities = [DialectQuestion::class, DialectInterest::class, DialectPerson::class],version = 1)
 @TypeConverters(DataConverter::class, QuestionConverter::class)
