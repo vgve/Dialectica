@@ -1,10 +1,8 @@
 package com.example.dialectica.presentation.home
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dialectica.database.room.AppRoomDatabase
 import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.data.models.DialectTheme
@@ -20,11 +18,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class HomeViewModel(application: Application): AndroidViewModel(application) {
-
-    private val context = application
+class HomeViewModel @Inject constructor(
+    private val repository: AppRoomRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -44,8 +43,6 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
     fun initDatabase(type: String, onSuccess: () -> Unit) {
         when(type) {
             TYPE_ROOM -> {
-                val dao = AppRoomDatabase.getInstance(context).getAppRoomDao()
-                REPOSITORY = AppRoomRepository(dao)
                 // callback about completed
                 onSuccess()
             }
@@ -112,7 +109,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         _uiState.update { it.copy(isFavourite = true, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.insertFavourite(question)
+            repository.insertFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -122,7 +119,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.deleteFavourite(question)
+            repository.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -159,7 +156,7 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
     fun getPersons() {
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
-            val tempPersons = REPOSITORY.getPersonList()
+            val tempPersons = repository.getPersonList()
             val personsWithoutOwner = tempPersons.toMutableList()
             tempPersons.forEach {
                 if (it.isOwner) {
@@ -179,10 +176,10 @@ class HomeViewModel(application: Application): AndroidViewModel(application) {
         val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = REPOSITORY.getPersonById(person.id).questions.toMutableList()
+            val newQuestionList = repository.getPersonById(person.id).questions.toMutableList()
             if (!newQuestionList.contains(question)) {
                 question?.let { newQuestionList.add(it) }
-                REPOSITORY.updatePersonQuestions(newQuestionList, person.id)
+                repository.updatePersonQuestions(newQuestionList, person.id)
             }
             _uiAction.send(HomeAction.AddQuestionToPersonClick)
             onSuccess()

@@ -6,8 +6,11 @@ import com.example.dialectica.data.models.entity.DialectInterest
 import com.example.dialectica.data.models.entity.DialectPerson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AppRoomRepository(private val appRoomDao: AppRoomDao) : DatabaseRepository {
+class AppRoomRepository @Inject constructor(
+    private val appRoomDao: AppRoomDao
+) : DatabaseRepository {
 
     override val favQuestions: List<DialectQuestion>
         get() = appRoomDao.getFavouriteList()

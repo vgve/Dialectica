@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavouriteViewModel : ViewModel() {
+class FavouriteViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavouriteUiState())
     val uiState = _uiState.asStateFlow()
