@@ -3,6 +3,7 @@ package com.example.dialectica.presentation.personal
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
@@ -12,10 +13,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PersonalViewModel: ViewModel() {
+class PersonalViewModel(
+    private val sharedPrefsRepository: SharedPrefsRepository
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(PersonalUiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        if (sharedPrefsRepository.getUserAuthorize()) {
+            setUsername(sharedPrefsRepository.getUserName())
+        }
+    }
 
     fun addOwnInterest(interest: String) {
         Log.d(TAG, "addInterestOfUser")
@@ -53,8 +62,8 @@ class PersonalViewModel: ViewModel() {
         _uiState.update { it.copy(tempInterestList = updatedInterests) }
     }
 
-    fun setUsername(username: String) {
-        Log.d(TAG, "saveUsername")
+    private fun setUsername(username: String) {
+        Log.d(TAG, "saveUsername $username")
 
         _uiState.update {
             it.copy(
@@ -106,7 +115,7 @@ class PersonalViewModel: ViewModel() {
         }
     }
 
-    fun loginUser(username: String, onSuccess: () -> Unit) {
+    fun loginUser(username: String) {
         Log.d(TAG, "loginUser")
         setUsername(username)
         val newPerson = DialectPerson(
@@ -119,7 +128,7 @@ class PersonalViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.Main) {
             REPOSITORY.insertPerson(newPerson)
             getPersons()
-            onSuccess()
+            sharedPrefsRepository.setUserName(username)
         }
     }
 

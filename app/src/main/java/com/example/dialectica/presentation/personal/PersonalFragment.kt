@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.example.dialectica.R
 import com.example.dialectica.databinding.DialogDeleteBinding
@@ -21,18 +22,25 @@ import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentPersonalBinding
 import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.example.dialectica.presentation.ui.adapters.PersonListAdapter
-import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
 
-
 class PersonalFragment : Fragment() {
 
     private lateinit var _binding: FragmentPersonalBinding
-    private val viewModel: PersonalViewModel by viewModels()
+    private val viewModel: PersonalViewModel by viewModels(
+        factoryProducer = {
+            viewModelFactory {
+                PersonalViewModel(
+                    MyApplication.appModule.sharedPrefsRepository
+                )
+            }
+        }
+    )
 
     private var ownInterestsAdapter: InterestListAdapter = InterestListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")
@@ -85,20 +93,6 @@ class PersonalFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        if (AppPreference.getUserAuthorize()) {
-            viewModel.setUsername(AppPreference.getUserName())
-        } else {
-            _binding.btnLogin.apply {
-                setOnClickListener {
-                showLoginUserDialog()
-                }
-            }
-        }
-    }
-
     private fun observeUiState() {
         Log.d(this.TAG, "observeUiState")
         viewLifecycleOwner.lifecycleScope.launch {
@@ -114,6 +108,13 @@ class PersonalFragment : Fragment() {
                     _binding.btnAddPerson.isVisible = state.isAuthorized
                     _binding.cvHello.isVisible = state.isAuthorized
                     _binding.tvOwnInterests.text = getString(R.string.own_interests, state.username)
+
+                    _binding.btnLogin.apply {
+                        setOnClickListener {
+                            if (!state.isAuthorized) showLoginUserDialog()
+                        }
+                    }
+
                 }
             }
         }
@@ -152,9 +153,7 @@ class PersonalFragment : Fragment() {
         dialogBinding.btnLogin.setOnClickListener {
             val username = dialogBinding.etName.text.toString().trim()
             if (username.isNotEmpty()) {
-                viewModel.loginUser(username) {
-                    AppPreference.setUserName(username)
-                }
+                viewModel.loginUser(username)
                 dialog.dismiss()
             } else {
                 Toast.makeText(context, getString(R.string.error_empty_name), Toast.LENGTH_SHORT).show()
