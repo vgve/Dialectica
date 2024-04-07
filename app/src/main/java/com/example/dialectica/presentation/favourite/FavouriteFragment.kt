@@ -12,17 +12,26 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dialectica.databinding.FragmentFavouriteBinding
 import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
-import com.example.dialectica.utils.AppPreference
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
 
     private lateinit var _binding: FragmentFavouriteBinding
-    private val viewModel: FavouriteViewModel by viewModels()
+    private val viewModel: FavouriteViewModel by viewModels(
+        factoryProducer = {
+            viewModelFactory {
+                FavouriteViewModel(
+                    MyApplication.appModule.sharedPrefsRepository
+                )
+            }
+        }
+    )
 
     private var questionsAdapter: QuestionListAdapter = QuestionListAdapter {
         Log.d(this.TAG, "onDeleteQuestion: $it")
@@ -41,11 +50,6 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding.rvQuestions.apply {
-            isVisible = AppPreference.getInitUser()
-            adapter = questionsAdapter
-        }
-
         viewModel.getFavQuestions()
         observeUiState()
     }
@@ -55,8 +59,14 @@ class FavouriteFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    setQuestionList(state.questions)
                     _binding.btnEmpty.isVisible = state.questions.isEmpty()
+
+                    // List of questions
+                    _binding.rvQuestions.apply {
+                        isVisible = state.isInit
+                        adapter = questionsAdapter
+                    }
+                    setQuestionList(state.questions)
                 }
             }
         }
