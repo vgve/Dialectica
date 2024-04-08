@@ -20,16 +20,27 @@ import com.example.dialectica.databinding.DialogAddToTalkBinding
 import com.example.dialectica.databinding.FragmentHomeBinding
 import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
+import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.PersonAddListAdapter
 import com.example.dialectica.presentation.ui.adapters.ThemeListAdapter
-import com.example.dialectica.utils.*
+import com.example.dialectica.utils.TAG
+import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var _binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels(
+        factoryProducer = {
+            viewModelFactory {
+                HomeViewModel(
+                    MyApplication.appModule.sharedPrefsRepository,
+                    MyApplication.appModule.appRoomRepository
+                )
+            }
+        }
+    )
 
     private var themesAdapter: ThemeListAdapter = ThemeListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")
@@ -83,7 +94,7 @@ class HomeFragment : Fragment() {
         }
         _binding.btnAddPersonal.setOnClickListener {
             viewModel.setRandomState(false)
-            checkUserAuthorize()
+            viewModel.checkUserAuthorize()
         }
         _binding.fabMagicRandom.setOnClickListener {
             val randomQuestion = viewModel.onClickRandom()
@@ -109,22 +120,10 @@ class HomeFragment : Fragment() {
             }
             dialogBinding.btnAddPersonal.setOnClickListener {
                 viewModel.setRandomState(true)
-                checkUserAuthorize()
+                viewModel.checkUserAuthorize()
                 dialog.dismiss()
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        if (AppPreference.getInitUser()) {
-            viewModel.initDatabase(AppPreference.getTypeDatabase()) {}
-        } else {
-            initDatabase()
-        }
-
-        _binding.tvStart.text = if (AppPreference.getUserAuthorize()) getString(R.string.info_home_page_user, AppPreference.getUserName()) else getString(R.string.info_home_page)
     }
 
     private fun observeUiState() {
@@ -133,6 +132,9 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
+                    _binding.tvStart.text =
+                        if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
+                        else getString(R.string.info_home_page)
                     setThemeList(state.themeList)
                     _binding.tvQuestion.text = state.currentQuestion?.text
                     _binding.tvQuestion.isVisible = state.currentQuestion != null
@@ -158,6 +160,12 @@ class HomeFragment : Fragment() {
                 is HomeAction.AddQuestionToPersonClick -> {
                     Log.d(TAG, "HomeAction.AddQuestionToPersonClick")
                 }
+                is HomeAction.OpenPersonalScreen -> {
+                    findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
+                }
+                is HomeAction.ShowAddToTalkScreen -> {
+                    showAddToTalkDialog()
+                }
             }
         }
     }
@@ -167,15 +175,6 @@ class HomeFragment : Fragment() {
         Log.d(this.TAG, "setThemeList")
         themesAdapter.items = themes
         themesAdapter.notifyDataSetChanged()
-    }
-
-    private fun checkUserAuthorize() {
-        Log.d(TAG, "checkUserAuthorize: ${AppPreference.getUserName()}")
-        if (AppPreference.getUserName().isEmpty() || AppPreference.getUserName() == USER_QUEST) {
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
-        } else {
-            showAddToTalkDialog()
-        }
     }
 
     private fun showAddToTalkDialog() {
@@ -200,12 +199,5 @@ class HomeFragment : Fragment() {
 
         dialogBinding.rvPersons.adapter = personsAdapter
         personsAdapter.items = viewModel.uiState.value.personList
-    }
-
-    private fun initDatabase() {
-        viewModel.initDatabase(TYPE_ROOM) {
-            AppPreference.setInitUser(true)
-            AppPreference.setTypeDatabase(TYPE_ROOM)
-        }
     }
 }

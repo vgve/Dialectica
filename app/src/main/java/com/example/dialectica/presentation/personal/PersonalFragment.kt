@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.example.dialectica.R
 import com.example.dialectica.databinding.DialogDeleteBinding
@@ -27,8 +26,8 @@ import com.example.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.example.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
+import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
-
 
 class PersonalFragment : Fragment() {
 

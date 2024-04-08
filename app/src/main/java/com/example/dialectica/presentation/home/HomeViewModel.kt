@@ -3,14 +3,14 @@ package com.example.dialectica.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.data.models.Themes
 import com.example.dialectica.data.models.entity.DialectPerson
-import com.example.dialectica.utils.REPOSITORY
 import com.example.dialectica.utils.TAG
-import com.example.dialectica.utils.TYPE_ROOM
+import com.example.dialectica.utils.USER_QUEST
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +18,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-
-class HomeViewModel @Inject constructor(
-    private val repository: AppRoomRepository
-) : ViewModel() {
+class HomeViewModel(
+    private val sharedPrefsRepository: SharedPrefsRepository,
+    private val appRoomRepository: AppRoomRepository
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -32,22 +31,40 @@ class HomeViewModel @Inject constructor(
     val uiAction = _uiAction.receiveAsFlow()
 
     init {
+
         _uiState.update {
             it.copy(
+                isAuthorize = sharedPrefsRepository.getUserAuthorize(),
+                username =
+                    if (sharedPrefsRepository.getUserAuthorize()) sharedPrefsRepository.getUserName()
+                    else null,
                 themeList = Themes().themeList,
                 allQuestions = Themes().questionList
             )
         }
     }
 
-    fun initDatabase(type: String, onSuccess: () -> Unit) {
-        when(type) {
-            TYPE_ROOM -> {
-                // callback about completed
-                onSuccess()
+    fun checkUserAuthorize() {
+        Log.d(TAG, "checkUserAuthorize: ${sharedPrefsRepository.getUserName()}")
+        viewModelScope.launch(Dispatchers.Main) {
+            if (sharedPrefsRepository.getUserName().isEmpty() || sharedPrefsRepository.getUserName() == USER_QUEST) {
+                _uiAction.send(HomeAction.OpenPersonalScreen)
+            } else {
+                _uiAction.send(HomeAction.ShowAddToTalkScreen)
             }
         }
     }
+
+//    fun initDatabase(type: String, onSuccess: () -> Unit) {
+//        when(type) {
+//            TYPE_ROOM -> {
+//                val dao = AppRoomDatabase.getInstance(context).getAppRoomDao()
+//                REPOSITORY = AppRoomRepository(dao)
+//                // callback about completed
+//                onSuccess()
+//            }
+//        }
+//    }
 
     fun onClickTheme(theme: DialectTheme) {
         Log.d(this.TAG, "onClickTheme")
@@ -109,7 +126,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isFavourite = true, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            repository.insertFavourite(question)
+            appRoomRepository.insertFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -119,7 +136,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            repository.deleteFavourite(question)
+            appRoomRepository.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -147,7 +164,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    favouriteList = REPOSITORY.getFavouriteList()
+                    favouriteList = appRoomRepository.getFavouriteList()
                 )
             }
         }
@@ -156,7 +173,7 @@ class HomeViewModel @Inject constructor(
     fun getPersons() {
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
-            val tempPersons = repository.getPersonList()
+            val tempPersons = appRoomRepository.getPersonList()
             val personsWithoutOwner = tempPersons.toMutableList()
             tempPersons.forEach {
                 if (it.isOwner) {
@@ -176,10 +193,10 @@ class HomeViewModel @Inject constructor(
         val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = repository.getPersonById(person.id).questions.toMutableList()
+            val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()
             if (!newQuestionList.contains(question)) {
                 question?.let { newQuestionList.add(it) }
-                repository.updatePersonQuestions(newQuestionList, person.id)
+                appRoomRepository.updatePersonQuestions(newQuestionList, person.id)
             }
             _uiAction.send(HomeAction.AddQuestionToPersonClick)
             onSuccess()
@@ -201,9 +218,13 @@ data class HomeUiState(
     val currentRandomQuestion: DialectQuestion? = null,
     val personList: List<DialectPerson> = emptyList(),
     val isFavourite: Boolean = false,
-    val isRandom: Boolean = false
+    val isRandom: Boolean = false,
+    val isAuthorize: Boolean = false,
+    val username: String? = null
 )
 
 sealed class HomeAction {
     object AddQuestionToPersonClick : HomeAction()
+    object ShowAddToTalkScreen : HomeAction()
+    object OpenPersonalScreen : HomeAction()
 }
