@@ -12,12 +12,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dialectica.databinding.FragmentFavouriteBinding
 import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.TAG
+import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
@@ -27,7 +27,8 @@ class FavouriteFragment : Fragment() {
         factoryProducer = {
             viewModelFactory {
                 FavouriteViewModel(
-                    MyApplication.appModule.sharedPrefsRepository
+                    MyApplication.appModule.sharedPrefsRepository,
+                    MyApplication.appModule.appRoomRepository
                 )
             }
         }

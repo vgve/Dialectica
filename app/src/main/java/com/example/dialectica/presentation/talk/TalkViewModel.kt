@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.data.models.entity.DialectQuestion
-import com.example.dialectica.utils.REPOSITORY
+import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class TalkViewModel: ViewModel() {
+class TalkViewModel(
+    private val appRoomRepository: AppRoomRepository
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(TalkUiState())
     val uiState = _uiState.asStateFlow()
@@ -33,7 +35,7 @@ class TalkViewModel: ViewModel() {
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.updatePersonInterests(_uiState.value.simpleInterestList, _uiState.value.personId)
+            appRoomRepository.updatePersonInterests(_uiState.value.simpleInterestList, _uiState.value.personId)
             onSuccess()
         }
     }
@@ -60,7 +62,7 @@ class TalkViewModel: ViewModel() {
         Log.d(TAG, "setPerson")
         var person: DialectPerson?
         viewModelScope.launch(Dispatchers.Main) {
-            person = REPOSITORY.getPersonById(personId)
+            person = appRoomRepository.getPersonById(personId)
 
             _uiState.update {
                 it.copy(
@@ -101,7 +103,7 @@ class TalkViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    ownerInterestList = REPOSITORY.getOwnerPerson(true).interests
+                    ownerInterestList = appRoomRepository.getOwnerPerson(true).interests
                 )
             }
             onSuccess()
@@ -120,7 +122,7 @@ class TalkViewModel: ViewModel() {
         _uiState.update { it.copy(questionList = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.updatePersonQuestions(newQuestionList, _uiState.value.personId)
+            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
             onSuccess()
         }
     }
@@ -133,7 +135,7 @@ class TalkViewModel: ViewModel() {
         _uiState.update { it.copy(questionList = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.updatePersonQuestions(newQuestionList, _uiState.value.personId)
+            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
             onSuccess()
         }
     }

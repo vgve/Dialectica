@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.example.dialectica.data.models.entity.DialectQuestion
-import com.example.dialectica.utils.REPOSITORY
+import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FavouriteViewModel(
-    private val sharedPrefsRepository: SharedPrefsRepository
+    sharedPrefsRepository: SharedPrefsRepository,
+    private val appRoomRepository: AppRoomRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavouriteUiState())
@@ -28,7 +29,7 @@ class FavouriteViewModel(
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
         viewModelScope.launch (Dispatchers.Main) {
-            REPOSITORY.deleteFavourite(question)
+            appRoomRepository.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -39,7 +40,7 @@ class FavouriteViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    questions = REPOSITORY.getFavouriteList()
+                    questions = appRoomRepository.getFavouriteList()
                 )
             }
         }

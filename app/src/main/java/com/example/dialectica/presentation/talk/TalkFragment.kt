@@ -19,16 +19,24 @@ import com.example.dialectica.databinding.DialogEnterNewInfoBinding
 import com.example.dialectica.databinding.DialogRandomQuestionBinding
 import com.example.dialectica.databinding.FragmentTalkBinding
 import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.PERSON_ID
 import com.example.dialectica.utils.TAG
+import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class TalkFragment : Fragment() {
 
     private lateinit var _binding: FragmentTalkBinding
-    private val viewModel: TalkViewModel by viewModels()
+    private val viewModel: TalkViewModel by viewModels(
+        factoryProducer = {
+            viewModelFactory {
+                TalkViewModel(MyApplication.appModule.appRoomRepository)
+            }
+        }
+    )
 
     private var interestsAdapter: InterestLocalListAdapter = InterestLocalListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")
