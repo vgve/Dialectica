@@ -1,12 +1,18 @@
 <resources>
+    <!-- Start Common Block -->
+    <string name="common_back">назад</string>
+    <!-- End Common Block -->
+
+    <!-- Start Favourites Block -->
+    <string name="favourites_fragment_title">Избранное</string>
+    <!-- End Favourites Block -->
+
     <string name="app_name">Dialectica</string>
     <string name="title_home">Каталог</string>
-    <string name="title_fav">Избранное</string>
     <string name="title_personal">Разговоры</string>
     <string name="title_talk">Собеседник</string>
     <string name="themes_title">Themes</string>
     <string name="add_to_fav">В избранное</string>
-    <string name="is_fav">Избранное</string>
     <string name="add_to_personal">В разговор</string>
     <string name="next">Дальше</string>
     <string name="info_home_page_user">Здравствуйте, %s! Выберите интересующий вас раздел и добавьте себе новую тему</string>

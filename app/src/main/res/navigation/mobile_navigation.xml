@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/navigation_favourite"
         android:name="com.example.dialectica.presentation.favourite.FavouriteFragment"
-        android:label="@string/title_fav"
+        android:label="@string/favourites_fragment_title"
         tools:layout="@layout/fragment_favourite" />
 
     <fragment

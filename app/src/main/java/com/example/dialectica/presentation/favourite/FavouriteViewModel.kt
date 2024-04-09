@@ -23,19 +23,23 @@ class FavouriteViewModel(
 
     init {
         val isInit = sharedPrefsRepository.getInitUser()
-        _uiState.update { it.copy(isInit = isInit) }
+        _uiState.update {
+            it.copy(
+                isInit = isInit
+            )
+        }
     }
 
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
         viewModelScope.launch (Dispatchers.Main) {
             appRoomRepository.deleteFavourite(question)
-            getFavQuestions()
+            updateFavourites()
             onSuccess()
         }
     }
 
-    fun getFavQuestions() {
+    fun updateFavourites() {
         Log.d(TAG, "getFavQuestions")
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {

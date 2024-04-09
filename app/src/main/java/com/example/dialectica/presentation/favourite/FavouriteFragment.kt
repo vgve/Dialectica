@@ -1,6 +1,5 @@
 package com.example.dialectica.presentation.favourite
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.dialectica.R
 import com.example.dialectica.databinding.FragmentFavouriteBinding
-import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.TAG
@@ -22,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
 
-    private lateinit var _binding: FragmentFavouriteBinding
+    private lateinit var binding: FragmentFavouriteBinding
+
     private val viewModel: FavouriteViewModel by viewModels(
         factoryProducer = {
             viewModelFactory {
@@ -44,14 +44,14 @@ class FavouriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
-        return _binding.root
+        binding = FragmentFavouriteBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.updateFavourites()
 
-        viewModel.getFavQuestions()
         observeUiState()
     }
 
@@ -60,23 +60,23 @@ class FavouriteFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    _binding.btnEmpty.isVisible = state.questions.isEmpty()
+                    with(binding) {
+                        // Toolbar
+                       toolbar.apply {
+                            tvToolbarTitle.text = getString(R.string.favourites_fragment_title)
+                        }
 
-                    // List of questions
-                    _binding.rvQuestions.apply {
-                        isVisible = state.isInit
-                        adapter = questionsAdapter
+                        btnEmpty.isVisible = state.questions.isEmpty()
+
+                        // List of questions
+                        rvQuestions.apply {
+                            adapter = questionsAdapter
+                            questionsAdapter.items = state.questions
+                            questionsAdapter.notifyDataSetChanged()
+                        }
                     }
-                    setQuestionList(state.questions)
                 }
             }
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setQuestionList(questions: List<DialectQuestion>) {
-        Log.d(TAG, "setQuestionList: $questions")
-        questionsAdapter.items = questions
-        questionsAdapter.notifyDataSetChanged()
     }
 }
