@@ -36,7 +36,8 @@ class PersonalFragment : Fragment() {
         factoryProducer = {
             viewModelFactory {
                 PersonalViewModel(
-                    MyApplication.appModule.sharedPrefsRepository
+                    MyApplication.appModule.sharedPrefsRepository,
+                    MyApplication.appModule.appRoomRepository
                 )
             }
         }

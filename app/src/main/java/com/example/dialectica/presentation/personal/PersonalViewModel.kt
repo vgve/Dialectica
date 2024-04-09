@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.example.dialectica.data.models.entity.DialectPerson
-import com.example.dialectica.utils.REPOSITORY
+import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PersonalViewModel(
-    private val sharedPrefsRepository: SharedPrefsRepository
+    private val sharedPrefsRepository: SharedPrefsRepository,
+    private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(PersonalUiState())
@@ -85,7 +86,7 @@ class PersonalViewModel(
         _uiState.update { it.copy(tempInterestList = emptyList()) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.insertPerson(newPerson)
+            appRoomRepository.insertPerson(newPerson)
             getPersons()
             onSuccess()
         }
@@ -95,7 +96,7 @@ class PersonalViewModel(
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
+            appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
             getPersons()
             onSuccess()
         }
@@ -104,7 +105,7 @@ class PersonalViewModel(
     fun getPersons() {
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
-            val persons = REPOSITORY.getPersonList()
+            val persons = appRoomRepository.getPersonList()
             _uiState.update {
                 it.copy(
                     personList = persons,
@@ -126,7 +127,7 @@ class PersonalViewModel(
         )
 
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.insertPerson(newPerson)
+            appRoomRepository.insertPerson(newPerson)
             getPersons()
             sharedPrefsRepository.setUserName(username)
         }
@@ -135,7 +136,7 @@ class PersonalViewModel(
     fun onDeletePerson(person: DialectPerson, onSuccess: () -> Unit) {
         Log.d(TAG, "onDeletePerson")
         viewModelScope.launch(Dispatchers.Main) {
-            REPOSITORY.deletePerson(person)
+            appRoomRepository.deletePerson(person)
             getPersons()
             onSuccess()
         }
