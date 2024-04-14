@@ -1,7 +1,14 @@
 <resources>
     <!-- Start Common Block -->
     <string name="common_back">назад</string>
+    <string name="common_name">Имя</string>
+    <string name="common_save">Сохранить</string>
     <!-- End Common Block -->
+
+    <!-- Start Welcome Block -->
+    <string name="signup_title">Привет!</string>
+    <string name="signup_subtitle">Давай знакомиться!</string>
+    <!-- End Welcome Block -->
 
     <!-- Start Favourites Block -->
     <string name="favourites_fragment_title">Избранное</string>
