@@ -89,7 +89,7 @@ class TalkViewModel(
             localInterestList.add(
                 LocalInterest(
                     name = it,
-                    isCommon = _uiState.value.ownerInterestList.contains(it)
+                    isCommon = _uiState.value.ownerInterestList?.contains(it) ?: false
                 )
             )
         }
@@ -103,7 +103,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    ownerInterestList = appRoomRepository.getOwnerPerson(true).interests
+                    ownerInterestList = appRoomRepository.getOwnerPerson(true)?.interests
                 )
             }
             onSuccess()
@@ -160,7 +160,7 @@ data class TalkUiState(
     val isOwner: Boolean = false,
     val simpleInterestList: List<String> = emptyList(),
     val interestList: List<LocalInterest> = emptyList(),
-    val ownerInterestList: List<String> = emptyList(),
+    val ownerInterestList: List<String>? = emptyList(),
     val questionList: List<DialectQuestion> = emptyList(),
     val currentRandomQuestion: DialectQuestion? = null
 )

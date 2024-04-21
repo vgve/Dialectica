@@ -23,9 +23,9 @@ interface DatabaseRepository {
 
     suspend fun deletePerson(person: DialectPerson?)
 
-    suspend fun getOwnerPerson(isOwner: Boolean?) : DialectPerson
+    suspend fun getOwnerPerson(isOwner: Boolean?) : DialectPerson?
 
-    suspend fun getPersonById(id: Int?) : DialectPerson
+    suspend fun getPersonById(id: Int?) : DialectPerson?
 
     suspend fun getPersonList() : List<DialectPerson>
 

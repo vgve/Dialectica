@@ -22,7 +22,7 @@ class FavouriteViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        val isInit = sharedPrefsRepository.getInitUser()
+        val isInit = sharedPrefsRepository.isAuthorize()
         _uiState.update {
             it.copy(
                 isInit = isInit

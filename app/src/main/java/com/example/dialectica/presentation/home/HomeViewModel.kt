@@ -193,8 +193,8 @@ class HomeViewModel(
         val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()
-            if (!newQuestionList.contains(question)) {
+            val newQuestionList = appRoomRepository.getPersonById(person.id)?.questions?.toMutableList()
+            if (newQuestionList?.contains(question) == false) {
                 question?.let { newQuestionList.add(it) }
                 appRoomRepository.updatePersonQuestions(newQuestionList, person.id)
             }
