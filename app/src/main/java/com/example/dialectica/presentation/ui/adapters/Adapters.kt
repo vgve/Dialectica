@@ -12,10 +12,8 @@ class ThemeListAdapter(
     themeAdapterDelegate(itemClickedListener)
 )
 
-class QuestionListAdapter(
-    itemDeleteClickedListener: (DialectQuestion) -> Unit
-) : ListDelegationAdapter<List<DialectQuestion>>(
-    questionAdapterDelegate(itemDeleteClickedListener)
+class QuestionListAdapter : ListDelegationAdapter<List<DialectQuestion>>(
+    questionAdapterDelegate()
 )
 
 class InterestListAdapter(

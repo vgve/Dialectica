@@ -70,7 +70,7 @@ class TalkViewModel(
                     personId = person?.id,
                     isOwner = person?.isOwner ?: false,
                     simpleInterestList = person?.interests.orEmpty(),
-                    questionList = person?.questions.orEmpty()
+                    questions = person?.questions.orEmpty()
                 )
             }
 
@@ -112,14 +112,14 @@ class TalkViewModel(
 
     fun addNewQuestion(question: String, onSuccess: () -> Unit) {
         Log.d(TAG, "addNewQuestion")
-        val newQuestionList = _uiState.value.questionList.toMutableList()
+        val newQuestionList = _uiState.value.questions.toMutableList()
         newQuestionList.add(
             DialectQuestion(
                 text = question,
                 idTheme = "own"
             )
         )
-        _uiState.update { it.copy(questionList = newQuestionList) }
+        _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
             appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
@@ -129,10 +129,10 @@ class TalkViewModel(
 
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "onDeleteQuestion")
-        val newQuestionList = _uiState.value.questionList.toMutableList()
+        val newQuestionList = _uiState.value.questions.toMutableList()
         newQuestionList.remove(question)
 
-        _uiState.update { it.copy(questionList = newQuestionList) }
+        _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
             appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
@@ -143,7 +143,7 @@ class TalkViewModel(
     fun getRandom(): DialectQuestion? {
         var randomQuestion = _uiState.value.currentRandomQuestion
         while (randomQuestion == _uiState.value.currentRandomQuestion) {
-            randomQuestion = _uiState.value.questionList.random()
+            randomQuestion = _uiState.value.questions.random()
         }
         _uiState.update {
             it.copy(
@@ -161,7 +161,7 @@ data class TalkUiState(
     val simpleInterestList: List<String> = emptyList(),
     val interestList: List<LocalInterest> = emptyList(),
     val ownerInterestList: List<String>? = emptyList(),
-    val questionList: List<DialectQuestion> = emptyList(),
+    val questions: List<DialectQuestion> = emptyList(),
     val currentRandomQuestion: DialectQuestion? = null
 )
 

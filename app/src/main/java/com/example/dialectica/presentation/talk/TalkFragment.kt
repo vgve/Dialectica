@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dialectica.R
 import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
@@ -43,10 +45,25 @@ class TalkFragment : Fragment() {
         viewModel.onDeleteInterest(it)
     }
 
-    private var questionsAdapter: QuestionListAdapter = QuestionListAdapter {
-        Log.d(this.TAG, "onClickTheme: $it")
-        onDeleteQuestion(it)
-    }
+    private var questionsAdapter: QuestionListAdapter = QuestionListAdapter()
+
+    private val swipeToDismissTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val deletedCourse = viewModel.uiState.value.questions[viewHolder.adapterPosition]
+            viewModel.onDeleteQuestion(deletedCourse) {}
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,12 +123,12 @@ class TalkFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     setInterestList(state.interestList)
-                    setQuestionList(state.questionList)
+                    setQuestionList(state.questions)
                     _binding.tvOwnInterests.text = getString(R.string.interests, state.username)
                     _binding.tvForOwner.text = getString(R.string.info_for_owner, state.username)
                     _binding.cvHello.isVisible = !state.isOwner
                     _binding.cvForOwner.isVisible = state.isOwner
-                    _binding.fabMagicRandom.isVisible = state.questionList.size > 1
+                    _binding.fabMagicRandom.isVisible = state.questions.size > 1
                 }
             }
         }
@@ -129,6 +146,7 @@ class TalkFragment : Fragment() {
         Log.d(this.TAG, "setOwnInterestList")
         questionsAdapter.items = questionList
         questionsAdapter.notifyDataSetChanged()
+        swipeToDismissTouchHelper.attachToRecyclerView(_binding.rvQuestions)
     }
 
     private fun showAddInterestDialog() {

@@ -28,25 +28,17 @@
 
         <TextView
             android:id="@+id/tv_question_text"
-            android:layout_width="220dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/lato_regular"
             android:lineSpacingExtra="6dp"
-            android:textAlignment="inherit"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Question 1: What do you think about..." />
-
-        <ImageView
-            android:id="@+id/iv_delete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="8dp"
-            android:layout_gravity="end|center"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/lavender"
-            tools:ignore="ContentDescription" />
+            tools:text="Question 1: What do you think about...What a do you think about..." />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

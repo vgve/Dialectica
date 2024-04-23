@@ -30,22 +30,17 @@ fun themeAdapterDelegate(
     }
 }
 
-fun questionAdapterDelegate(
-    itemDeleteClickedListener: (DialectQuestion) -> Unit
-) = adapterDelegateViewBinding<DialectQuestion, DialectQuestion, ItemQuestionBinding>(
+fun questionAdapterDelegate() = adapterDelegateViewBinding<DialectQuestion, DialectQuestion, ItemQuestionBinding>(
     { layoutInflater, root -> ItemQuestionBinding.inflate(layoutInflater, root, false) }
 ) {
-    binding.ivDelete.setOnClickListener {
-        itemDeleteClickedListener(item)
-    }
     bind {
-            var themeOfQuestionIcon: Int? = null
-            Themes().themeList.forEach {
-                if (item.idTheme == it.id) {
-                    themeOfQuestionIcon = it.src
-                }
+        var themeOfQuestionIcon: Int? = null
+        Themes().themeList.forEach {
+            if (item.idTheme == it.id) {
+                themeOfQuestionIcon = it.src
             }
-            binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_inkwell)
+        }
+        binding.ivTheme.setImageResource(themeOfQuestionIcon ?: R.drawable.ic_inkwell)
 
         binding.tvQuestionText.text = item.text
     }
