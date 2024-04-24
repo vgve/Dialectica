@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/main_graph"
     app:startDestination="@+id/navigation_home">
 
     <fragment
@@ -17,6 +17,19 @@
         <action
             android:id="@+id/action_navigation_home_to_navigation_favourite"
             app:destination="@id/navigation_favourite" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_auth"
+        android:name="com.example.dialectica.presentation.signup.SignUpFragment"
+        android:label="@string/title_sign_up"
+        tools:layout="@layout/fragment_signup" >
+
+        <action
+            android:id="@+id/action_navigation_auth_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

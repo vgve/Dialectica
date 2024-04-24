@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/start_graph"
+    tools:ignore="InvalidNavigation">
+
+    <action
+        android:id="@+id/action_global_signUpFragment"
+        app:destination="@id/signUpFragment"
+        app:popUpTo="@id/start_graph" />
+
+    <action
+        android:id="@+id/action_global_baseFlowFragment"
+        app:destination="@id/baseFlowFragment"
+        app:popUpTo="@id/start_graph" />
+
+    <fragment
+        android:id="@+id/baseFlowFragment"
+        android:name="com.example.dialectica.presentation.base.BaseFlowFragment"
+        android:label="flow_fragment_base"
+        tools:layout="@layout/flow_fragment_base" />
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.dialectica.presentation.signup.SignUpFragment"
+        android:label="fragment_sign"
+        tools:layout="@layout/fragment_signup" />
+
+</navigation>
