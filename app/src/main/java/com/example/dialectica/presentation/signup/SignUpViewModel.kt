@@ -2,6 +2,7 @@ package com.example.dialectica.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dialectica.core.domain.SharedPrefsKeys
 import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +32,7 @@ class SignUpViewModel(
 
     fun signUp() {
         sharedPrefsRepository.setUserName(uiState.value.username)
+        sharedPrefsRepository.setBoolean(SharedPrefsKeys.IS_AUTHORIZED_KEY, true)
 
         viewModelScope.launch(Dispatchers.Main) {
             _uiAction.send(SignUpAction.OnAuthSuccess)
