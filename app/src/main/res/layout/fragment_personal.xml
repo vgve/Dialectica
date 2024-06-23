@@ -116,7 +116,7 @@
         android:layout_width="match_parent"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:foreground="@drawable/bg_corner_button"
+        android:foreground="@drawable/bg_corners"
         android:text="@string/add_new_person"
         android:fontFamily="@font/lato_regular"
         app:icon="@drawable/ic_open"
