@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -67,6 +68,7 @@ class SignUpFragment: Fragment(R.layout.fragment_signup) {
                             setOnClickListener {
                                 viewModel.signUp()
                             }
+                            setBackgroundColor(if (isEnabled) ContextCompat.getColor(context, R.color.system_secondary) else ContextCompat.getColor(context, R.color.light_grey))
                         }
                     }
                 }
