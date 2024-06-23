@@ -6,9 +6,11 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity(tableName = "question_tables")
-data class DialectQuestion (
-    @PrimaryKey(autoGenerate = true) val id : Int = 0,
+data class DialectQuestion(
     @ColumnInfo val idTheme: String,
     @ColumnInfo val text: String,
     @ColumnInfo var isFavourite: Boolean? = false
-) : Serializable
+) : Serializable {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
+}
