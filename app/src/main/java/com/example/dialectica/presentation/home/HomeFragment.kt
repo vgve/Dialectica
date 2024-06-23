@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
             val isFavourite = viewModel.uiState.value.favouriteList.contains(randomQuestion)
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
             val dialog = Dialog(requireContext()).apply {
-                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
                 setContentView(dialogBinding.root)
                 setCancelable(true)
             }
@@ -180,7 +180,7 @@ class HomeFragment : Fragment() {
     private fun showAddToTalkDialog() {
         val dialogBinding = DialogAddToTalkBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }

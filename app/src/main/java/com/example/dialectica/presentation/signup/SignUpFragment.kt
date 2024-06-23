@@ -68,7 +68,12 @@ class SignUpFragment: Fragment(R.layout.fragment_signup) {
                             setOnClickListener {
                                 viewModel.signUp()
                             }
-                            setBackgroundColor(if (isEnabled) ContextCompat.getColor(context, R.color.system_secondary) else ContextCompat.getColor(context, R.color.light_grey))
+                            setBackgroundColor(
+                                if (isEnabled) ContextCompat.getColor(
+                                    context,
+                                    R.color.system_secondary
+                                ) else ContextCompat.getColor(context, R.color.light_grey)
+                            )
                         }
                     }
                 }

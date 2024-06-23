@@ -145,7 +145,7 @@ class PersonalFragment : Fragment() {
     private fun showLoginUserDialog() {
         val dialogBinding = DialogLoginBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
@@ -174,7 +174,7 @@ class PersonalFragment : Fragment() {
     private fun showAddPersonDialog() {
         val dialogBinding = DialogLoginBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
@@ -204,7 +204,7 @@ class PersonalFragment : Fragment() {
     private fun showAddInterestDialog() {
         val dialogBinding = DialogEnterNewInfoBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
@@ -222,7 +222,7 @@ class PersonalFragment : Fragment() {
     private fun onDeletePerson(person: DialectPerson) {
         val dialogBinding = DialogDeleteBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
