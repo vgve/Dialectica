@@ -2,6 +2,7 @@
 <resources>
     <color name="system_primary">#FFBB86FC</color>
     <color name="system_secondary">#9380BD</color>
+    <color name="system_tertiary">#E1ADE6</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>

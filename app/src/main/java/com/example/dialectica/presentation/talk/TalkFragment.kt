@@ -97,7 +97,7 @@ class TalkFragment : Fragment() {
             val randomQuestion = viewModel.getRandom()
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
             val dialog = Dialog(requireContext()).apply {
-                window?.setBackgroundDrawableResource(android.R.color.transparent)
+                window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
                 setContentView(dialogBinding.root)
                 setCancelable(true)
             }
@@ -152,7 +152,7 @@ class TalkFragment : Fragment() {
     private fun showAddInterestDialog() {
         val dialogBinding = DialogEnterNewInfoBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
@@ -170,7 +170,7 @@ class TalkFragment : Fragment() {
     private fun showAddNewQuestionDialog() {
         val dialogBinding = DialogEnterNewInfoBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
@@ -192,7 +192,7 @@ class TalkFragment : Fragment() {
     private fun onDeleteQuestion(question: DialectQuestion) {
         val dialogBinding = DialogDeleteBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
             setContentView(dialogBinding.root)
             setCancelable(true)
         }
