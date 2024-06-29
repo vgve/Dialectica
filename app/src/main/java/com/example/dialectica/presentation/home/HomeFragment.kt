@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,7 +26,6 @@ import com.example.dialectica.presentation.ui.adapters.PersonAddListAdapter
 import com.example.dialectica.presentation.ui.adapters.ThemeListAdapter
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.viewModelFactory
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -94,7 +94,7 @@ class HomeFragment : Fragment() {
         }
         _binding.btnAddPersonal.setOnClickListener {
             viewModel.setRandomState(false)
-            viewModel.checkUserAuthorize()
+            viewModel.onClickAddToTalk()
         }
         _binding.fabMagicRandom.setOnClickListener {
             val randomQuestion = viewModel.onClickRandom()
@@ -120,7 +120,7 @@ class HomeFragment : Fragment() {
             }
             dialogBinding.btnAddPersonal.setOnClickListener {
                 viewModel.setRandomState(true)
-                viewModel.checkUserAuthorize()
+                viewModel.onClickAddToTalk()
                 dialog.dismiss()
             }
         }
@@ -132,39 +132,51 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
-                    _binding.tvStart.text =
-                        if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
-                        else getString(R.string.info_home_page)
-                    setThemeList(state.themeList)
-                    _binding.tvQuestion.text = state.currentQuestion?.text
-                    _binding.tvQuestion.isVisible = state.currentQuestion != null
-                    _binding.tvStart.isVisible = state.currentQuestion == null
-                    _binding.btnNext.isVisible = state.currentQuestion?.text != null
-                    _binding.btnAddFav.isVisible = state.currentQuestion?.text != null
-                    _binding.btnAddPersonal.isVisible = state.currentQuestion?.text != null
-                    val ic = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
-                    _binding.btnAddFav.setImageResource(ic)
+                    with(_binding) {
+                        tvStart.text =
+                            if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
+                            else getString(R.string.info_home_page)
+                        setThemeList(state.themeList)
+                        tvQuestion.text = state.currentQuestion?.text
+                        tvQuestion.isVisible = state.currentQuestion != null
+                        tvStart.isVisible = state.currentQuestion == null
+                        btnNext.isVisible = state.currentQuestion?.text != null
+                        btnAddFav.isVisible = state.currentQuestion?.text != null
+                        btnAddPersonal.isVisible = state.currentQuestion?.text != null
+                        val favIcon = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
+                        btnAddFav.setImageResource(favIcon)
+                        val personIconColor = if (state.personList.isEmpty()) R.color.grey else R.color.black
+                        btnAddPersonal.setColorFilter(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                personIconColor
+                            )
+                        )
 
-                    if (state.currentQuestion != null) {
-                        viewModel.changeFavouriteState()
+                        if (state.currentQuestion != null) {
+                            viewModel.changeFavouriteState()
+                        }
                     }
-
                 }
             }
         }
     }
 
     private fun observeUIAction() {
-        viewModel.uiAction.onEach { uiAction ->
-            when (uiAction) {
-                is HomeAction.AddQuestionToPersonClick -> {
-                    Log.d(TAG, "HomeAction.AddQuestionToPersonClick")
-                }
-                is HomeAction.OpenPersonalScreen -> {
-                    findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
-                }
-                is HomeAction.ShowAddToTalkScreen -> {
-                    showAddToTalkDialog()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiAction.collect { uiAction ->
+                    when (uiAction) {
+                        is HomeAction.AddQuestionToPersonClick -> {
+                            Toast.makeText(context, getString(R.string.successful_added), Toast.LENGTH_SHORT).show()
+                        }
+                        is HomeAction.OpenPersonalScreen -> {
+                            findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
+                        }
+                        is HomeAction.ShowAddToTalkScreen -> {
+                            showAddToTalkDialog()
+                        }
+                    }
                 }
             }
         }
@@ -178,6 +190,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun showAddToTalkDialog() {
+        Log.d(TAG, "showAddToTalkDialog")
+        if (viewModel.uiState.value.personList.isEmpty()) {
+            Toast.makeText(context, getString(R.string.need_to_add_person), Toast.LENGTH_SHORT).show()
+            return
+        }
         val dialogBinding = DialogAddToTalkBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext()).apply {
             window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
@@ -193,7 +210,6 @@ class HomeFragment : Fragment() {
         val personsAdapter= PersonAddListAdapter {
             Log.d(this.TAG, "onClickPerson: $it")
             viewModel.addQuestionToPerson(it) { }
-            Toast.makeText(context, getString(R.string.successful_added), Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
 
