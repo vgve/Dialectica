@@ -11,7 +11,9 @@ import com.example.dialectica.databinding.ItemQuestionBinding
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.data.models.Themes
 import com.example.dialectica.presentation.talk.LocalInterest
+import com.example.dialectica.utils.LOCALE_RU
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
+import java.util.*
 
 fun themeAdapterDelegate(
     itemClickedListener: (DialectTheme) -> Unit
@@ -34,7 +36,8 @@ fun questionAdapterDelegate() = adapterDelegateViewBinding<DialectQuestion, Dial
 ) {
     bind {
         var themeOfQuestionIcon: Int? = null
-        Themes().themeList.forEach {
+        val sections = if (Locale.getDefault().language == LOCALE_RU) Themes.ruSections else Themes.enSections
+        sections.forEach {
             if (item.idTheme == it.id) {
                 themeOfQuestionIcon = it.src
             }

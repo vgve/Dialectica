@@ -143,7 +143,6 @@ class PersonalFragment : Fragment() {
                     setOwnInterestList(state.ownInterestList)
                     setNewUserInterestList(state.tempInterestList)
                     _binding.btnLogin.isVisible = !state.isAuthorized
-                    _binding.tvInfo.isVisible = !state.isAuthorized
                     _binding.btnAddPerson.isVisible = state.isAuthorized
                     _binding.cvHello.isVisible = state.isAuthorized
                     _binding.tvOwnInterests.text = getString(R.string.own_interests, state.username)
