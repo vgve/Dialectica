@@ -2,12 +2,14 @@ package com.example.dialectica.presentation.personal
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,6 +17,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dialectica.R
 import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.DialogEnterNewInfoBinding
@@ -22,6 +26,7 @@ import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentPersonalBinding
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.presentation.MyApplication
+import com.example.dialectica.presentation.favourite.FavouriteFragment
 import com.example.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.example.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.PERSON_ID
@@ -53,18 +58,47 @@ class PersonalFragment : Fragment() {
         viewModel.onDeleteInterestOfUser(it)
     }
 
-    private var personsAdapter: PersonListAdapter = PersonListAdapter (
-        {
-            Log.d(this.TAG, "onClickPerson: $it")
-            val bundle = Bundle()
-            bundle.putInt(PERSON_ID, it.id)
-            findNavController().navigate(R.id.action_navigation_personal_to_navigation_talk, bundle)
-        },
-        {
-            Log.d(this.TAG, "onDeletePerson: $it")
-            onDeletePerson(it)
+    private var personsAdapter: PersonListAdapter = PersonListAdapter {
+        Log.d(this.TAG, "onClickPerson: $it")
+        findNavController().navigate(
+            R.id.action_navigation_personal_to_navigation_talk,
+            bundleOf(Pair(PERSON_ID, it.id))
+        )
+    }
+
+    private val swipeToDismissTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            // Return element in list after swiping
+            val newDx = if (dX >= FavouriteFragment.SWIPE_DX) FavouriteFragment.SWIPE_DX else dX
+            super.onChildDraw(c, recyclerView, viewHolder, newDx, dY, actionState, isCurrentlyActive)
         }
-    )
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            _binding.rvPersons.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+            val deletedElement = viewModel.uiState.value.personList[viewHolder.absoluteAdapterPosition]
+            Log.d(this.TAG, "onDeletePerson: $deletedElement")
+            onDeletePerson(deletedElement)
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,10 +134,14 @@ class PersonalFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
-                    _binding.rvPersons.isVisible = state.personList.isNotEmpty()
+                    _binding.rvPersons.apply {
+                        personsAdapter.items = state.personList
+                        personsAdapter.notifyDataSetChanged()
+                        isVisible = state.personList.isNotEmpty()
+                        swipeToDismissTouchHelper.attachToRecyclerView(this)
+                    }
                     setOwnInterestList(state.ownInterestList)
                     setNewUserInterestList(state.tempInterestList)
-                    setPersonList(state.personList)
                     _binding.btnLogin.isVisible = !state.isAuthorized
                     _binding.tvInfo.isVisible = !state.isAuthorized
                     _binding.btnAddPerson.isVisible = state.isAuthorized

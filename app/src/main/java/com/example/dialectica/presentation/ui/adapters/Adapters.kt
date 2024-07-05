@@ -29,10 +29,9 @@ class InterestLocalListAdapter(
 )
 
 class PersonListAdapter(
-    itemClickedListener: (DialectPerson) -> Unit,
-    itemDeleteClickedListener: (DialectPerson) -> Unit
+    itemClickedListener: (DialectPerson) -> Unit
 ) : ListDelegationAdapter<List<DialectPerson>>(
-    personAdapterDelegate(itemClickedListener, itemDeleteClickedListener)
+    personAdapterDelegate(itemClickedListener)
 )
 
 class PersonAddListAdapter(
