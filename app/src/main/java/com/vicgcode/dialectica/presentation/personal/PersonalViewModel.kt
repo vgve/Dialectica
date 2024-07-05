@@ -27,6 +27,20 @@ class PersonalViewModel(
         }
     }
 
+    fun getPersons() {
+        Log.d(TAG, "getPersons")
+        viewModelScope.launch(Dispatchers.Main) {
+            val persons = appRoomRepository.getPersonList()
+            _uiState.update {
+                it.copy(
+                    personList = persons,
+                    ownInterestList = persons.find { it.isOwner }?.interests.orEmpty(),
+                    ownerId = persons.find { it.isOwner }?.id,
+                )
+            }
+        }
+    }
+
     fun addOwnInterest(interest: String) {
         Log.d(TAG, "addInterestOfUser")
         if (interest.isEmpty()) return
@@ -34,7 +48,7 @@ class PersonalViewModel(
         updatedInterests.add(interest)
         _uiState.update { it.copy(ownInterestList = updatedInterests) }
 
-        if (_uiState.value.isAuthorized) updateOwnPerson {  }
+        updateOwnPerson { }
     }
 
     fun addInterestOfUser(interest: String) {
@@ -52,7 +66,7 @@ class PersonalViewModel(
 
         _uiState.update { it.copy(ownInterestList = updatedInterests) }
 
-        if (_uiState.value.isAuthorized) updateOwnPerson {  }
+        updateOwnPerson { }
     }
 
     fun onDeleteInterestOfUser(interest: String) {
@@ -99,20 +113,6 @@ class PersonalViewModel(
             appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
             getPersons()
             onSuccess()
-        }
-    }
-
-    fun getPersons() {
-        Log.d(TAG, "getPersons")
-        viewModelScope.launch(Dispatchers.Main) {
-            val persons = appRoomRepository.getPersonList()
-            _uiState.update {
-                it.copy(
-                    personList = persons,
-                    ownInterestList = persons.find { it.isOwner }?.interests.orEmpty(),
-                    ownerId = persons.find { it.isOwner }?.id,
-                )
-            }
         }
     }
 

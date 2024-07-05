@@ -30,7 +30,7 @@
     <string name="info_home_page">Select the section you are interested in and find a new topic of conversation</string>
     <string name="info_login">The button to the right of the input field saves the interest entered.</string>
     <string name="enter_name">Enter nickname</string>
-    <string name="enter_interests">Enter interests: f.e. history</string>
+    <string name="enter_interests">Enter an interest: f.e. history</string>
     <string name="enter_new_interest">Enter a new interest:</string>
     <string name="login_btn">Sign up</string>
     <string name="empty">There\'s nothing here yet…</string>

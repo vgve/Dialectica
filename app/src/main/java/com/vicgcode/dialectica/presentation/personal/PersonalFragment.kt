@@ -95,8 +95,10 @@ class PersonalFragment : Fragment() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             _binding.rvPersons.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
             val deletedElement = viewModel.uiState.value.personList[viewHolder.absoluteAdapterPosition]
-            Log.d(this.TAG, "onDeletePerson: $deletedElement")
-            onDeletePerson(deletedElement)
+            if (!deletedElement.isOwner) {
+                Log.d(this.TAG, "onDeletePerson: $deletedElement")
+                onDeletePerson(deletedElement)
+            }
         }
     })
 
