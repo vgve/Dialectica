@@ -1,5 +1,7 @@
 package com.example.dialectica.presentation.favourite
 
+import android.app.Dialog
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +16,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dialectica.R
+import com.example.dialectica.data.models.entity.DialectQuestion
+import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.FragmentFavouriteBinding
 import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
@@ -23,6 +27,10 @@ import kotlinx.coroutines.launch
 
 
 class FavouriteFragment : Fragment() {
+
+    companion object {
+        const val SWIPE_DX = 100f
+    }
 
     private lateinit var binding: FragmentFavouriteBinding
 
@@ -43,6 +51,19 @@ class FavouriteFragment : Fragment() {
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
     ) {
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            // Return element in list after swiping
+            val newDx = if (dX >= SWIPE_DX) SWIPE_DX else dX
+            super.onChildDraw(c, recyclerView, viewHolder, newDx, dY, actionState, isCurrentlyActive)
+        }
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -52,8 +73,9 @@ class FavouriteFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val deletedCourse = viewModel.uiState.value.questions[viewHolder.adapterPosition]
-            viewModel.onDeleteQuestion(deletedCourse) {}
+            binding.rvQuestions.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+            val deletedElement = viewModel.uiState.value.questions[viewHolder.absoluteAdapterPosition]
+            viewModel.onSwipeToDeleteQuestion(deletedElement)
         }
     })
 
@@ -71,6 +93,8 @@ class FavouriteFragment : Fragment() {
         viewModel.updateFavourites()
 
         observeUiState()
+
+        observeUIAction()
     }
 
     private fun observeUiState() {
@@ -95,6 +119,41 @@ class FavouriteFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun observeUIAction() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiAction.collect { uiAction ->
+                    when (uiAction) {
+                        is FavouriteAction.OpenPopupToDeleteQuestion -> {
+                            openPopupToDeleteQuestion(uiAction.question)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openPopupToDeleteQuestion(question: DialectQuestion) {
+        val dialogBinding = DialogDeleteBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext()).apply {
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
+            setContentView(dialogBinding.root)
+            setCancelable(true)
+        }
+        dialog.show()
+
+        dialogBinding.tvInfo.text = getString(R.string.info_delete_question, question.text)
+
+        dialogBinding.btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.btnYes.setOnClickListener {
+            viewModel.onDeleteQuestion(question) {
+                dialog.dismiss()
             }
         }
     }
