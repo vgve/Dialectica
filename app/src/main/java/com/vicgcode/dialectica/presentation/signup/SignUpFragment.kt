@@ -28,7 +28,8 @@ class SignUpFragment: Fragment(R.layout.fragment_signup) {
         factoryProducer = {
             viewModelFactory {
                 SignUpViewModel(
-                    MyApplication.appModule.sharedPrefsRepository
+                    MyApplication.appModule.sharedPrefsRepository,
+                    MyApplication.appModule.appRoomRepository
                 )
             }
         }

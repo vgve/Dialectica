@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.SharedPrefsKeys
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
+import com.vicgcode.dialectica.data.models.entity.DialectPerson
+import com.vicgcode.dialectica.database.room.AppRoomRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class SignUpViewModel(
     private val sharedPrefsRepository: SharedPrefsRepository,
+    private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -31,10 +34,17 @@ class SignUpViewModel(
     }
 
     fun signUp() {
+        val user = DialectPerson(
+            name = uiState.value.username.orEmpty(),
+            interests = emptyList(),
+            isOwner = true,
+            questions = emptyList()
+        )
         sharedPrefsRepository.setUserName(uiState.value.username)
         sharedPrefsRepository.setBoolean(SharedPrefsKeys.IS_AUTHORIZED_KEY, true)
 
         viewModelScope.launch(Dispatchers.Main) {
+            appRoomRepository.insertPerson(user)
             _uiAction.send(SignUpAction.OnAuthSuccess)
         }
     }
