@@ -38,7 +38,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/back"
+            android:text="@string/common_back"
             android:layout_weight="1"
             app:icon="@drawable/ic_return"
             app:iconGravity="textStart"

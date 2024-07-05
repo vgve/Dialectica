@@ -127,7 +127,7 @@ class TalkFragment : Fragment() {
             dialogBinding.btnAddPersonal.isVisible = true
             dialogBinding.btnAddPersonal.apply {
                 setIconResource(R.drawable.ic_return)
-                text = getString(R.string.back)
+                text = getString(R.string.common_back)
                 setOnClickListener {
                     dialog.dismiss()
                 }
