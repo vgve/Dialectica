@@ -26,10 +26,10 @@ import com.example.dialectica.databinding.DialogLoginBinding
 import com.example.dialectica.databinding.FragmentPersonalBinding
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.presentation.MyApplication
-import com.example.dialectica.presentation.favourite.FavouriteFragment
 import com.example.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.example.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.example.dialectica.utils.PERSON_ID
+import com.example.dialectica.utils.SWIPE_DX
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
@@ -80,7 +80,7 @@ class PersonalFragment : Fragment() {
             isCurrentlyActive: Boolean
         ) {
             // Return element in list after swiping
-            val newDx = if (dX >= FavouriteFragment.SWIPE_DX) FavouriteFragment.SWIPE_DX else dX
+            val newDx = if (dX >= SWIPE_DX) SWIPE_DX else dX
             super.onChildDraw(c, recyclerView, viewHolder, newDx, dY, actionState, isCurrentlyActive)
         }
 
@@ -171,13 +171,6 @@ class PersonalFragment : Fragment() {
         Log.d(this.TAG, "setOwnInterestList")
         interestsNewUserAdapter.items = interestList
         interestsNewUserAdapter.notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setPersonList(persons: List<DialectPerson>) {
-        Log.d(this.TAG, "setThemeList")
-        personsAdapter.items = persons
-        personsAdapter.notifyDataSetChanged()
     }
 
     private fun showLoginUserDialog() {

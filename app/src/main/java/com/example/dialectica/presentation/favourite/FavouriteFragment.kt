@@ -21,16 +21,13 @@ import com.example.dialectica.databinding.DialogDeleteBinding
 import com.example.dialectica.databinding.FragmentFavouriteBinding
 import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
+import com.example.dialectica.utils.SWIPE_DX
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 
 class FavouriteFragment : Fragment() {
-
-    companion object {
-        const val SWIPE_DX = 100f
-    }
 
     private lateinit var binding: FragmentFavouriteBinding
 

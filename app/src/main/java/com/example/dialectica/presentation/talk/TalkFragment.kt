@@ -1,7 +1,7 @@
 package com.example.dialectica.presentation.talk
 
-import android.annotation.SuppressLint
 import android.app.Dialog
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,6 +25,7 @@ import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.example.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.example.dialectica.utils.PERSON_ID
+import com.example.dialectica.utils.SWIPE_DX
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
@@ -51,6 +52,20 @@ class TalkFragment : Fragment() {
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
     ) {
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            // Return element in list after swiping
+            val newDx = if (dX >= SWIPE_DX) SWIPE_DX else dX
+            super.onChildDraw(c, recyclerView, viewHolder, newDx, dY, actionState, isCurrentlyActive)
+        }
+
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
@@ -60,8 +75,9 @@ class TalkFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val deletedCourse = viewModel.uiState.value.questions[viewHolder.adapterPosition]
-            viewModel.onDeleteQuestion(deletedCourse) {}
+            _binding.rvQuestions.adapter?.notifyItemChanged(viewHolder.absoluteAdapterPosition)
+            val deletedElement = viewModel.uiState.value.questions[viewHolder.absoluteAdapterPosition]
+            viewModel.onSwipeToDeleteQuestion(deletedElement)
         }
     })
 
@@ -78,6 +94,8 @@ class TalkFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observeUiState()
+
+        observeUIAction()
 
         viewModel.getPerson(arguments?.getInt(PERSON_ID)) { }
 
@@ -122,31 +140,60 @@ class TalkFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    setInterestList(state.interestList)
-                    setQuestionList(state.questions)
-                    _binding.tvOwnInterests.text = getString(R.string.interests, state.username)
-                    _binding.tvForOwner.text = getString(R.string.info_for_owner, state.username)
-                    _binding.cvHello.isVisible = !state.isOwner
-                    _binding.cvForOwner.isVisible = state.isOwner
-                    _binding.fabMagicRandom.isVisible = state.questions.size > 1
+                    with(_binding) {
+                        // Interests
+                        interestsAdapter.items = state.interestList
+                        interestsAdapter.notifyDataSetChanged()
+
+                        // Questions
+                        questionsAdapter.items = state.questions
+                        questionsAdapter.notifyDataSetChanged()
+                        swipeToDismissTouchHelper.attachToRecyclerView(rvQuestions)
+
+                        tvOwnInterests.text = getString(R.string.interests, state.username)
+                        tvForOwner.text = getString(R.string.info_for_owner, state.username)
+                        cvHello.isVisible = !state.isOwner
+                        cvForOwner.isVisible = state.isOwner
+                        fabMagicRandom.isVisible = state.questions.size > 1
+                    }
                 }
             }
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setInterestList(interestList: List<LocalInterest>) {
-        Log.d(this.TAG, "setOwnInterestList")
-        interestsAdapter.items = interestList
-        interestsAdapter.notifyDataSetChanged()
+    private fun observeUIAction() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiAction.collect { uiAction ->
+                    when (uiAction) {
+                        is TalkAction.OpenPopupToDeleteQuestion -> {
+                            openPopupToDeleteQuestion(uiAction.question)
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setQuestionList(questionList: List<DialectQuestion>) {
-        Log.d(this.TAG, "setOwnInterestList")
-        questionsAdapter.items = questionList
-        questionsAdapter.notifyDataSetChanged()
-        swipeToDismissTouchHelper.attachToRecyclerView(_binding.rvQuestions)
+    private fun openPopupToDeleteQuestion(question: DialectQuestion) {
+        val dialogBinding = DialogDeleteBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext()).apply {
+            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
+            setContentView(dialogBinding.root)
+            setCancelable(true)
+        }
+        dialog.show()
+
+        dialogBinding.tvInfo.text = getString(R.string.info_delete_question, question.text)
+
+        dialogBinding.btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.btnYes.setOnClickListener {
+            viewModel.onDeleteQuestion(question) {
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun showAddInterestDialog() {
@@ -186,27 +233,6 @@ class TalkFragment : Fragment() {
         dialogBinding.btnYes.setOnClickListener {
             viewModel.addNewQuestion(dialogBinding.etQuestion.text.toString().trim()) {}
             dialog.dismiss()
-        }
-    }
-
-    private fun onDeleteQuestion(question: DialectQuestion) {
-        val dialogBinding = DialogDeleteBinding.inflate(layoutInflater)
-        val dialog = Dialog(requireContext()).apply {
-            window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
-            setContentView(dialogBinding.root)
-            setCancelable(true)
-        }
-        dialog.show()
-
-        dialogBinding.tvInfo.text = getString(R.string.info_delete_question, question.text)
-
-        dialogBinding.btnNo.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialogBinding.btnYes.setOnClickListener {
-            viewModel.onDeleteQuestion(question) {
-                dialog.dismiss()
-            }
         }
     }
 }
