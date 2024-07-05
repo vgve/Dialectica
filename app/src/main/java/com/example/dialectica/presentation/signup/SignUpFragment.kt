@@ -15,7 +15,6 @@ import com.example.dialectica.R
 import com.example.dialectica.databinding.FragmentSignupBinding
 import com.example.dialectica.presentation.MyApplication
 import com.example.dialectica.presentation.extensions.activityNavController
-import com.example.dialectica.presentation.extensions.navigateSafely
 import com.example.dialectica.utils.TAG
 import com.example.dialectica.utils.afterTextChanged
 import com.example.dialectica.utils.viewModelFactory
@@ -66,6 +65,7 @@ class SignUpFragment: Fragment(R.layout.fragment_signup) {
                         btnSave.apply {
                             isEnabled = !state.username.isNullOrEmpty()
                             setOnClickListener {
+                                Log.e(TAG, "onClickListener btnSave")
                                 viewModel.signUp()
                             }
                             setBackgroundColor(
@@ -88,7 +88,7 @@ class SignUpFragment: Fragment(R.layout.fragment_signup) {
                     when (uiAction) {
                         is SignUpAction.OnAuthSuccess -> {
                             Log.d(TAG, "OnAuthSuccess")
-                            activityNavController().navigateSafely(R.id.action_global_baseFlowFragment)
+                            activityNavController().navigate(R.id.action_global_baseFlowFragment)
                         }
                     }
                 }

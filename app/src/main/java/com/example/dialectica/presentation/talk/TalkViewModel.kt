@@ -8,8 +8,10 @@ import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.database.room.AppRoomRepository
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,9 @@ class TalkViewModel(
 
     private val _uiState = MutableStateFlow(TalkUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _uiAction: Channel<TalkAction> = Channel()
+    val uiAction = _uiAction.receiveAsFlow()
 
     fun addInterest(interest: String) {
         Log.d(TAG, "addInterest")
@@ -152,6 +157,13 @@ class TalkViewModel(
         }
         return randomQuestion
     }
+
+    fun onSwipeToDeleteQuestion(question: DialectQuestion) {
+        Log.d(TAG, "OnSwipeDeleteQuestion")
+        viewModelScope.launch (Dispatchers.Main) {
+            _uiAction.send(TalkAction.OpenPopupToDeleteQuestion(question))
+        }
+    }
 }
 
 data class TalkUiState(
@@ -170,3 +182,6 @@ data class LocalInterest(
     val isCommon: Boolean = false
 )
 
+sealed class TalkAction {
+    data class OpenPopupToDeleteQuestion(val question: DialectQuestion): TalkAction()
+}

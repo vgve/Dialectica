@@ -1,7 +1,6 @@
 package com.example.dialectica.presentation.ui.adapters
 
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import com.example.dialectica.R
 import com.example.dialectica.databinding.ItemInterestBinding
 import com.example.dialectica.databinding.ItemPersonBinding
@@ -75,22 +74,17 @@ fun interestLocalAdapterDelegate(
 }
 
 fun personAdapterDelegate(
-    itemClickedListener: (DialectPerson) -> Unit,
-    itemDeleteClickedListener: (DialectPerson) -> Unit
+    itemClickedListener: (DialectPerson) -> Unit
 ) = adapterDelegateViewBinding<DialectPerson, DialectPerson, ItemPersonBinding>(
     { layoutInflater, root -> ItemPersonBinding.inflate(layoutInflater, root, false) }
 ) {
     binding.itemQuestion.setOnClickListener {
         itemClickedListener(item)
     }
-    binding.ivDelete.setOnClickListener {
-        itemDeleteClickedListener(item)
-    }
     bind {
         binding.tvPersonName.text = if (!item.isOwner) item.name else getString(R.string.notes)
         val iconPerson = if (!item.isOwner) R.drawable.ic_person_menu else R.drawable.ic_inkwell
         binding.ivPerson.setImageResource(iconPerson)
-        binding.ivDelete.isVisible = !item.isOwner
     }
 }
 
@@ -106,6 +100,5 @@ fun personAddAdapterDelegate(
         binding.tvPersonName.text = if (!item.isOwner) item.name else getString(R.string.notes)
         val iconPerson = if (!item.isOwner) R.drawable.ic_person_menu else R.drawable.ic_inkwell
         binding.ivPerson.setImageResource(iconPerson)
-        binding.ivDelete.setImageResource(R.drawable.ic_add)
     }
 }

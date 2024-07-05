@@ -10,7 +10,6 @@ import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.data.models.Themes
 import com.example.dialectica.data.models.entity.DialectPerson
 import com.example.dialectica.utils.TAG
-import com.example.dialectica.utils.USER_QUEST
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,27 +43,11 @@ class HomeViewModel(
         }
     }
 
-    fun checkUserAuthorize() {
-        Log.d(TAG, "checkUserAuthorize: ${sharedPrefsRepository.getUserName()}")
+    fun onClickAddToTalk() {
         viewModelScope.launch(Dispatchers.Main) {
-            if (sharedPrefsRepository.getUserName().isEmpty() || sharedPrefsRepository.getUserName() == USER_QUEST) {
-                _uiAction.send(HomeAction.OpenPersonalScreen)
-            } else {
-                _uiAction.send(HomeAction.ShowAddToTalkScreen)
-            }
+            _uiAction.send(HomeAction.ShowAddToTalkScreen)
         }
     }
-
-//    fun initDatabase(type: String, onSuccess: () -> Unit) {
-//        when(type) {
-//            TYPE_ROOM -> {
-//                val dao = AppRoomDatabase.getInstance(context).getAppRoomDao()
-//                REPOSITORY = AppRoomRepository(dao)
-//                // callback about completed
-//                onSuccess()
-//            }
-//        }
-//    }
 
     fun onClickTheme(theme: DialectTheme) {
         Log.d(this.TAG, "onClickTheme")
