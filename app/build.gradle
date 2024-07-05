@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace 'com.example.dialectica'
+    namespace 'com.vicgcode.dialectica'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.dialectica"
+        applicationId "com.vicgcode.dialectica"
         minSdk 24
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
