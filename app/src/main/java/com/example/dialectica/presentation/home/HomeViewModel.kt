@@ -9,6 +9,7 @@ import com.example.dialectica.data.models.entity.DialectQuestion
 import com.example.dialectica.data.models.DialectTheme
 import com.example.dialectica.data.models.Themes
 import com.example.dialectica.data.models.entity.DialectPerson
+import com.example.dialectica.utils.LOCALE_RU
 import com.example.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.*
 
 class HomeViewModel(
     private val sharedPrefsRepository: SharedPrefsRepository,
@@ -30,15 +32,14 @@ class HomeViewModel(
     val uiAction = _uiAction.receiveAsFlow()
 
     init {
-
         _uiState.update {
             it.copy(
                 isAuthorize = sharedPrefsRepository.getUserAuthorize(),
                 username =
                     if (sharedPrefsRepository.getUserAuthorize()) sharedPrefsRepository.getUserName()
                     else null,
-                themeList = Themes().themeList,
-                allQuestions = Themes().questionList
+                sections = if (Locale.getDefault().language == LOCALE_RU) Themes.ruSections else Themes.enSections,
+                questions = if (Locale.getDefault().language == LOCALE_RU) Themes.ruQuestions else Themes.enQuestions
             )
         }
     }
@@ -50,20 +51,20 @@ class HomeViewModel(
     }
 
     fun onClickTheme(theme: DialectTheme) {
-        Log.d(this.TAG, "onClickTheme")
-        val themes = _uiState.value.themeList.map {
+        Log.d(TAG, "onClickTheme")
+        val themes = _uiState.value.sections.map {
             it.isChosen = it.id == theme.id
             it
         }
         val questions = mutableListOf<DialectQuestion>()
-        Themes().questionList.forEach {
+        uiState.value.questions.forEach {
             if (it.idTheme == theme.id) questions.add(it)
         }
         val newQuestion = questions.random()
 
         _uiState.update {
             it.copy(
-                themeList = themes,
+                sections = themes,
                 currentQuestionList = questions,
                 currentQuestion = newQuestion,
                 isFavourite = checkFavourite(newQuestion)
@@ -91,7 +92,7 @@ class HomeViewModel(
     fun onClickRandom(): DialectQuestion? {
         var randomQuestion = _uiState.value.currentRandomQuestion
         while (randomQuestion == _uiState.value.currentRandomQuestion || randomQuestion == _uiState.value.currentQuestion) {
-            randomQuestion = _uiState.value.allQuestions.random()
+            randomQuestion = _uiState.value.questions.random()
         }
         _uiState.update {
             it.copy(
@@ -193,8 +194,8 @@ class HomeViewModel(
 }
 
 data class HomeUiState(
-    val themeList: List<DialectTheme> = emptyList(),
-    val allQuestions: List<DialectQuestion> = emptyList(),
+    val sections: List<DialectTheme> = emptyList(),
+    val questions: List<DialectQuestion> = emptyList(),
     val currentQuestionList: List<DialectQuestion> = emptyList(),
     val favouriteList: List<DialectQuestion> = emptyList(),
     val currentQuestion: DialectQuestion? = null,

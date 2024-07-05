@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -136,7 +135,7 @@ class HomeFragment : Fragment() {
                         tvStart.text =
                             if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
                             else getString(R.string.info_home_page)
-                        setThemeList(state.themeList)
+                        setThemeList(state.sections)
                         tvQuestion.text = state.currentQuestion?.text
                         tvQuestion.isVisible = state.currentQuestion != null
                         tvStart.isVisible = state.currentQuestion == null
@@ -145,13 +144,7 @@ class HomeFragment : Fragment() {
                         btnAddPersonal.isVisible = state.currentQuestion?.text != null
                         val favIcon = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
                         btnAddFav.setImageResource(favIcon)
-                        val personIconColor = if (state.personList.isEmpty()) R.color.grey else R.color.black
-                        btnAddPersonal.setColorFilter(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                personIconColor
-                            )
-                        )
+                        btnAddPersonal.isVisible = state.personList.isNotEmpty()
 
                         if (state.currentQuestion != null) {
                             viewModel.changeFavouriteState()
