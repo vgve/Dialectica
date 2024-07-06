@@ -43,7 +43,7 @@
     <string name="own_interests">Have a nice talk, %s!\nYour interests:</string>
     <string name="interests">%s\nInterests:</string>
     <string name="add_new_question">Add a new topic</string>
-    <string name="notes">Personal</string>
+    <string name="notes">Notes</string>
     <string name="info_new_question">What would you like to talk about?</string>
     <string name="enter_new_question">Enter a new topic</string>
     <string name="successful_added">Added</string>

@@ -43,7 +43,7 @@
     <string name="own_interests">Приятной беседы, %s!\nВаши интересы:</string>
     <string name="interests">%s\nИнтересы:</string>
     <string name="add_new_question">Добавить новую тему</string>
-    <string name="notes">Личное</string>
+    <string name="notes">Заметки</string>
     <string name="info_new_question">Что вам хочется обсудить?</string>
     <string name="enter_new_question">Введите новую тему</string>
     <string name="successful_added">Добавлено</string>

@@ -141,10 +141,9 @@ class HomeFragment : Fragment() {
                         tvStart.isVisible = state.currentQuestion == null
                         btnNext.isVisible = state.currentQuestion?.text != null
                         btnAddFav.isVisible = state.currentQuestion?.text != null
-                        btnAddPersonal.isVisible = state.currentQuestion?.text != null
+                        btnAddPersonal.isVisible = state.currentQuestion?.text != null && state.personList.isNotEmpty()
                         val favIcon = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
                         btnAddFav.setImageResource(favIcon)
-                        btnAddPersonal.isVisible = state.personList.isNotEmpty()
 
                         if (state.currentQuestion != null) {
                             viewModel.changeFavouriteState()
@@ -200,7 +199,7 @@ class HomeFragment : Fragment() {
             dialog.dismiss()
         }
 
-        val personsAdapter= PersonAddListAdapter {
+        val personsAdapter = PersonAddListAdapter {
             Log.d(this.TAG, "onClickPerson: $it")
             viewModel.addQuestionToPerson(it) { }
             dialog.dismiss()
