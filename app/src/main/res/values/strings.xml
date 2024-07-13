@@ -30,7 +30,7 @@
     <string name="info_home_page">Выберите интересующий вас раздел и добавьте себе новую тему</string>
     <string name="info_login">Кнопка справа от поля ввода сохраняет введенный интерес.</string>
     <string name="enter_name">Введите никнейм/имя</string>
-    <string name="enter_interests">Введите интересы: f.e. история</string>
+    <string name="enter_interests">Введите интерес: f.e. история</string>
     <string name="enter_new_interest">Введите новый интерес:</string>
     <string name="login_btn">Войти</string>
     <string name="empty">Здесь пока ничего нет…</string>
@@ -43,7 +43,7 @@
     <string name="own_interests">Приятной беседы, %s!\nВаши интересы:</string>
     <string name="interests">%s\nИнтересы:</string>
     <string name="add_new_question">Добавить новую тему</string>
-    <string name="notes">Личное</string>
+    <string name="notes">Заметки</string>
     <string name="info_new_question">Что вам хочется обсудить?</string>
     <string name="enter_new_question">Введите новую тему</string>
     <string name="successful_added">Добавлено</string>

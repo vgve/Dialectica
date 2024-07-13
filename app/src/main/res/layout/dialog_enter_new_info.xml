@@ -5,7 +5,6 @@
     android:layout_width="400dp"
     android:layout_height="wrap_content"
     app:cardElevation="6dp"
-    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="9dp">
 
     <LinearLayout
@@ -19,7 +18,8 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_info"
             android:layout_margin="20dp"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            app:tint="?android:attr/textColorPrimary" />
 
         <TextView
             android:id="@+id/tv_question"
@@ -33,7 +33,7 @@
             android:textSize="16sp"
             android:text="@string/enter_new_interest"
             android:fontFamily="@font/lato_regular"
-            android:textColor="@color/black" />
+            android:textColor="?android:attr/textColorPrimary" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -44,13 +44,14 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:layout_gravity="center"
-            app:boxBackgroundColor="@color/light_grey">
+            app:boxBackgroundColor="?android:attr/textColorPrimaryInverse">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/enter_interests" />
+                android:hint="@string/enter_interests"
+                android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -63,13 +64,14 @@
             android:layout_marginBottom="20dp"
             android:layout_gravity="center"
             android:visibility="gone"
-            app:boxBackgroundColor="@color/light_grey">
+            app:boxBackgroundColor="?android:attr/textColorPrimaryInverse">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/enter_new_question" />
+            android:hint="@string/enter_new_question"
+            android:textColor="?android:attr/textColorPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -85,11 +87,12 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/common_back"
+                android:textColor="?android:attr/textColorPrimary"
                 android:layout_weight="1"
                 app:icon="@drawable/ic_return"
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
-                app:iconTint="@null" />
+                app:iconTint="?android:attr/textColorPrimary" />
 
             <com.google.android.material.button.MaterialButton
                 style="@style/AddButton"
@@ -98,11 +101,12 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/dialog_btn_add"
+                android:textColor="?android:attr/textColorPrimary"
                 android:layout_weight="1"
                 app:icon="@drawable/ic_check"
                 app:iconGravity="textStart"
                 app:iconSize="24dp"
-                app:iconTint="@null" />
+                app:iconTint="?android:attr/textColorPrimary" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
