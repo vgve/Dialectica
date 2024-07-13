@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.databinding.ActivityMainBinding
-import com.vicgcode.dialectica.utils.TAG
+import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 

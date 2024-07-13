@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.database.room.AppRoomRepository
-import com.vicgcode.dialectica.utils.TAG
+import com.vicgcode.dialectica.presentation.extensions.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

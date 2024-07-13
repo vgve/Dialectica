@@ -9,8 +9,8 @@ import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.data.models.DialectTheme
 import com.vicgcode.dialectica.data.models.Themes
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
+import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.utils.LOCALE_RU
-import com.vicgcode.dialectica.utils.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -117,10 +117,14 @@ class HomeViewModel(
     }
 
     fun deleteFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+        Log.d(TAG, "deleteFromFavourite")
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
+        val deleted = _uiState.value.favouriteList.find {
+            it.text == question?.text
+        }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(question)
+            appRoomRepository.deleteFavourite(deleted)
             getFavQuestions()
             onSuccess()
         }

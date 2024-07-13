@@ -1,6 +1,5 @@
 package com.vicgcode.dialectica.presentation.home
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -18,12 +17,13 @@ import androidx.navigation.fragment.findNavController
 import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.databinding.DialogAddToTalkBinding
 import com.vicgcode.dialectica.databinding.FragmentHomeBinding
-import com.vicgcode.dialectica.data.models.DialectTheme
 import com.vicgcode.dialectica.databinding.DialogRandomQuestionBinding
 import com.vicgcode.dialectica.presentation.MyApplication
+import com.vicgcode.dialectica.presentation.extensions.TAG
+import com.vicgcode.dialectica.presentation.extensions.navigateSafely
+import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonAddListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.ThemeListAdapter
-import com.vicgcode.dialectica.utils.TAG
 import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
             viewModel.onClickNext()
         }
         _binding.btnAddFav.apply {
-            setOnClickListener {
+            setOnSingleClickListener {
                 if (viewModel.uiState.value.isFavourite) {
                     viewModel.deleteFavourite(viewModel.uiState.value.currentQuestion) {
                         Toast.makeText(
@@ -91,11 +91,11 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        _binding.btnAddPersonal.setOnClickListener {
+        _binding.btnAddPersonal.setOnSingleClickListener {
             viewModel.setRandomState(false)
             viewModel.onClickAddToTalk()
         }
-        _binding.fabMagicRandom.setOnClickListener {
+        _binding.fabMagicRandom.setOnSingleClickListener {
             val randomQuestion = viewModel.onClickRandom()
             val isFavourite = viewModel.uiState.value.favouriteList.contains(randomQuestion)
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
             dialog.show()
             dialogBinding.tvQuestion.text = randomQuestion?.text
             dialogBinding.btnAddFav.isVisible = !isFavourite
-            dialogBinding.btnAddFav.setOnClickListener {
+            dialogBinding.btnAddFav.setOnSingleClickListener {
                 viewModel.addToFavourite(randomQuestion) {
                     Toast.makeText(
                         context,
@@ -117,7 +117,7 @@ class HomeFragment : Fragment() {
                 }
                 dialog.dismiss()
             }
-            dialogBinding.btnAddPersonal.setOnClickListener {
+            dialogBinding.btnAddPersonal.setOnSingleClickListener {
                 viewModel.setRandomState(true)
                 viewModel.onClickAddToTalk()
                 dialog.dismiss()
@@ -135,7 +135,10 @@ class HomeFragment : Fragment() {
                         tvStart.text =
                             if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
                             else getString(R.string.info_home_page)
-                        setThemeList(state.sections)
+
+                        themesAdapter.items = state.sections
+                        themesAdapter.notifyDataSetChanged()
+
                         tvQuestion.text = state.currentQuestion?.text
                         tvQuestion.isVisible = state.currentQuestion != null
                         tvStart.isVisible = state.currentQuestion == null
@@ -163,7 +166,7 @@ class HomeFragment : Fragment() {
                             Toast.makeText(context, getString(R.string.successful_added), Toast.LENGTH_SHORT).show()
                         }
                         is HomeAction.OpenPersonalScreen -> {
-                            findNavController().navigate(R.id.action_navigation_home_to_navigation_personal)
+                            findNavController().navigateSafely(R.id.action_navigation_home_to_navigation_personal)
                         }
                         is HomeAction.ShowAddToTalkScreen -> {
                             showAddToTalkDialog()
@@ -172,13 +175,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setThemeList(themes: List<DialectTheme>) {
-        Log.d(this.TAG, "setThemeList")
-        themesAdapter.items = themes
-        themesAdapter.notifyDataSetChanged()
     }
 
     private fun showAddToTalkDialog() {

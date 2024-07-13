@@ -22,12 +22,11 @@ import com.vicgcode.dialectica.databinding.DialogRandomQuestionBinding
 import com.vicgcode.dialectica.databinding.FragmentTalkBinding
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.presentation.MyApplication
+import com.vicgcode.dialectica.presentation.extensions.TAG
+import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
-import com.vicgcode.dialectica.utils.PERSON_ID
-import com.vicgcode.dialectica.utils.SWIPE_DX
-import com.vicgcode.dialectica.utils.TAG
-import com.vicgcode.dialectica.utils.viewModelFactory
+import com.vicgcode.dialectica.utils.*
 import kotlinx.coroutines.launch
 
 class TalkFragment : Fragment() {
@@ -103,15 +102,15 @@ class TalkFragment : Fragment() {
 
         _binding.rvQuestions.adapter = questionsAdapter
 
-        _binding.btnAddInterest.setOnClickListener {
+        _binding.btnAddInterest.setOnSingleClickListener {
             showAddInterestDialog()
         }
 
-        _binding.btnAddNewQuestion.setOnClickListener {
+        _binding.btnAddNewQuestion.setOnSingleClickListener {
             showAddNewQuestionDialog()
         }
 
-        _binding.fabMagicRandom.setOnClickListener {
+        _binding.fabMagicRandom.setOnSingleClickListener {
             val randomQuestion = viewModel.getRandom()
             val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
             val dialog = Dialog(requireContext()).apply {

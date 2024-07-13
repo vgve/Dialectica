@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.databinding.FlowFragmentBaseBinding
-import com.vicgcode.dialectica.utils.TAG
+import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.utils.viewModelFactory
 
 class BaseFlowFragment: Fragment(R.layout.flow_fragment_base) {

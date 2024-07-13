@@ -26,11 +26,13 @@ import com.vicgcode.dialectica.databinding.DialogLoginBinding
 import com.vicgcode.dialectica.databinding.FragmentPersonalBinding
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.presentation.MyApplication
+import com.vicgcode.dialectica.presentation.extensions.TAG
+import com.vicgcode.dialectica.presentation.extensions.navigateSafely
+import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.vicgcode.dialectica.utils.PERSON_ID
 import com.vicgcode.dialectica.utils.SWIPE_DX
-import com.vicgcode.dialectica.utils.TAG
 import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
@@ -60,7 +62,7 @@ class PersonalFragment : Fragment() {
 
     private var personsAdapter: PersonListAdapter = PersonListAdapter {
         Log.d(this.TAG, "onClickPerson: $it")
-        findNavController().navigate(
+        findNavController().navigateSafely(
             R.id.action_navigation_personal_to_navigation_talk,
             bundleOf(Pair(PERSON_ID, it.id))
         )
@@ -121,11 +123,11 @@ class PersonalFragment : Fragment() {
         _binding.rvPersons.adapter = personsAdapter
         _binding.rvOwnInterests.adapter = ownInterestsAdapter
 
-        _binding.btnAddPerson.setOnClickListener {
+        _binding.btnAddPerson.setOnSingleClickListener {
             showAddPersonDialog()
         }
 
-        _binding.btnAddInterest.setOnClickListener {
+        _binding.btnAddInterest.setOnSingleClickListener {
             showAddInterestDialog()
         }
     }
