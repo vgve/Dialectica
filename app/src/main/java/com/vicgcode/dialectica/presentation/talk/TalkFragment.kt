@@ -32,13 +32,15 @@ import kotlinx.coroutines.launch
 class TalkFragment : Fragment() {
 
     private lateinit var _binding: FragmentTalkBinding
-    private val viewModel: TalkViewModel by viewModels(
-        factoryProducer = {
-            viewModelFactory {
-                TalkViewModel(MyApplication.appModule.appRoomRepository)
-            }
+
+    private val viewModel by lazy {
+        createViewModel { handle ->
+            TalkViewModel(
+                handle,
+                MyApplication.appModule.appRoomRepository
+            )
         }
-    )
+    }
 
     private var interestsAdapter: InterestLocalListAdapter = InterestLocalListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")
@@ -95,8 +97,6 @@ class TalkFragment : Fragment() {
         observeUiState()
 
         observeUIAction()
-
-        viewModel.getPerson(arguments?.getInt(PERSON_ID)) { }
 
         _binding.rvInterests.adapter = interestsAdapter
 

@@ -18,6 +18,10 @@ class PersonalViewModel(
     private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
 
+    companion object {
+        const val PERSON_ID = "person_id"
+    }
+
     private val _uiState = MutableStateFlow(PersonalUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -48,7 +52,7 @@ class PersonalViewModel(
         updatedInterests.add(interest)
         _uiState.update { it.copy(ownInterestList = updatedInterests) }
 
-        updateOwnPerson { }
+        updateOwnPerson()
     }
 
     fun addInterestOfUser(interest: String) {
@@ -66,7 +70,7 @@ class PersonalViewModel(
 
         _uiState.update { it.copy(ownInterestList = updatedInterests) }
 
-        updateOwnPerson { }
+        updateOwnPerson()
     }
 
     fun onDeleteInterestOfUser(interest: String) {
@@ -106,13 +110,19 @@ class PersonalViewModel(
         }
     }
 
-    private fun updateOwnPerson(onSuccess: () -> Unit) {
+    private fun updateOwnPerson() {
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
-            getPersons()
-            onSuccess()
+            try {
+                _uiState.value.ownerId?.let {
+                    appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, it)
+                    getPersons()
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                _uiState.update { it.copy(isFailed = true) }
+            }
         }
     }
 
@@ -129,7 +139,7 @@ class PersonalViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             appRoomRepository.insertPerson(newPerson)
             getPersons()
-            sharedPrefsRepository.setUserName(username)
+            sharedPrefsRepository.setUsername(username)
         }
     }
 
@@ -145,6 +155,7 @@ class PersonalViewModel(
 
 data class PersonalUiState(
     val username: String? = null,
+    val isFailed: Boolean = false,
     val ownerId: Int? = 0,
     val ownInterestList: List<String> = emptyList(),
     val tempInterestList: List<String> = emptyList(),

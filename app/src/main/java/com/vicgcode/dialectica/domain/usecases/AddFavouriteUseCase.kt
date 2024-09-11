@@ -6,6 +6,6 @@ import com.vicgcode.dialectica.database.room.AppRoomRepository
 class AddFavouriteUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(question: DialectQuestion?) =
+    suspend operator fun invoke(question: DialectQuestion) =
         appRoomRepository.insertFavourite(question)
 }

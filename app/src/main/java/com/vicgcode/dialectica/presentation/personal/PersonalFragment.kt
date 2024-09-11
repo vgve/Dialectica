@@ -31,7 +31,6 @@ import com.vicgcode.dialectica.presentation.extensions.navigateSafely
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonListAdapter
-import com.vicgcode.dialectica.utils.PERSON_ID
 import com.vicgcode.dialectica.utils.SWIPE_DX
 import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
@@ -64,7 +63,7 @@ class PersonalFragment : Fragment() {
         Log.d(this.TAG, "onClickPerson: $it")
         findNavController().navigateSafely(
             R.id.action_navigation_personal_to_navigation_talk,
-            bundleOf(Pair(PERSON_ID, it.id))
+            bundleOf(PersonalViewModel.PERSON_ID to it.id)
         )
     }
 

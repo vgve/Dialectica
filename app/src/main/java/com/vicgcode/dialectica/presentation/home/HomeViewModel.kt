@@ -103,7 +103,7 @@ class HomeViewModel(
         return randomQuestion
     }
 
-    fun addToFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+    fun addToFavourite(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "addToFavourite")
         if (checkFavourite(question)) return
 
@@ -116,15 +116,12 @@ class HomeViewModel(
         }
     }
 
-    fun deleteFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+    fun deleteFavourite(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "deleteFromFavourite")
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
-        val deleted = _uiState.value.favouriteList.find {
-            it.text == question?.text
-        }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(deleted)
+            appRoomRepository.deleteFavourite(question)
             getFavQuestions()
             onSuccess()
         }
@@ -181,8 +178,8 @@ class HomeViewModel(
         val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = appRoomRepository.getPersonById(person.id)?.questions?.toMutableList()
-            if (newQuestionList?.contains(question) == false) {
+            val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()
+            if (!newQuestionList.contains(question)) {
                 question?.let { newQuestionList.add(it) }
                 appRoomRepository.updatePersonQuestions(newQuestionList, person.id)
             }
