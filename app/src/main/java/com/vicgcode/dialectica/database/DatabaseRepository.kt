@@ -5,9 +5,7 @@ import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 
 interface DatabaseRepository {
-    val favQuestions: List<DialectQuestion>
-    val personList: List<DialectPerson>
-    val interestList: List<DialectInterest>
+    fun getFavQuestions(): List<DialectQuestion>
 
     suspend fun insertFavourite(question: DialectQuestion)
 

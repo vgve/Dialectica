@@ -9,12 +9,7 @@ import kotlinx.coroutines.withContext
 
 class AppRoomRepository(private val appRoomDao: AppRoomDao) : DatabaseRepository {
 
-    override val favQuestions: List<DialectQuestion>
-        get() = appRoomDao.getFavouriteList()
-    override val personList: List<DialectPerson>
-        get() = appRoomDao.getPersonList()
-    override val interestList: List<DialectInterest>
-        get() = appRoomDao.getInterestList()
+    override fun getFavQuestions(): List<DialectQuestion> = appRoomDao.getFavouriteList()
 
     override suspend fun getFavouriteList(): List<DialectQuestion> {
         return withContext(Dispatchers.IO) {
