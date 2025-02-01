@@ -1,12 +1,14 @@
 package com.vicgcode.dialectica.presentation.talk
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.database.room.AppRoomRepository
 import com.vicgcode.dialectica.presentation.extensions.TAG
+import com.vicgcode.dialectica.presentation.personal.PersonalViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TalkViewModel(
+    private val savedStateHandle: SavedStateHandle,
     private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
 
@@ -24,6 +27,37 @@ class TalkViewModel(
 
     private val _uiAction: Channel<TalkAction> = Channel()
     val uiAction = _uiAction.receiveAsFlow()
+
+    private val personId = savedStateHandle.get<Int>(PersonalViewModel.PERSON_ID)
+
+    init {
+        Log.d(TAG, "setPerson")
+        var person: DialectPerson?
+        viewModelScope.launch(Dispatchers.Main) {
+            try {
+                personId?.let {
+                    person = appRoomRepository.getPersonById(personId)
+
+                    _uiState.update {
+                        it.copy(
+                            username = person?.name,
+                            personId = person?.id,
+                            isOwner = person?.isOwner ?: false,
+                            simpleInterestList = person?.interests.orEmpty(),
+                            questions = person?.questions.orEmpty()
+                        )
+                    }
+
+                    getOwnerPerson {
+                        setLocalInterestList(person?.interests.orEmpty())
+                    }
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                _uiState.update { it.copy(isFailed = true) }
+            }
+        }
+    }
 
     fun addInterest(interest: String) {
         Log.d(TAG, "addInterest")
@@ -40,8 +74,18 @@ class TalkViewModel(
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonInterests(_uiState.value.simpleInterestList, _uiState.value.personId)
-            onSuccess()
+            try {
+                _uiState.value.personId?.let {
+                    appRoomRepository.updatePersonInterests(
+                        _uiState.value.simpleInterestList,
+                        it
+                    )
+                    onSuccess()
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                _uiState.update { it.copy(isFailed = true) }
+            }
         }
     }
 
@@ -61,30 +105,6 @@ class TalkViewModel(
         }
 
         updatePerson {  }
-    }
-
-    fun getPerson(personId: Int?, onSuccess: () -> Unit) {
-        Log.d(TAG, "setPerson")
-        var person: DialectPerson?
-        viewModelScope.launch(Dispatchers.Main) {
-            person = appRoomRepository.getPersonById(personId)
-
-            _uiState.update {
-                it.copy(
-                    username = person?.name,
-                    personId = person?.id,
-                    isOwner = person?.isOwner ?: false,
-                    simpleInterestList = person?.interests.orEmpty(),
-                    questions = person?.questions.orEmpty()
-                )
-            }
-
-            getOwnerPerson {
-                setLocalInterestList(person?.interests.orEmpty())
-            }
-
-            onSuccess()
-        }
     }
 
     private fun setLocalInterestList(interests: List<String>) {
@@ -108,7 +128,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    ownerInterestList = appRoomRepository.getOwnerPerson(true)?.interests
+                    ownerInterestList = appRoomRepository.getOwnerPerson(true).interests
                 )
             }
             onSuccess()
@@ -127,8 +147,10 @@ class TalkViewModel(
         _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
-            onSuccess()
+            _uiState.value.personId?.let {
+                appRoomRepository.updatePersonQuestions(newQuestionList, it)
+                onSuccess()
+            }
         }
     }
 
@@ -140,8 +162,15 @@ class TalkViewModel(
         _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
-            onSuccess()
+            try {
+                _uiState.value.personId?.let {
+                    appRoomRepository.updatePersonQuestions(newQuestionList, it)
+                    onSuccess()
+                }
+            } catch (exception: Exception) {
+                exception.printStackTrace()
+                _uiState.update { it.copy(isFailed = true) }
+            }
         }
     }
 
@@ -167,6 +196,7 @@ class TalkViewModel(
 }
 
 data class TalkUiState(
+    val isFailed: Boolean = false,
     val username: String? = null,
     val personId: Int? = 0,
     val isOwner: Boolean = false,

@@ -6,6 +6,6 @@ import com.vicgcode.dialectica.database.room.AppRoomRepository
 class UpdatePersonQuestionsUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(questions: List<DialectQuestion>, id: Int?) =
+    suspend operator fun invoke(questions: List<DialectQuestion>, id: Int) =
         appRoomRepository.updatePersonQuestions(questions, id)
 }

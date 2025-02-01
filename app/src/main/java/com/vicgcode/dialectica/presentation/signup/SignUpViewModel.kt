@@ -2,10 +2,11 @@ package com.vicgcode.dialectica.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vicgcode.dialectica.core.domain.SharedPrefsKeys
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.SetAuthorizeUseCase
+import com.vicgcode.dialectica.domain.usecases.SetUsernameUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,9 @@ class SignUpViewModel(
     private val sharedPrefsRepository: SharedPrefsRepository,
     private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
+
+    private val setAuthorizeUseCase = SetAuthorizeUseCase(sharedPrefsRepository)
+    private val setUsernameUseCase = SetUsernameUseCase(sharedPrefsRepository)
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
@@ -40,8 +44,8 @@ class SignUpViewModel(
             isOwner = true,
             questions = emptyList()
         )
-        sharedPrefsRepository.setUserName(uiState.value.username)
-        sharedPrefsRepository.setBoolean(SharedPrefsKeys.IS_AUTHORIZED_KEY, true)
+        uiState.value.username?.let { setUsernameUseCase.invoke(it) }
+        setAuthorizeUseCase.invoke(true)
 
         viewModelScope.launch(Dispatchers.Main) {
             appRoomRepository.insertPerson(user)

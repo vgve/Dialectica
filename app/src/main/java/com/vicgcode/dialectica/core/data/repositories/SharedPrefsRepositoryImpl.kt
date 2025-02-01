@@ -16,7 +16,7 @@ class SharedPrefsRepositoryImpl(
         sharedPrefs.edit().putBoolean(IS_AUTHORIZED_KEY, init).apply()
     }
 
-    override fun setUserName(name: String?) {
+    override fun setUsername(name: String?) {
         sharedPrefs.edit().putString(USER_NAME_KEY, name).apply()
     }
 

@@ -72,21 +72,23 @@ class HomeFragment : Fragment() {
         }
         _binding.btnAddFav.apply {
             setOnSingleClickListener {
-                if (viewModel.uiState.value.isFavourite) {
-                    viewModel.deleteFavourite(viewModel.uiState.value.currentQuestion) {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.successful_deleted),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
-                    viewModel.addToFavourite(viewModel.uiState.value.currentQuestion) {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.successful_added),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                viewModel.uiState.value.currentQuestion?.let {
+                    if (viewModel.uiState.value.isFavourite) {
+                        viewModel.deleteFavourite(it) {
+                            Toast.makeText(
+                                context,
+                                getString(R.string.successful_deleted),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        viewModel.addToFavourite(it) {
+                            Toast.makeText(
+                                context,
+                                getString(R.string.successful_added),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
@@ -108,12 +110,14 @@ class HomeFragment : Fragment() {
             dialogBinding.tvQuestion.text = randomQuestion?.text
             dialogBinding.btnAddFav.isVisible = !isFavourite
             dialogBinding.btnAddFav.setOnSingleClickListener {
-                viewModel.addToFavourite(randomQuestion) {
-                    Toast.makeText(
-                        context,
-                        getString(R.string.successful_added),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                randomQuestion?.let {
+                    viewModel.addToFavourite(it) {
+                        Toast.makeText(
+                            context,
+                            getString(R.string.successful_added),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
                 dialog.dismiss()
             }

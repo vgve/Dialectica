@@ -4,7 +4,7 @@ interface SharedPrefsRepository {
 
     fun setAuthorize(init: Boolean)
 
-    fun setUserName(name: String?)
+    fun setUsername(name: String?)
 
     fun setTypeDatabase(type: String)
 

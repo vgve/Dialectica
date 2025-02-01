@@ -6,6 +6,6 @@ import com.vicgcode.dialectica.database.room.AppRoomRepository
 class DeletePersonUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(person: DialectPerson?) =
+    suspend operator fun invoke(person: DialectPerson) =
         appRoomRepository.deletePerson(person)
 }
