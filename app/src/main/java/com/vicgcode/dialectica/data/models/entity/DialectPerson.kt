@@ -15,4 +15,4 @@ data class DialectPerson (
     @TypeConverters(QuestionConverter::class)
     @ColumnInfo val questions: List<DialectQuestion>,
     @ColumnInfo val isOwner: Boolean,
-) : Serializable
+)

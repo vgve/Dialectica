@@ -91,7 +91,9 @@ class HomeViewModel(
 
     fun onClickRandom(): DialectQuestion? {
         var randomQuestion = _uiState.value.currentRandomQuestion
-        while (randomQuestion == _uiState.value.currentRandomQuestion || randomQuestion == _uiState.value.currentQuestion) {
+        while (randomQuestion == _uiState.value.currentRandomQuestion
+            || randomQuestion == _uiState.value.currentQuestion
+        ) {
             randomQuestion = _uiState.value.questions.random()
         }
         _uiState.update {
@@ -175,7 +177,8 @@ class HomeViewModel(
 
     fun addQuestionToPerson(person: DialectPerson, onSuccess: () -> Unit) {
         Log.d(TAG, "addQuestionToPerson: ${person.name}")
-        val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
+        val question =
+            if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
             val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()

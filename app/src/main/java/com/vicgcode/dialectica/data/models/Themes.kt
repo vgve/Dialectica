@@ -3,6 +3,7 @@ package com.vicgcode.dialectica.data.models
 import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 
+@Suppress("MaxLineLength")
 object Themes {
     val ruSections = listOf(
         DialectTheme("0", "Знакомство", R.drawable.ic_handshake),

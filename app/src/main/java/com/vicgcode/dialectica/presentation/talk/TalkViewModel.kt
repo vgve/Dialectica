@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class TalkViewModel(
     private val savedStateHandle: SavedStateHandle,
@@ -52,7 +53,7 @@ class TalkViewModel(
                         setLocalInterestList(person?.interests.orEmpty())
                     }
                 }
-            } catch (exception: Exception) {
+            } catch (exception: IOException) {
                 exception.printStackTrace()
                 _uiState.update { it.copy(isFailed = true) }
             }
@@ -82,7 +83,7 @@ class TalkViewModel(
                     )
                     onSuccess()
                 }
-            } catch (exception: Exception) {
+            } catch (exception: IOException) {
                 exception.printStackTrace()
                 _uiState.update { it.copy(isFailed = true) }
             }
@@ -167,7 +168,7 @@ class TalkViewModel(
                     appRoomRepository.updatePersonQuestions(newQuestionList, it)
                     onSuccess()
                 }
-            } catch (exception: Exception) {
+            } catch (exception: IOException) {
                 exception.printStackTrace()
                 _uiState.update { it.copy(isFailed = true) }
             }

@@ -1,6 +1,10 @@
 package com.vicgcode.dialectica.database.room
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.vicgcode.dialectica.data.models.entity.DialectInterest
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion

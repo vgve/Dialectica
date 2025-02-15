@@ -65,70 +65,9 @@ class HomeFragment : Fragment() {
 
         viewModel.getFavQuestions()
         viewModel.getPersons()
-
-        _binding.rvThemes.adapter = themesAdapter
-        _binding.btnNext.setOnClickListener {
-            viewModel.onClickNext()
-        }
-        _binding.btnAddFav.apply {
-            setOnSingleClickListener {
-                viewModel.uiState.value.currentQuestion?.let {
-                    if (viewModel.uiState.value.isFavourite) {
-                        viewModel.deleteFavourite(it) {
-                            Toast.makeText(
-                                context,
-                                getString(R.string.successful_deleted),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    } else {
-                        viewModel.addToFavourite(it) {
-                            Toast.makeText(
-                                context,
-                                getString(R.string.successful_added),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            }
-        }
-        _binding.btnAddPersonal.setOnSingleClickListener {
-            viewModel.setRandomState(false)
-            viewModel.onClickAddToTalk()
-        }
-        _binding.fabMagicRandom.setOnSingleClickListener {
-            val randomQuestion = viewModel.onClickRandom()
-            val isFavourite = viewModel.uiState.value.favouriteList.contains(randomQuestion)
-            val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
-            val dialog = Dialog(requireContext()).apply {
-                window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
-                setContentView(dialogBinding.root)
-                setCancelable(true)
-            }
-            dialog.show()
-            dialogBinding.tvQuestion.text = randomQuestion?.text
-            dialogBinding.btnAddFav.isVisible = !isFavourite
-            dialogBinding.btnAddFav.setOnSingleClickListener {
-                randomQuestion?.let {
-                    viewModel.addToFavourite(it) {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.successful_added),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                dialog.dismiss()
-            }
-            dialogBinding.btnAddPersonal.setOnSingleClickListener {
-                viewModel.setRandomState(true)
-                viewModel.onClickAddToTalk()
-                dialog.dismiss()
-            }
-        }
     }
 
+    @Suppress("LongMethod")
     private fun observeUiState() {
         Log.d(this.TAG, "observeUiState")
         viewLifecycleOwner.lifecycleScope.launch {
@@ -136,25 +75,89 @@ class HomeFragment : Fragment() {
                 viewModel.uiState.collect { state ->
                     Log.d(this.TAG, "$state")
                     with(_binding) {
+                        rvThemes.adapter = themesAdapter
+                        themesAdapter.items = state.sections
+                        themesAdapter.notifyDataSetChanged()
+
+                        btnNext.setOnClickListener { viewModel.onClickNext() }
+
+                        btnAddFav.apply {
+                            val favIcon = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
+                            setImageResource(favIcon)
+                            isVisible = state.currentQuestion?.text != null
+                            setOnSingleClickListener {
+                                viewModel.uiState.value.currentQuestion?.let {
+                                    if (viewModel.uiState.value.isFavourite) {
+                                        viewModel.deleteFavourite(it) {
+                                            Toast.makeText(
+                                                context,
+                                                getString(R.string.successful_deleted),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    } else {
+                                        viewModel.addToFavourite(it) {
+                                            Toast.makeText(
+                                                context,
+                                                getString(R.string.successful_added),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        btnAddPersonal.apply {
+                            isVisible = state.currentQuestion?.text != null && state.personList.isNotEmpty()
+                            setOnSingleClickListener {
+                                viewModel.setRandomState(false)
+                                viewModel.onClickAddToTalk()
+                            }
+                        }
+
+                        fabMagicRandom.setOnSingleClickListener {
+                            val randomQuestion = viewModel.onClickRandom()
+                            val isFavourite = viewModel.uiState.value.favouriteList.contains(randomQuestion)
+                            val dialogBinding = DialogRandomQuestionBinding.inflate(layoutInflater)
+                            val dialog = Dialog(requireContext()).apply {
+                                window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
+                                setContentView(dialogBinding.root)
+                                setCancelable(true)
+                            }
+                            dialog.show()
+                            dialogBinding.tvQuestion.text = randomQuestion?.text
+                            dialogBinding.btnAddFav.isVisible = !isFavourite
+                            dialogBinding.btnAddFav.setOnSingleClickListener {
+                                randomQuestion?.let {
+                                    viewModel.addToFavourite(it) {
+                                        Toast.makeText(
+                                            context,
+                                            getString(R.string.successful_added),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                                dialog.dismiss()
+                            }
+                            dialogBinding.btnAddPersonal.setOnSingleClickListener {
+                                viewModel.setRandomState(true)
+                                viewModel.onClickAddToTalk()
+                                dialog.dismiss()
+                            }
+                        }
+
                         tvStart.text =
                             if (state.isAuthorize) getString(R.string.info_home_page_user, state.username)
                             else getString(R.string.info_home_page)
 
-                        themesAdapter.items = state.sections
-                        themesAdapter.notifyDataSetChanged()
 
                         tvQuestion.text = state.currentQuestion?.text
                         tvQuestion.isVisible = state.currentQuestion != null
                         tvStart.isVisible = state.currentQuestion == null
                         btnNext.isVisible = state.currentQuestion?.text != null
-                        btnAddFav.isVisible = state.currentQuestion?.text != null
-                        btnAddPersonal.isVisible = state.currentQuestion?.text != null && state.personList.isNotEmpty()
-                        val favIcon = if (state.isFavourite) R.drawable.ic_fav_click else R.drawable.ic_fav_menu
-                        btnAddFav.setImageResource(favIcon)
 
-                        if (state.currentQuestion != null) {
-                            viewModel.changeFavouriteState()
-                        }
+                        if (state.currentQuestion != null) { viewModel.changeFavouriteState() }
                     }
                 }
             }

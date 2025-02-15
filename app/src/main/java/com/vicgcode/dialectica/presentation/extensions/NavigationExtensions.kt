@@ -3,7 +3,11 @@ package com.vicgcode.dialectica.presentation.extensions
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigator
+import androidx.navigation.findNavController
 import com.vicgcode.dialectica.R
 
 fun Fragment.activityNavController() = requireActivity().findNavController(R.id.nav_host_fragment)

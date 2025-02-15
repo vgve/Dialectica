@@ -11,20 +11,15 @@ val Any.TAG: String
 
 fun TextInputEditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        }
+        @Suppress("EmptyFunctionBlock")
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        @Suppress("EmptyFunctionBlock")
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
         override fun afterTextChanged(editable: Editable?) {
             afterTextChanged.invoke(editable.toString())
         }
     })
-}
-
-fun View.setOnSingleClickListener(l: View.OnClickListener) {
-    setOnClickListener(OnSingleClickListener(l))
 }
 
 fun View.setOnSingleClickListener(l: (View) -> Unit) {
