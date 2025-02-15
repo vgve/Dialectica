@@ -71,7 +71,11 @@ fun interestLocalAdapterDelegate(
     }
     bind {
         binding.tvInterest.text = item.name
-        val backgroundColor = if (item.isCommon) ContextCompat.getColor(context, R.color.lavender) else ContextCompat.getColor(context, R.color.light_grey)
+        val backgroundColor =
+            if (item.isCommon) ContextCompat.getColor(context, R.color.lavender) else ContextCompat.getColor(
+                context,
+                R.color.light_grey
+            )
         binding.llInterest.setBackgroundColor(backgroundColor)
     }
 }

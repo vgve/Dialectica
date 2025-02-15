@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -26,7 +25,8 @@ import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
-import com.vicgcode.dialectica.utils.*
+import com.vicgcode.dialectica.utils.SWIPE_DX
+import com.vicgcode.dialectica.utils.createViewModel
 import kotlinx.coroutines.launch
 
 class TalkFragment : Fragment() {

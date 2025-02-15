@@ -10,7 +10,7 @@ data class DialectQuestion(
     @ColumnInfo val idTheme: String,
     @ColumnInfo val text: String,
     @ColumnInfo var isFavourite: Boolean? = false
-) : Serializable {
+) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 }

@@ -5,7 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.vicgcode.dialectica.data.models.entity.*
+import com.vicgcode.dialectica.data.models.entity.DataConverter
+import com.vicgcode.dialectica.data.models.entity.DialectInterest
+import com.vicgcode.dialectica.data.models.entity.DialectPerson
+import com.vicgcode.dialectica.data.models.entity.DialectQuestion
+import com.vicgcode.dialectica.data.models.entity.QuestionConverter
 
 @Database(entities = [DialectQuestion::class, DialectInterest::class, DialectPerson::class],version = 1)
 @TypeConverters(DataConverter::class, QuestionConverter::class)

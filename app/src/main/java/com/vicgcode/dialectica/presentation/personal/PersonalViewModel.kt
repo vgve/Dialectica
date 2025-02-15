@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class PersonalViewModel(
     private val sharedPrefsRepository: SharedPrefsRepository,
@@ -119,7 +120,7 @@ class PersonalViewModel(
                     appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, it)
                     getPersons()
                 }
-            } catch (exception: Exception) {
+            } catch (exception: IOException) {
                 exception.printStackTrace()
                 _uiState.update { it.copy(isFailed = true) }
             }
