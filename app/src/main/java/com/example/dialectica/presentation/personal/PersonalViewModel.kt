@@ -96,7 +96,7 @@ class PersonalViewModel(
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, _uiState.value.ownerId)
+            _uiState.value.ownerId?.let { appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, it) }
             getPersons()
             onSuccess()
         }
@@ -106,8 +106,8 @@ class PersonalViewModel(
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
             val persons = appRoomRepository.getPersonList()
-            _uiState.update {
-                it.copy(
+            _uiState.update { uiState ->
+                uiState.copy(
                     personList = persons,
                     ownInterestList = persons.find { it.isOwner }?.interests.orEmpty(),
                     ownerId = persons.find { it.isOwner }?.id,

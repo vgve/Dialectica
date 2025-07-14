@@ -32,7 +32,7 @@ class SignUpViewModel(
 
     fun signUp() {
         sharedPrefsRepository.setUserName(uiState.value.username)
-        sharedPrefsRepository.setBoolean(SharedPrefsKeys.IS_AUTHORIZED_KEY, true)
+        sharedPrefsRepository.setAuthorize(true)
 
         viewModelScope.launch(Dispatchers.Main) {
             _uiAction.send(SignUpAction.OnAuthSuccess)

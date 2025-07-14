@@ -1,6 +1,5 @@
 package com.example.dialectica.domain.usecases
 
-import com.example.dialectica.core.domain.SharedPrefsKeys
 import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
 
 class GetAuthorizeUseCase(
@@ -8,6 +7,6 @@ class GetAuthorizeUseCase(
 ) {
 
     operator fun invoke(): Boolean {
-        return sharedPrefsRepository.getBoolean(SharedPrefsKeys.IS_AUTHORIZED_KEY)
+        return sharedPrefsRepository.isAuthorize()
     }
 }

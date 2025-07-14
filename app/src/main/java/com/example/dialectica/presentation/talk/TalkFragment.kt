@@ -97,7 +97,7 @@ class TalkFragment : Fragment() {
 
         observeUIAction()
 
-        viewModel.getPerson(arguments?.getInt(PERSON_ID)) { }
+        arguments?.getInt(PERSON_ID)?.let { viewModel.getPerson(it) { } }
 
         _binding.rvInterests.adapter = interestsAdapter
 

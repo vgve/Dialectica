@@ -88,8 +88,8 @@ class HomeViewModel(
         }
     }
 
-    fun onClickRandom(): DialectQuestion? {
-        var randomQuestion = _uiState.value.currentRandomQuestion
+    fun onClickRandom(): DialectQuestion {
+        var randomQuestion = _uiState.value.currentRandomQuestion ?: _uiState.value.allQuestions.random()
         while (randomQuestion == _uiState.value.currentRandomQuestion || randomQuestion == _uiState.value.currentQuestion) {
             randomQuestion = _uiState.value.allQuestions.random()
         }
@@ -102,26 +102,32 @@ class HomeViewModel(
         return randomQuestion
     }
 
-    fun addToFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+    fun addToFavourite(onSuccess: () -> Unit) {
         Log.d(TAG, "addToFavourite")
+        val question = uiState.value.currentQuestion
         if (checkFavourite(question)) return
 
         _uiState.update { it.copy(isFavourite = true, isRandom = false) }
 
-        viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.insertFavourite(question)
-            getFavQuestions()
-            onSuccess()
+        question?.let {
+            viewModelScope.launch(Dispatchers.Main) {
+                appRoomRepository.insertFavourite(it)
+                getFavQuestions()
+                onSuccess()
+            }
         }
     }
 
-    fun deleteFavourite(question: DialectQuestion?, onSuccess: () -> Unit) {
+    fun deleteFavourite(onSuccess: () -> Unit) {
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
+        val question = uiState.value.currentQuestion
 
-        viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(question)
-            getFavQuestions()
-            onSuccess()
+        question?.let {
+            viewModelScope.launch(Dispatchers.Main) {
+                appRoomRepository.deleteFavourite(it)
+                getFavQuestions()
+                onSuccess()
+            }
         }
     }
 
@@ -176,7 +182,7 @@ class HomeViewModel(
         val question = if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = appRoomRepository.getPersonById(person.id)?.questions?.toMutableList()
+            val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()
             if (newQuestionList?.contains(question) == false) {
                 question?.let { newQuestionList.add(it) }
                 appRoomRepository.updatePersonQuestions(newQuestionList, person.id)

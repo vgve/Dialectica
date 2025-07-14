@@ -40,7 +40,10 @@ class TalkViewModel(
         Log.d(TAG, "updateOwnPerson")
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonInterests(_uiState.value.simpleInterestList, _uiState.value.personId)
+            _uiState.value.personId?.let {
+                appRoomRepository
+                    .updatePersonInterests(_uiState.value.simpleInterestList, it)
+            }
             onSuccess()
         }
     }
@@ -63,24 +66,23 @@ class TalkViewModel(
         updatePerson {  }
     }
 
-    fun getPerson(personId: Int?, onSuccess: () -> Unit) {
+    fun getPerson(personId: Int, onSuccess: () -> Unit) {
         Log.d(TAG, "setPerson")
-        var person: DialectPerson?
         viewModelScope.launch(Dispatchers.Main) {
-            person = appRoomRepository.getPersonById(personId)
+            val person = appRoomRepository.getPersonById(personId)
 
             _uiState.update {
                 it.copy(
-                    username = person?.name,
-                    personId = person?.id,
-                    isOwner = person?.isOwner ?: false,
-                    simpleInterestList = person?.interests.orEmpty(),
-                    questions = person?.questions.orEmpty()
+                    username = person.name,
+                    personId = person.id,
+                    isOwner = person.isOwner,
+                    simpleInterestList = person.interests,
+                    questions = person.questions
                 )
             }
 
             getOwnerPerson {
-                setLocalInterestList(person?.interests.orEmpty())
+                setLocalInterestList(person.interests)
             }
 
             onSuccess()
@@ -108,7 +110,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    ownerInterestList = appRoomRepository.getOwnerPerson(true)?.interests
+                    ownerInterestList = appRoomRepository.getOwnerPerson(true).interests
                 )
             }
             onSuccess()
@@ -127,7 +129,7 @@ class TalkViewModel(
         _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
+            _uiState.value.personId?.let { appRoomRepository.updatePersonQuestions(newQuestionList, it) }
             onSuccess()
         }
     }
@@ -140,7 +142,7 @@ class TalkViewModel(
         _uiState.update { it.copy(questions = newQuestionList) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.updatePersonQuestions(newQuestionList, _uiState.value.personId)
+            _uiState.value.personId?.let { appRoomRepository.updatePersonQuestions(newQuestionList, it) }
             onSuccess()
         }
     }

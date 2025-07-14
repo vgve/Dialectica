@@ -6,6 +6,6 @@ import com.example.dialectica.database.room.AppRoomRepository
 class DeleteInterestUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(interest: DialectInterest?) =
+    suspend operator fun invoke(interest: DialectInterest) =
         appRoomRepository.deleteInterest(interest)
 }

@@ -6,6 +6,6 @@ import com.example.dialectica.database.room.AppRoomRepository
 class AddPersonUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(person: DialectPerson?) =
+    suspend operator fun invoke(person: DialectPerson) =
         appRoomRepository.insertPerson(person)
 }

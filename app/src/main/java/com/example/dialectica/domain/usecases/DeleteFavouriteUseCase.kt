@@ -6,6 +6,6 @@ import com.example.dialectica.database.room.AppRoomRepository
 class DeleteFavouriteUseCase(
     private val appRoomRepository: AppRoomRepository
 ) {
-    suspend operator fun invoke(question: DialectQuestion?) =
+    suspend operator fun invoke(question: DialectQuestion) =
         appRoomRepository.deleteFavourite(question)
 }
