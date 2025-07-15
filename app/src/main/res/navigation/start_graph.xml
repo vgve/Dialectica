@@ -17,13 +17,13 @@
 
     <fragment
         android:id="@+id/baseFlowFragment"
-        android:name="com.example.dialectica.presentation.base.BaseFlowFragment"
+        android:name="com.vicgcode.dialectica.presentation.base.BaseFlowFragment"
         android:label="flow_fragment_base"
         tools:layout="@layout/flow_fragment_base" />
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.dialectica.presentation.signup.SignUpFragment"
+        android:name="com.vicgcode.dialectica.presentation.signup.SignUpFragment"
         android:label="fragment_sign"
         tools:layout="@layout/fragment_signup" />
 

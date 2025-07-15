@@ -1,0 +1,53 @@
+<resources>
+    <!-- Start Common Block -->
+    <string name="common_back">Back</string>
+    <string name="common_name">Enter a name or nickname</string>
+    <string name="common_save">Save</string>
+    <string name="common_no">No</string>
+    <string name="common_delete">Delete</string>
+    <!-- End Common Block -->
+
+    <!-- Start Welcome Block -->
+    <string name="signup_title">Hey there!</string>
+    <string name="signup_subtitle">Let\'s meet!</string>
+    <!-- End Welcome Block -->
+
+    <!-- Start Favourites Block -->
+    <string name="favourites_fragment_title">Favorites</string>
+    <!-- End Favourites Block -->
+
+    <string name="app_name">Dialectica</string>
+    <string name="title_home">Home</string>
+    <string name="title_sign_up">Sign up</string>
+    <string name="title_personal">Talks</string>
+    <string name="title_talk">Person</string>
+    <string name="themes_title">Themes</string>
+    <string name="add_to_fav">Favorites</string>
+    <string name="add_to_personal">Talks</string>
+    <string name="next">Next</string>
+    <string name="info_home_page_user">Hey, %s!\nSelect a section or use the randomizer</string>
+    <string name="info_for_owner">Personal: topics, ideas, notes</string>
+    <string name="info_home_page">Select the section you are interested in and find a new topic of conversation</string>
+    <string name="info_login">The button to the right of the input field saves the interest entered.</string>
+    <string name="enter_name">Enter nickname</string>
+    <string name="enter_interests">Enter an interest: f.e. history</string>
+    <string name="enter_new_interest">Enter a new interest:</string>
+    <string name="login_btn">Sign up</string>
+    <string name="empty">There\'s nothing here yet…</string>
+    <string name="add_new_person">Add a new person</string>
+    <string name="error_empty_name">Enter a nickname!</string>
+    <string name="dialog_btn_add">Add</string>
+    <string name="info_delete_person">Are you sure you want to delete the person «%s»? It is not possible to cancel this action.</string>
+    <string name="info_delete_question">Are you sure you want to delete the topic «%s»? It is not possible to cancel this action</string>
+    <string name="random">Random</string>
+    <string name="own_interests">Have a nice talk, %s!\nYour interests:</string>
+    <string name="interests">%s\nInterests:</string>
+    <string name="add_new_question">Add a new topic</string>
+    <string name="notes">Notes</string>
+    <string name="info_new_question">What would you like to talk about?</string>
+    <string name="enter_new_question">Enter a new topic</string>
+    <string name="successful_added">Added</string>
+    <string name="need_to_add_person">First, add an person</string>
+    <string name="successful_deleted">Deleted</string>
+    <string name="title_themes">Sections</string>
+</resources>

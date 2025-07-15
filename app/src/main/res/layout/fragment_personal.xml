@@ -7,24 +7,6 @@
     android:id="@+id/fr_personal"
     tools:context=".presentation.personal.PersonalFragment">
 
-    <TextView
-        android:id="@+id/tv_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:lineSpacingExtra="6dp"
-        android:textSize="16sp"
-        android:text="@string/please_login"
-        android:fontFamily="@font/lato_regular"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_login"
-        tools:visibility="gone" />
-
     <com.google.android.material.button.MaterialButton
         style="@style/AddButton"
         android:id="@+id/btn_login"
@@ -48,7 +30,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="@color/light_grey"
+        app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
         app:cardCornerRadius="9dp"
         app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +59,7 @@
                     android:layout_weight="3"
                     android:lineSpacingExtra="6dp"
                     android:textSize="16sp"
-                    android:textColor="@color/black" />
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <ImageView
                     android:id="@+id/btn_add_interest"
@@ -87,6 +69,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:src="@drawable/ic_add"
+                    app:tint="?android:attr/textColorPrimary"
                     tools:ignore="contentDescription" />
         </LinearLayout>
 
@@ -97,7 +80,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/light_grey"
+                android:background="@null"
                 android:orientation="horizontal"
                 android:scrollbars="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
@@ -119,10 +102,11 @@
         android:foreground="@drawable/bg_corners"
         android:text="@string/add_new_person"
         android:fontFamily="@font/lato_regular"
+        android:textColor="?android:attr/textColorPrimary"
         app:icon="@drawable/ic_open"
         app:iconGravity="textEnd"
         app:iconSize="24dp"
-        app:iconTint="@color/black"
+        app:iconTint="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cv_hello" />
@@ -132,7 +116,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        android:background="@color/light_grey"
+        android:background="@null"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"

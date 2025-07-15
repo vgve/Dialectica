@@ -29,6 +29,7 @@
             android:src="@drawable/ic_handshake"
             app:tint="?android:attr/textColorPrimary"
             app:shapeAppearanceOverlay="@style/circleImageView"
+            app:strokeColor="?android:attr/textColorPrimary"
             app:strokeWidth="2dp" />
 
     </androidx.cardview.widget.CardView>

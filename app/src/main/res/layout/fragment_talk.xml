@@ -22,7 +22,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            app:cardBackgroundColor="@color/light_grey"
+            app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
             app:cardCornerRadius="9dp"
             app:cardElevation="0dp">
 
@@ -37,8 +37,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:lineSpacingExtra="6dp"
                 android:text="@string/info_for_owner"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textColor="?android:attr/textColorPrimary" />
 
         </androidx.cardview.widget.CardView>
 
@@ -49,7 +48,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            app:cardBackgroundColor="@color/light_grey"
+            app:cardBackgroundColor="?android:attr/colorBackgroundFloating"
             app:cardCornerRadius="9dp"
             app:cardElevation="0dp">
 
@@ -74,8 +73,8 @@
                         android:layout_weight="3"
                         android:lineSpacingExtra="6dp"
                         android:text="@string/interests"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="?android:attr/textColorPrimary" />
 
                     <ImageView
                         android:id="@+id/btn_add_interest"
@@ -85,7 +84,8 @@
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:src="@drawable/ic_add"
-                        tools:ignore="ContentDescription" />
+                        tools:ignore="ContentDescription"
+                        app:tint="?android:attr/textColorPrimary" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -95,7 +95,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/light_grey"
+                    android:background="@null"
                     android:orientation="horizontal"
                     android:scrollbars="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
@@ -118,10 +118,11 @@
             android:layout_marginEnd="20dp"
             android:foreground="@drawable/bg_corners"
             android:text="@string/add_new_question"
+            android:textColor="?android:attr/textColorPrimary"
             app:icon="@drawable/ic_inkwell"
             app:iconGravity="textEnd"
             app:iconSize="24dp"
-            app:iconTint="@color/black" />
+            app:iconTint="?android:attr/textColorPrimary" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -132,7 +133,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="100dp"
-        android:background="@color/light_grey"
+        android:background="@null"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
