@@ -1,15 +1,13 @@
 package com.vicgcode.dialectica.database.room
 
-import com.vicgcode.dialectica.data.models.entity.DialectQuestion
-import com.vicgcode.dialectica.database.DatabaseRepository
 import com.vicgcode.dialectica.data.models.entity.DialectInterest
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
+import com.vicgcode.dialectica.data.models.entity.DialectQuestion
+import com.vicgcode.dialectica.database.DatabaseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AppRoomRepository(private val appRoomDao: AppRoomDao) : DatabaseRepository {
-
-    override fun getFavQuestions(): List<DialectQuestion> = appRoomDao.getFavouriteList()
 
     override suspend fun getFavouriteList(): List<DialectQuestion> {
         return withContext(Dispatchers.IO) {

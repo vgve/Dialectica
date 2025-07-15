@@ -212,7 +212,7 @@ data class HomeUiState(
 )
 
 sealed class HomeAction {
-    object AddQuestionToPersonClick : HomeAction()
-    object ShowAddToTalkScreen : HomeAction()
-    object OpenPersonalScreen : HomeAction()
+    data object AddQuestionToPersonClick : HomeAction()
+    data object ShowAddToTalkScreen : HomeAction()
+    data object OpenPersonalScreen : HomeAction()
 }
