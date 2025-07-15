@@ -60,5 +60,5 @@ data class SignUpUiState(
 )
 
 sealed class SignUpAction {
-    object OnAuthSuccess : SignUpAction()
+    data object OnAuthSuccess : SignUpAction()
 }

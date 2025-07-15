@@ -5,6 +5,7 @@ compileSdk = "35"
 
 kotlin = "2.0.21"
 androidGradlePlugin = "8.7.3"
+detekt = "1.23.7"
 coreKtx = "1.16.0"
 appcompat = "1.7.1"
 activity = "1.10.1"
@@ -57,8 +58,12 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 # GSON
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
+# Detekt
+arturbosch-detekt = { module = "io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin", version.ref = "detekt" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

@@ -1,6 +1,6 @@
-package com.example.dialectica.domain.usecases
+package com.vicgcode.dialectica.domain.usecases
 
-import com.example.dialectica.core.domain.repositories.SharedPrefsRepository
+import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 
 class GetAuthorizeUseCase(
     private val sharedPrefsRepository: SharedPrefsRepository
