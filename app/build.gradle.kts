@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.detekt)
 }
@@ -33,6 +35,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
+        compose = true
         viewBinding = true
     }
 }
@@ -55,9 +59,19 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.constraintlayout)
 
+    // UI
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
     // Navigation Component
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     // Test
     testImplementation(libs.junit)
@@ -77,11 +91,17 @@ dependencies {
     // ROOM
     // To use Kotlin annotation processing tool (kapt)
     kapt(libs.androidx.room.compiler)
-    implementation(libs.room.runtime)
+    implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
     // Detect
     implementation(libs.arturbosch.detekt)
+
+    // Logger
+    implementation(libs.timber)
 }
