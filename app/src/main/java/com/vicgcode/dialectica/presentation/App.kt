@@ -1,7 +1,7 @@
 package com.vicgcode.dialectica.presentation
 
 import android.app.Application
-import com.example.dialectica.BuildConfig
+import com.vicgcode.dialectica.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
