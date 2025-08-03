@@ -1,8 +1,9 @@
 package com.vicgcode.dialectica.domain.usecases
 
 import com.vicgcode.dialectica.database.room.AppRoomRepository
+import javax.inject.Inject
 
-class GetPersonsUseCase(
+class GetPersonsUseCase @Inject constructor(
     private val appRoomRepository: AppRoomRepository
 ) {
     suspend operator fun invoke() =
