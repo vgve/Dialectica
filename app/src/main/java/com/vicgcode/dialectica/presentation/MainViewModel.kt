@@ -1,40 +1,44 @@
 package com.vicgcode.dialectica.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.domain.usecases.GetAuthorizeUseCase
-import com.vicgcode.dialectica.presentation.extensions.TAG
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
-    private val sharedPrefsRepository: SharedPrefsRepository
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val getAuthorizeUseCase: GetAuthorizeUseCase
 ): ViewModel() {
 
-    private val getAuthorizeUseCase = GetAuthorizeUseCase(sharedPrefsRepository)
-
-    private val _uiAction: Channel<MainAction> = Channel()
-    val uiAction = _uiAction.receiveAsFlow()
+    private val _state = MutableStateFlow<SplashState>(SplashState.Loading)
+    // val state: StateFlow<SplashState> = _state
+    val state = _state.asStateFlow()
 
     init {
-        val isAuthorized = getAuthorizeUseCase.invoke()
-        Log.e(TAG, "isAuthorized $isAuthorized")
         viewModelScope.launch(Dispatchers.Main) {
-            if (isAuthorized) {
-                _uiAction.send(MainAction.OpenHomeScreen)
-            } else {
-                _uiAction.send(MainAction.OpenAuthScreen)
+            try {
+                val isAuthorized = getAuthorizeUseCase.invoke()
+                if (isAuthorized) {
+                    _state.value = SplashState.Home
+                } else {
+                    _state.value = SplashState.Login
+                }
+            } catch (exception: Exception) {
+                _state.value = SplashState.Error(message = exception.message)
             }
         }
     }
 
 }
 
-sealed class MainAction {
-    object OpenAuthScreen : MainAction()
-    object OpenHomeScreen : MainAction()
+sealed class SplashState {
+    data object Loading : SplashState()
+    data object Login : SplashState()
+    data object Home : SplashState()
+    data class Error(val message: String?) : SplashState()
 }

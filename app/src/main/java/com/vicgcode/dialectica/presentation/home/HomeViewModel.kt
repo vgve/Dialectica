@@ -11,6 +11,7 @@ import com.vicgcode.dialectica.data.models.Themes
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.utils.LOCALE_RU
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +20,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository,
     private val appRoomRepository: AppRoomRepository
 ): ViewModel() {
