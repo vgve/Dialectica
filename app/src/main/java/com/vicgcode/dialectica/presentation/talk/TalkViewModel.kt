@@ -9,6 +9,7 @@ import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.database.room.AppRoomRepository
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.personal.PersonalViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +18,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-class TalkViewModel(
+@HiltViewModel
+class TalkViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val appRoomRepository: AppRoomRepository
 ): ViewModel() {

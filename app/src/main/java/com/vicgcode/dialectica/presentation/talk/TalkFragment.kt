@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,27 +21,18 @@ import com.vicgcode.dialectica.databinding.DialogEnterNewInfoBinding
 import com.vicgcode.dialectica.databinding.DialogRandomQuestionBinding
 import com.vicgcode.dialectica.databinding.FragmentTalkBinding
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
-import com.vicgcode.dialectica.presentation.MyApplication
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX
-import com.vicgcode.dialectica.utils.createViewModel
 import kotlinx.coroutines.launch
 
 class TalkFragment : Fragment() {
 
     private lateinit var _binding: FragmentTalkBinding
 
-    private val viewModel by lazy {
-        createViewModel { handle ->
-            TalkViewModel(
-                handle,
-                MyApplication.appModule.appRoomRepository
-            )
-        }
-    }
+    private val viewModel: TalkViewModel by viewModels()
 
     private var interestsAdapter: InterestLocalListAdapter = InterestLocalListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")

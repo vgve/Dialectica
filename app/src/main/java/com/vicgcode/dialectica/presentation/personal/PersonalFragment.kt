@@ -25,29 +25,18 @@ import com.vicgcode.dialectica.databinding.DialogEnterNewInfoBinding
 import com.vicgcode.dialectica.databinding.DialogLoginBinding
 import com.vicgcode.dialectica.databinding.FragmentPersonalBinding
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
-import com.vicgcode.dialectica.presentation.MyApplication
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX
-import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class PersonalFragment : Fragment() {
 
     private lateinit var _binding: FragmentPersonalBinding
-    private val viewModel: PersonalViewModel by viewModels(
-        factoryProducer = {
-            viewModelFactory {
-                PersonalViewModel(
-                    MyApplication.appModule.sharedPrefsRepository,
-                    MyApplication.appModule.appRoomRepository
-                )
-            }
-        }
-    )
+    private val viewModel: PersonalViewModel by viewModels()
 
     private var ownInterestsAdapter: InterestListAdapter = InterestListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")

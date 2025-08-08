@@ -19,27 +19,16 @@ import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.databinding.DialogDeleteBinding
 import com.vicgcode.dialectica.databinding.FragmentFavouriteBinding
-import com.vicgcode.dialectica.presentation.MyApplication
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX
-import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment() {
 
     private lateinit var binding: FragmentFavouriteBinding
 
-    private val viewModel: FavouriteViewModel by viewModels(
-        factoryProducer = {
-            viewModelFactory {
-                FavouriteViewModel(
-                    MyApplication.appModule.sharedPrefsRepository,
-                    MyApplication.appModule.appRoomRepository
-                )
-            }
-        }
-    )
+    private val viewModel: FavouriteViewModel by viewModels()
 
     private var questionsAdapter: QuestionListAdapter = QuestionListAdapter()
 
