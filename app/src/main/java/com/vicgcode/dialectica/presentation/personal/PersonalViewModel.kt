@@ -5,18 +5,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
-import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.AddPersonUseCase
+import com.vicgcode.dialectica.domain.usecases.DeletePersonUseCase
+import com.vicgcode.dialectica.domain.usecases.GetPersonsUseCase
+import com.vicgcode.dialectica.domain.usecases.UpdatePersonInterestsUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-class PersonalViewModel(
+@HiltViewModel
+class PersonalViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository,
-    private val appRoomRepository: AppRoomRepository
+    private val getPersonsUseCase: GetPersonsUseCase,
+    private val addPersonUseCase: AddPersonUseCase,
+    private val updatePersonInterestsUseCase: UpdatePersonInterestsUseCase,
+    private val deletePersonUseCase: DeletePersonUseCase
 ): ViewModel() {
 
     companion object {
@@ -35,7 +44,7 @@ class PersonalViewModel(
     fun getPersons() {
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
-            val persons = appRoomRepository.getPersonList()
+            val persons = getPersonsUseCase.invoke()
             _uiState.update {
                 it.copy(
                     personList = persons,
@@ -105,7 +114,7 @@ class PersonalViewModel(
         _uiState.update { it.copy(tempInterestList = emptyList()) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.insertPerson(newPerson)
+            addPersonUseCase.invoke(newPerson)
             getPersons()
             onSuccess()
         }
@@ -117,7 +126,7 @@ class PersonalViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 _uiState.value.ownerId?.let {
-                    appRoomRepository.updatePersonInterests(_uiState.value.ownInterestList, it)
+                    updatePersonInterestsUseCase.invoke(_uiState.value.ownInterestList, it)
                     getPersons()
                 }
             } catch (exception: IOException) {
@@ -138,7 +147,7 @@ class PersonalViewModel(
         )
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.insertPerson(newPerson)
+            addPersonUseCase.invoke(newPerson)
             getPersons()
             sharedPrefsRepository.setUsername(username)
         }
@@ -147,7 +156,7 @@ class PersonalViewModel(
     fun onDeletePerson(person: DialectPerson, onSuccess: () -> Unit) {
         Log.d(TAG, "onDeletePerson")
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.deletePerson(person)
+            deletePersonUseCase.invoke(person)
             getPersons()
             onSuccess()
         }

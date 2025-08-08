@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
-import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.DeleteFavouriteUseCase
+import com.vicgcode.dialectica.domain.usecases.GetFavouritesUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,10 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FavouriteViewModel(
-    sharedPrefsRepository: SharedPrefsRepository,
-    private val appRoomRepository: AppRoomRepository
+@HiltViewModel
+class FavouriteViewModel @Inject constructor(
+    private val sharedPrefsRepository: SharedPrefsRepository,
+    private val deleteFavouriteUseCase: DeleteFavouriteUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavouriteUiState())
@@ -45,7 +50,7 @@ class FavouriteViewModel(
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
         viewModelScope.launch (Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(question)
+            deleteFavouriteUseCase.invoke(question)
             updateFavourites()
             onSuccess()
         }
@@ -54,9 +59,10 @@ class FavouriteViewModel(
     fun updateFavourites() {
         Log.d(TAG, "getFavQuestions")
         viewModelScope.launch(Dispatchers.Main) {
+            val favourites = getFavouritesUseCase.invoke()
             _uiState.update {
                 it.copy(
-                    questions = appRoomRepository.getFavouriteList()
+                    questions = favourites
                 )
             }
         }

@@ -13,28 +13,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.databinding.FragmentSignupBinding
-import com.vicgcode.dialectica.presentation.MyApplication
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.activityNavController
 import com.vicgcode.dialectica.presentation.extensions.afterTextChanged
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
-import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class SignUpFragment: Fragment(R.layout.fragment_signup) {
 
     private lateinit var binding: FragmentSignupBinding
 
-    private val viewModel: SignUpViewModel by viewModels(
-        factoryProducer = {
-            viewModelFactory {
-                SignUpViewModel(
-                    MyApplication.appModule.sharedPrefsRepository,
-                    MyApplication.appModule.appRoomRepository
-                )
-            }
-        }
-    )
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

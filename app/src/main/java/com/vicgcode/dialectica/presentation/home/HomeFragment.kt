@@ -18,28 +18,17 @@ import com.vicgcode.dialectica.R
 import com.vicgcode.dialectica.databinding.DialogAddToTalkBinding
 import com.vicgcode.dialectica.databinding.FragmentHomeBinding
 import com.vicgcode.dialectica.databinding.DialogRandomQuestionBinding
-import com.vicgcode.dialectica.presentation.MyApplication
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonAddListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.ThemeListAdapter
-import com.vicgcode.dialectica.utils.viewModelFactory
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var _binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels(
-        factoryProducer = {
-            viewModelFactory {
-                HomeViewModel(
-                    MyApplication.appModule.sharedPrefsRepository,
-                    MyApplication.appModule.appRoomRepository
-                )
-            }
-        }
-    )
+    private val viewModel: HomeViewModel by viewModels()
 
     private var themesAdapter: ThemeListAdapter = ThemeListAdapter {
         Log.d(this.TAG, "onClickTheme: $it")

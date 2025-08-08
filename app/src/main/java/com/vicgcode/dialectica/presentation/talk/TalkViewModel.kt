@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
-import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.GetOwnPersonUseCase
+import com.vicgcode.dialectica.domain.usecases.GetPersonByIdUseCase
+import com.vicgcode.dialectica.domain.usecases.UpdatePersonInterestsUseCase
+import com.vicgcode.dialectica.domain.usecases.UpdatePersonQuestionsUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.personal.PersonalViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,10 +21,15 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-class TalkViewModel(
+@HiltViewModel
+class TalkViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val appRoomRepository: AppRoomRepository
+    private val updatePersonInterestsUseCase: UpdatePersonInterestsUseCase,
+    private val updatePersonQuestionsUseCase: UpdatePersonQuestionsUseCase,
+    private val getPersonByIdUseCase: GetPersonByIdUseCase,
+    private val getOwnPersonUseCase: GetOwnPersonUseCase,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(TalkUiState())
@@ -37,7 +46,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 personId?.let {
-                    person = appRoomRepository.getPersonById(personId)
+                    person = getPersonByIdUseCase.invoke(personId)
 
                     _uiState.update {
                         it.copy(
@@ -77,7 +86,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 _uiState.value.personId?.let {
-                    appRoomRepository.updatePersonInterests(
+                    updatePersonInterestsUseCase.invoke(
                         _uiState.value.simpleInterestList,
                         it
                     )
@@ -129,7 +138,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.update {
                 it.copy(
-                    ownerInterestList = appRoomRepository.getOwnerPerson(true).interests
+                    ownerInterestList = getOwnPersonUseCase.invoke(true).interests
                 )
             }
             onSuccess()
@@ -149,7 +158,7 @@ class TalkViewModel(
 
         viewModelScope.launch(Dispatchers.Main) {
             _uiState.value.personId?.let {
-                appRoomRepository.updatePersonQuestions(newQuestionList, it)
+                updatePersonQuestionsUseCase.invoke(newQuestionList, it)
                 onSuccess()
             }
         }
@@ -165,7 +174,7 @@ class TalkViewModel(
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 _uiState.value.personId?.let {
-                    appRoomRepository.updatePersonQuestions(newQuestionList, it)
+                    updatePersonQuestionsUseCase.invoke(newQuestionList, it)
                     onSuccess()
                 }
             } catch (exception: IOException) {

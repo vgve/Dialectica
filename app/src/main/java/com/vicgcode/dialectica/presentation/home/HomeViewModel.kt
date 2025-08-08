@@ -4,11 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
-import com.vicgcode.dialectica.database.room.AppRoomRepository
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.data.models.DialectTheme
 import com.vicgcode.dialectica.data.models.Themes
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
+import com.vicgcode.dialectica.domain.usecases.AddFavouriteUseCase
+import com.vicgcode.dialectica.domain.usecases.DeleteFavouriteUseCase
+import com.vicgcode.dialectica.domain.usecases.GetFavouritesUseCase
+import com.vicgcode.dialectica.domain.usecases.GetPersonByIdUseCase
+import com.vicgcode.dialectica.domain.usecases.GetPersonsUseCase
+import com.vicgcode.dialectica.domain.usecases.UpdatePersonQuestionsUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.utils.LOCALE_RU
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +30,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository,
-    private val appRoomRepository: AppRoomRepository
+    private val addFavouriteUseCase: AddFavouriteUseCase,
+    private val deleteFavouriteUseCase: DeleteFavouriteUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
+    private val getPersonsUseCase: GetPersonsUseCase,
+    private val getPersonByIdUseCase: GetPersonByIdUseCase,
+    private val updatePersonQuestionsUseCase: UpdatePersonQuestionsUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -115,7 +125,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isFavourite = true, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.insertFavourite(question)
+            addFavouriteUseCase.invoke(question)
             getFavQuestions()
             onSuccess()
         }
@@ -126,7 +136,7 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(isFavourite = false, isRandom = false) }
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(question)
+            deleteFavouriteUseCase.invoke(question)
             getFavQuestions()
             onSuccess()
         }
@@ -152,9 +162,10 @@ class HomeViewModel @Inject constructor(
     fun getFavQuestions() {
         Log.d(TAG, "getFavQuestions")
         viewModelScope.launch(Dispatchers.Main) {
+            val favourites = getFavouritesUseCase.invoke()
             _uiState.update {
                 it.copy(
-                    favouriteList = appRoomRepository.getFavouriteList()
+                    favouriteList = favourites
                 )
             }
         }
@@ -163,7 +174,7 @@ class HomeViewModel @Inject constructor(
     fun getPersons() {
         Log.d(TAG, "getPersons")
         viewModelScope.launch(Dispatchers.Main) {
-            val tempPersons = appRoomRepository.getPersonList()
+            val tempPersons = getPersonsUseCase.invoke()
             val personsWithoutOwner = tempPersons.toMutableList()
             tempPersons.forEach {
                 if (it.isOwner) {
@@ -184,10 +195,10 @@ class HomeViewModel @Inject constructor(
             if (_uiState.value.isRandom) _uiState.value.currentRandomQuestion else _uiState.value.currentQuestion
 
         viewModelScope.launch(Dispatchers.Main) {
-            val newQuestionList = appRoomRepository.getPersonById(person.id).questions.toMutableList()
+            val newQuestionList = getPersonByIdUseCase.invoke(person.id).questions.toMutableList()
             if (!newQuestionList.contains(question)) {
                 question?.let { newQuestionList.add(it) }
-                appRoomRepository.updatePersonQuestions(newQuestionList, person.id)
+                updatePersonQuestionsUseCase.invoke(newQuestionList, person.id)
             }
             _uiAction.send(HomeAction.AddQuestionToPersonClick)
             onSuccess()
