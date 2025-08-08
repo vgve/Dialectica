@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
-import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.DeleteFavouriteUseCase
+import com.vicgcode.dialectica.domain.usecases.GetFavouritesUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FavouriteViewModel @Inject constructor(
     private val sharedPrefsRepository: SharedPrefsRepository,
-    private val appRoomRepository: AppRoomRepository
+    private val deleteFavouriteUseCase: DeleteFavouriteUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(FavouriteUiState())
@@ -48,7 +50,7 @@ class FavouriteViewModel @Inject constructor(
     fun onDeleteQuestion(question: DialectQuestion, onSuccess: () -> Unit) {
         Log.d(TAG, "OnDeleteQuestion")
         viewModelScope.launch (Dispatchers.Main) {
-            appRoomRepository.deleteFavourite(question)
+            deleteFavouriteUseCase.invoke(question)
             updateFavourites()
             onSuccess()
         }
@@ -57,9 +59,10 @@ class FavouriteViewModel @Inject constructor(
     fun updateFavourites() {
         Log.d(TAG, "getFavQuestions")
         viewModelScope.launch(Dispatchers.Main) {
+            val favourites = getFavouritesUseCase.invoke()
             _uiState.update {
                 it.copy(
-                    questions = appRoomRepository.getFavouriteList()
+                    questions = favourites
                 )
             }
         }

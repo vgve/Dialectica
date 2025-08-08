@@ -2,9 +2,8 @@ package com.vicgcode.dialectica.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vicgcode.dialectica.core.domain.repositories.SharedPrefsRepository
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
-import com.vicgcode.dialectica.database.room.AppRoomRepository
+import com.vicgcode.dialectica.domain.usecases.AddPersonUseCase
 import com.vicgcode.dialectica.domain.usecases.SetAuthorizeUseCase
 import com.vicgcode.dialectica.domain.usecases.SetUsernameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,12 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val sharedPrefsRepository: SharedPrefsRepository,
-    private val appRoomRepository: AppRoomRepository
+    private val addPersonUseCase: AddPersonUseCase,
+    private val setAuthorizeUseCase: SetAuthorizeUseCase,
+    private val setUsernameUseCase: SetUsernameUseCase,
 ): ViewModel() {
-
-    private val setAuthorizeUseCase = SetAuthorizeUseCase(sharedPrefsRepository)
-    private val setUsernameUseCase = SetUsernameUseCase(sharedPrefsRepository)
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
@@ -51,7 +48,7 @@ class SignUpViewModel @Inject constructor(
         setAuthorizeUseCase.invoke(true)
 
         viewModelScope.launch(Dispatchers.Main) {
-            appRoomRepository.insertPerson(user)
+            addPersonUseCase.invoke(user)
             _uiAction.send(SignUpAction.OnAuthSuccess)
         }
     }
