@@ -21,6 +21,8 @@ import com.vicgcode.dialectica.databinding.DialogRandomQuestionBinding
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
+import com.vicgcode.dialectica.presentation.screens.home.HomeAction
+import com.vicgcode.dialectica.presentation.screens.home.HomeViewModel
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonAddListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.ThemeListAdapter
 import kotlinx.coroutines.launch

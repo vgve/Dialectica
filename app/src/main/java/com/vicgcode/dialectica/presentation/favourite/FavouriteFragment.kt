@@ -20,6 +20,8 @@ import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.databinding.DialogDeleteBinding
 import com.vicgcode.dialectica.databinding.FragmentFavouriteBinding
 import com.vicgcode.dialectica.presentation.extensions.TAG
+import com.vicgcode.dialectica.presentation.screens.favourite.FavouriteAction
+import com.vicgcode.dialectica.presentation.screens.favourite.FavouriteViewModel
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX
 import kotlinx.coroutines.launch

@@ -10,7 +10,7 @@ import com.vicgcode.dialectica.data.models.DialectTheme
 import com.vicgcode.dialectica.databinding.ItemQuestionBinding
 import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.data.models.Themes
-import com.vicgcode.dialectica.presentation.talk.LocalInterest
+import com.vicgcode.dialectica.presentation.screens.conversation.LocalInterest
 import com.vicgcode.dialectica.utils.LOCALE_RU
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import java.util.*

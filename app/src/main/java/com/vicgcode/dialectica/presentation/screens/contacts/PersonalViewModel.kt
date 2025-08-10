@@ -1,4 +1,4 @@
-package com.vicgcode.dialectica.presentation.personal
+package com.vicgcode.dialectica.presentation.screens.contacts
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

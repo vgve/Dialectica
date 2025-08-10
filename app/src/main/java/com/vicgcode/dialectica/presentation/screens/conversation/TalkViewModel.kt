@@ -1,4 +1,4 @@
-package com.vicgcode.dialectica.presentation.talk
+package com.vicgcode.dialectica.presentation.screens.conversation
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -11,7 +11,7 @@ import com.vicgcode.dialectica.domain.usecases.GetPersonByIdUseCase
 import com.vicgcode.dialectica.domain.usecases.UpdatePersonInterestsUseCase
 import com.vicgcode.dialectica.domain.usecases.UpdatePersonQuestionsUseCase
 import com.vicgcode.dialectica.presentation.extensions.TAG
-import com.vicgcode.dialectica.presentation.personal.PersonalViewModel
+import com.vicgcode.dialectica.presentation.screens.contacts.PersonalViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel

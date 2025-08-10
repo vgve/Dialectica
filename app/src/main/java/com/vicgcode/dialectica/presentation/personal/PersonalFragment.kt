@@ -28,6 +28,7 @@ import com.vicgcode.dialectica.data.models.entity.DialectPerson
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
+import com.vicgcode.dialectica.presentation.screens.contacts.PersonalViewModel
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.PersonListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX

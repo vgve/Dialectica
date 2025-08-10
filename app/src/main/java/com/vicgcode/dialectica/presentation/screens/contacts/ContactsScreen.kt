@@ -9,14 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vicgcode.dialectica.presentation.personal.PersonalUiState
-import com.vicgcode.dialectica.presentation.personal.PersonalViewModel
 
 @Composable
 fun ContactsScreen() {
 
-    val viewModel: PersonalViewModel = viewModel()
+    val viewModel: PersonalViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     ContactsView(

@@ -23,6 +23,8 @@ import com.vicgcode.dialectica.databinding.FragmentTalkBinding
 import com.vicgcode.dialectica.data.models.entity.DialectQuestion
 import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.setOnSingleClickListener
+import com.vicgcode.dialectica.presentation.screens.conversation.TalkAction
+import com.vicgcode.dialectica.presentation.screens.conversation.TalkViewModel
 import com.vicgcode.dialectica.presentation.ui.adapters.InterestLocalListAdapter
 import com.vicgcode.dialectica.presentation.ui.adapters.QuestionListAdapter
 import com.vicgcode.dialectica.utils.SWIPE_DX

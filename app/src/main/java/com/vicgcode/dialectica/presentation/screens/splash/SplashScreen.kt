@@ -10,10 +10,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vicgcode.dialectica.R
-import com.vicgcode.dialectica.presentation.MainViewModel
-import com.vicgcode.dialectica.presentation.SplashState
 
 private const val DELAY: Long = 2000
 
@@ -22,7 +21,7 @@ fun SplashScreen(
     navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit,
 ) {
-    val viewModel: MainViewModel = hiltViewModel()
+    val viewModel: SplashViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(state) {
@@ -48,4 +47,10 @@ fun SplashView() {
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun SplashViewPreview() {
+    SplashView()
 }

@@ -1,4 +1,4 @@
-package com.vicgcode.dialectica.presentation.signup
+package com.vicgcode.dialectica.presentation.screens.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

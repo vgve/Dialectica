@@ -1,4 +1,4 @@
-package com.vicgcode.dialectica.presentation.favourite
+package com.vicgcode.dialectica.presentation.screens.favourite
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

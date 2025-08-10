@@ -1,4 +1,4 @@
-package com.vicgcode.dialectica.presentation
+package com.vicgcode.dialectica.presentation.screens.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class SplashViewModel @Inject constructor(
     private val getAuthorizeUseCase: GetAuthorizeUseCase
 ): ViewModel() {
 

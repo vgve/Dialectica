@@ -21,18 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.vicgcode.dialectica.R
-import com.vicgcode.dialectica.presentation.signup.SignUpAction
-import com.vicgcode.dialectica.presentation.signup.SignUpUiState
-import com.vicgcode.dialectica.presentation.signup.SignUpViewModel
 
 @Composable
 fun SignUpScreen(
     navigateToHome: () -> Unit
 ) {
 
-    val viewModel: SignUpViewModel = viewModel()
+    val viewModel: SignUpViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     SignUpView(

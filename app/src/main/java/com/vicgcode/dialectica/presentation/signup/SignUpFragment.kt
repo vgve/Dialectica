@@ -17,6 +17,8 @@ import com.vicgcode.dialectica.presentation.extensions.TAG
 import com.vicgcode.dialectica.presentation.extensions.activityNavController
 import com.vicgcode.dialectica.presentation.extensions.afterTextChanged
 import com.vicgcode.dialectica.presentation.extensions.navigateSafely
+import com.vicgcode.dialectica.presentation.screens.signup.SignUpAction
+import com.vicgcode.dialectica.presentation.screens.signup.SignUpViewModel
 import kotlinx.coroutines.launch
 
 class SignUpFragment: Fragment(R.layout.fragment_signup) {

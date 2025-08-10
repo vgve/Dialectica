@@ -9,15 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vicgcode.dialectica.presentation.talk.TalkAction
-import com.vicgcode.dialectica.presentation.talk.TalkUiState
-import com.vicgcode.dialectica.presentation.talk.TalkViewModel
 
 @Composable
 fun ConversationScreen() {
 
-    val viewModel: TalkViewModel = viewModel()
+    val viewModel: TalkViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     ConversationView(
