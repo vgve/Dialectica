@@ -1,5 +1,6 @@
-package com.vicgcode.dialectica.presentation.home
+package com.vicgcode.dialectica.presentation.screens.home
 
+import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,7 +39,7 @@ class HomeViewModel @Inject constructor(
     private val updatePersonQuestionsUseCase: UpdatePersonQuestionsUseCase
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow(HomeState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiAction: Channel<HomeAction> = Channel()
@@ -209,9 +210,13 @@ class HomeViewModel @Inject constructor(
         Log.d(TAG, "setRandomState: $isRandom")
         _uiState.update { it.copy(isRandom = isRandom) }
     }
+
+    fun handleEvent(action: HomeEvent) {
+
+    }
 }
 
-data class HomeUiState(
+data class HomeState(
     val sections: List<DialectTheme> = emptyList(),
     val questions: List<DialectQuestion> = emptyList(),
     val currentQuestionList: List<DialectQuestion> = emptyList(),
@@ -229,4 +234,12 @@ sealed class HomeAction {
     data object AddQuestionToPersonClick : HomeAction()
     data object ShowAddToTalkScreen : HomeAction()
     data object OpenPersonalScreen : HomeAction()
+}
+
+sealed class HomeEvent {
+    data class OnThemeSelected(val theme: DialectTheme) : HomeEvent()
+    data object OnNextClick : HomeEvent()
+    data object OnAddToContactsClick : HomeEvent()
+    data object OnAddFavoriteClick : HomeEvent()
+    data object OnRandomClick : HomeEvent()
 }

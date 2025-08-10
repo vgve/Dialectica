@@ -50,4 +50,8 @@
     <string name="need_to_add_person">Сначала добавьте собеседника</string>
     <string name="successful_deleted">Удалено</string>
     <string name="title_themes">Разделы</string>
+
+    <!--    Home Screen -->
+    <string name="add_personal">Добавить в контакты</string>
+    <string name="add_favorite">Добавить в избранное</string>
 </resources>

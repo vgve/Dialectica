@@ -50,4 +50,8 @@
     <string name="need_to_add_person">First, add an person</string>
     <string name="successful_deleted">Deleted</string>
     <string name="title_themes">Sections</string>
+
+    <!--    Home Screen -->
+    <string name="add_personal">Add to contacts</string>
+    <string name="add_favorite">Add to favourite</string>
 </resources>

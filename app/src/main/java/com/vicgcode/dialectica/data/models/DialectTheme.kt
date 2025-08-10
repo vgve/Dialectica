@@ -1,8 +1,10 @@
 package com.vicgcode.dialectica.data.models
 
+import androidx.annotation.DrawableRes
+
 data class DialectTheme(
     val id: String,
     val name: String,
-    val src: Int,
+    @DrawableRes val src: Int,
     var isChosen: Boolean? = false
 )
