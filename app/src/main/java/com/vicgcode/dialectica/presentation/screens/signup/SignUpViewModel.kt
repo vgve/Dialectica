@@ -23,7 +23,7 @@ class SignUpViewModel @Inject constructor(
     private val setUsernameUseCase: SetUsernameUseCase,
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow(SignUpUiState())
+    private val _uiState = MutableStateFlow(SignUpState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiAction: Channel<SignUpAction> = Channel()
@@ -47,18 +47,35 @@ class SignUpViewModel @Inject constructor(
         uiState.value.username?.let { setUsernameUseCase.invoke(it) }
         setAuthorizeUseCase.invoke(true)
 
+        _uiState.update {
+            it.copy(isSignUpSuccessful = true)
+        }
+
         viewModelScope.launch(Dispatchers.Main) {
             addPersonUseCase.invoke(user)
             _uiAction.send(SignUpAction.OnAuthSuccess)
         }
     }
 
+    fun handleEvent(event: SignUpEvent) {
+        when (event) {
+            is SignUpEvent.NameChanged -> setName(event.name)
+            is SignUpEvent.OnSignUpClick -> signUp()
+        }
+    }
+
 }
 
-data class SignUpUiState(
+data class SignUpState(
     val username: String? = null,
+    val isSignUpSuccessful: Boolean? = null
 )
 
 sealed class SignUpAction {
     data object OnAuthSuccess : SignUpAction()
+}
+
+sealed class SignUpEvent {
+    data class NameChanged(val name: String) : SignUpEvent()
+    data object OnSignUpClick : SignUpEvent()
 }
