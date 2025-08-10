@@ -25,14 +25,22 @@ fun NavGraph() {
         composable(route = NavRoute.Splash.route){
             SplashScreen(
                 navigateToHome = {
-                    navController.navigate(NavRoute.Home.route)
+                    navController.navigate(NavRoute.Home.route) {
+                        popUpTo(NavRoute.Splash.route) { inclusive = true }
+                    }
                 },
                 navigateToSignUp = {
-                    navController.navigate(NavRoute.SignUp.route)
+                    navController.navigate(NavRoute.SignUp.route) {
+                        popUpTo(NavRoute.Splash.route) { inclusive = true }
+                    }
                 }
             )
         }
+
+        // SignUp Flow (nested graph)
         startGraph(navController)
+
+        // Main Flow (nested graph)
         mainGraph(navController)
     }
 }
@@ -41,13 +49,15 @@ fun NavGraphBuilder.startGraph(
     navController: NavHostController,
 ) {
     navigation(
-        route = NavRoute.SignUp.route,
+        route = NavRoute.StartFlow.route,
         startDestination = NavRoute.SignUp.route
     ) {
         composable(NavRoute.SignUp.route) {
             SignUpScreen(
                 navigateToHome = {
-                    navController.navigate(NavRoute.Home.route)
+                    navController.navigate(NavRoute.Home.route) {
+                        popUpTo(NavRoute.StartFlow.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -58,7 +68,7 @@ fun NavGraphBuilder.mainGraph(
     navController: NavHostController,
 ) {
     navigation(
-        route = NavRoute.Home.route,
+        route = NavRoute.MainFlow.route,
         startDestination = NavRoute.Home.route
     ) {
         composable(NavRoute.Home.route) {

@@ -2,6 +2,11 @@ package com.vicgcode.dialectica.presentation.navigation
 
 sealed class NavRoute(val route : String) {
 
+    // Flows
+    data object StartFlow : NavRoute("start_flow")
+    data object MainFlow : NavRoute("main_flow")
+
+    // Screens
     data object Splash : NavRoute("splash")
     data object SignUp : NavRoute("signup")
     data object Home : NavRoute("home")
