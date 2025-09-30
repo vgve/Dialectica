@@ -2,7 +2,6 @@ package com.vicgcode.dialectica.presentation.screens.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +15,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,9 +53,7 @@ fun SignUpScreen(
 
     SignUpView(
         state = uiState,
-        onEvent = { event ->
-            viewModel.handleEvent(event)
-        }
+        onEvent = viewModel::handleEvent
     )
 }
 

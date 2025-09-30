@@ -42,7 +42,7 @@ fun HomeScreen() {
 
     HomeView(
         state = uiState,
-        onEvent = { event -> viewModel.handleEvent(event) }
+        onEvent = viewModel::handleEvent
     )
 }
 

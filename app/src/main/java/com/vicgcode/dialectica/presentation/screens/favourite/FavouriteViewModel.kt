@@ -25,7 +25,7 @@ class FavouriteViewModel @Inject constructor(
     private val getFavouritesUseCase: GetFavouritesUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(FavouriteUiState())
+    private val _uiState = MutableStateFlow(FavouriteState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiAction: Channel<FavouriteAction> = Channel()
@@ -67,13 +67,23 @@ class FavouriteViewModel @Inject constructor(
             }
         }
     }
+
+    fun handleEvent(event: FavouriteEvent) {
+        when(event) {
+            FavouriteEvent.Initialized -> updateFavourites()
+        }
+    }
 }
 
-data class FavouriteUiState(
+data class FavouriteState(
     val isInit: Boolean = false,
     val questions: List<DialectQuestion> = emptyList()
 )
 
 sealed class FavouriteAction {
     data class OpenPopupToDeleteQuestion(val question: DialectQuestion): FavouriteAction()
+}
+
+sealed class FavouriteEvent {
+    data object Initialized : FavouriteEvent()
 }
